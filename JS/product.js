@@ -4,6 +4,692 @@
 
 // Catálogo Completo de Produtos da Loja
 const productsDB = {
+    // --- CAMISAS ---
+    'camisa-1': {
+        id: 'camisa-1',
+        name: 'Camiseta Oversized ZSX Graphic',
+        category: 'Camisas & Camisetas',
+        tag: 'NEW DROP • 2026',
+        price: 99.90,
+        originalPrice: 149.90,
+        discount: '33% OFF',
+        installments: '3x de R$ 33,30 sem juros',
+        rating: 4.8,
+        reviewsCount: 84,
+        image: '../images/shirts3d.png',
+        gallery: [
+            '../images/shirts3d.png',
+            '../images/shirts.png',
+            '../images/shirts3d.png',
+            '../images/shirts.png'
+        ],
+        colors: [
+            { name: 'Preto ZSX', hex: '#111111' },
+            { name: 'Off-White', hex: '#ebe7df' },
+            { name: 'Cinza Grafite', hex: '#4b5563' }
+        ],
+        sizes: ['P', 'M', 'G', 'GG'],
+        description: 'Camiseta oversized confeccionada em meia malha 100% algodão penteado 260 GSM com toque peletizado. Estampa em silk-screen de alta durabilidade com design brutalista contemporâneo.',
+        specs: [
+            'Modelagem Oversized streetwear ampla',
+            'Algodão premium penteado 260 GSM',
+            'Gola em ribana canelada de 3cm',
+            'Costura ombro a ombro reforçada',
+            'Toque aveludado anti-encolhimento'
+        ],
+        materialsText: '100% algodão penteado de fibra longa com acabamento peletizado.',
+        fitText: 'Modelagem ampla oversized. Escolha seu tamanho usual para caimento solto.',
+        shippingText: 'Envio rápido em até 24h úteis para todo o Brasil.'
+    },
+
+    'camisa-2': {
+        id: 'camisa-2',
+        name: 'Camiseta Boxy Heavyweight Preta',
+        category: 'Camisas & Camisetas',
+        tag: 'BESTSELLER • ESSENTIALS',
+        price: 109.90,
+        originalPrice: 159.90,
+        discount: '31% OFF',
+        installments: '3x de R$ 36,63 sem juros',
+        rating: 4.9,
+        reviewsCount: 142,
+        image: '../images/shirts.png',
+        gallery: [
+            '../images/shirts.png',
+            '../images/shirts3d.png',
+            '../images/shirts.png',
+            '../images/shirts3d.png'
+        ],
+        colors: [
+            { name: 'Preto Onix', hex: '#09090b' },
+            { name: 'Carvão Mineral', hex: '#27272a' }
+        ],
+        sizes: ['M', 'G', 'GG', 'XGG'],
+        description: 'Camiseta corte boxy com caimento reto e estrutura encorpada. O clássico indispensável para o guarda-roupa streetwear de alto padrão.',
+        specs: [
+            'Modelagem Boxy Fit quadrada',
+            'Malha Heavyweight 280 GSM',
+            'Gola estruturada reforçada',
+            'Tingimento reativo preto profundo'
+        ],
+        materialsText: '100% algodão heavyweight fio 20.1 penteado.',
+        fitText: 'Caimento reto e encorpado sem sobras excessivas no comprimento.',
+        shippingText: 'Entrega com rastreamento em tempo real.'
+    },
+
+    'camisa-3': {
+        id: 'camisa-3',
+        name: 'Camiseta Acid Wash Vintage ZSX',
+        category: 'Camisas & Camisetas',
+        tag: 'DROP LIMITADO',
+        price: 119.90,
+        originalPrice: 169.90,
+        discount: '29% OFF',
+        installments: '3x de R$ 39,96 sem juros',
+        rating: 4.8,
+        reviewsCount: 56,
+        image: '../images/shirts3d.png',
+        gallery: [
+            '../images/shirts3d.png',
+            '../images/shirts.png',
+            '../images/shirts3d.png',
+            '../images/shirts.png'
+        ],
+        colors: [
+            { name: 'Cinza Chumbo Acid', hex: '#374151' },
+            { name: 'Preto Estonado', hex: '#1f2937' }
+        ],
+        sizes: ['P', 'M', 'G'],
+        description: 'Lavanderia acid wash artesanal que confere aspecto vintage único a cada exemplar. Toque ultra macio e maleável.',
+        specs: [
+            'Lavagem marmorizada artesanal',
+            'Algodão 100% amaciado com silicone',
+            'Visual vintage streetwear autêntico'
+        ],
+        materialsText: '100% algodão amaciado pré-lavado.',
+        fitText: 'Modelagem solta e confortável.',
+        shippingText: 'Envio seguro com garantia de troca.'
+    },
+
+    'camisa-4': {
+        id: 'camisa-4',
+        name: 'Camiseta Streetwear Off-White Minimal',
+        category: 'Camisas & Camisetas',
+        tag: 'MINIMAL COLLECTION',
+        price: 99.90,
+        originalPrice: 149.90,
+        discount: '33% OFF',
+        installments: '3x de R$ 33,30 sem juros',
+        rating: 4.7,
+        reviewsCount: 71,
+        image: '../images/shirts.png',
+        gallery: [
+            '../images/shirts.png',
+            '../images/shirts3d.png',
+            '../images/shirts.png',
+            '../images/shirts3d.png'
+        ],
+        colors: [
+            { name: 'Off-White', hex: '#f4f4f5' },
+            { name: 'Creme Areia', hex: '#e7e5e4' }
+        ],
+        sizes: ['P', 'M', 'G', 'GG'],
+        description: 'Tonalidade neutra off-white com microponto discreto no peito. Versatilidade para combinar com qualquer sobreposição.',
+        specs: [
+            'Tom neutro contemporâneo',
+            'Algodão penteado premium',
+            'Gola e punhos com costura invisível'
+        ],
+        materialsText: '100% algodão penteado.',
+        fitText: 'Modelagem standard streetwear.',
+        shippingText: 'Envio expresso.'
+    },
+
+    // --- BERMUDAS ---
+    'bermuda-1': {
+        id: 'bermuda-1',
+        name: 'Bermuda Cargo Streetwear Preta',
+        category: 'Bermudas & Shorts',
+        tag: 'BESTSELLER • UTILITY',
+        price: 129.90,
+        originalPrice: 189.90,
+        discount: '31% OFF',
+        installments: '4x de R$ 32,47 sem juros',
+        rating: 4.9,
+        reviewsCount: 118,
+        image: '../images/shorts3d.png',
+        gallery: [
+            '../images/shorts3d.png',
+            '../images/shorts.png',
+            '../images/shorts3d.png',
+            '../images/shorts.png'
+        ],
+        colors: [
+            { name: 'Preto ZSX', hex: '#111111' },
+            { name: 'Verde Militar', hex: '#374151' }
+        ],
+        sizes: ['P', 'M', 'G', 'GG'],
+        description: 'Bermuda cargo com múltiplos bolsos fole utilitários, cós elástico anatômico com cordão reforçado e tecido ripstop flexível.',
+        specs: [
+            'Bolsos laterais com lapela de velcro',
+            'Cós ajustável com cordão esportivo',
+            'Tecido resistente a rasgos e abrasão',
+            'Comprimento acima do joelho'
+        ],
+        materialsText: '65% algodão e 35% poliéster ripstop encorpado.',
+        fitText: 'Caimento solto e funcional para mobilidade máxima.',
+        shippingText: 'Entrega imediata.'
+    },
+
+    'bermuda-2': {
+        id: 'bermuda-2',
+        name: 'Bermuda Moletom Heavyweight Mescla',
+        category: 'Bermudas & Shorts',
+        tag: 'COMFORT ESSENTIAL',
+        price: 119.90,
+        originalPrice: 169.90,
+        discount: '29% OFF',
+        installments: '3x de R$ 39,96 sem juros',
+        rating: 4.8,
+        reviewsCount: 64,
+        image: '../images/shorts.png',
+        gallery: [
+            '../images/shorts.png',
+            '../images/shorts3d.png',
+            '../images/shorts.png',
+            '../images/shorts3d.png'
+        ],
+        colors: [
+            { name: 'Cinza Mescla', hex: '#9ca3af' },
+            { name: 'Preto', hex: '#111111' }
+        ],
+        sizes: ['M', 'G', 'GG'],
+        description: 'Bermuda em moletom felpado 380 GSM com toque aveludado e bolsos faca embutidos.',
+        specs: [
+            'Moletom 380 GSM felpado macio',
+            'Bolsos laterais e bolso traseiro embutido',
+            'Barra com acabamento a fio discreto'
+        ],
+        materialsText: '80% algodão e 20% poliéster.',
+        fitText: 'Caimento relaxado e extremamente macio.',
+        shippingText: 'Envio seguro com código de rastreamento.'
+    },
+
+    'bermuda-3': {
+        id: 'bermuda-3',
+        name: 'Bermuda Nylon Ripstop Utility',
+        category: 'Bermudas & Shorts',
+        tag: 'WATER REPELLENT',
+        price: 139.90,
+        originalPrice: 199.90,
+        discount: '30% OFF',
+        installments: '4x de R$ 34,97 sem juros',
+        rating: 4.8,
+        reviewsCount: 79,
+        image: '../images/shorts3d.png',
+        gallery: [
+            '../images/shorts3d.png',
+            '../images/shorts.png',
+            '../images/shorts3d.png',
+            '../images/shorts.png'
+        ],
+        colors: [
+            { name: 'Preto ZSX', hex: '#111111' },
+            { name: 'Cinza Concreto', hex: '#64748b' }
+        ],
+        sizes: ['P', 'M', 'G', 'GG', 'XGG'],
+        description: 'Shorts técnico em nylon hidrofóbico ultraleve. Secagem rápida e respirabilidade para os dias mais quentes.',
+        specs: [
+            'Nylon hidrofóbico de secagem ultrarrápida',
+            'Forro interno ventilado em mesh',
+            'Zíperes selados contra umidade'
+        ],
+        materialsText: '100% poliamida ultraleve.',
+        fitText: 'Comprimento moderno 5 polegadas.',
+        shippingText: 'Envio expresso.'
+    },
+
+    'bermuda-4': {
+        id: 'bermuda-4',
+        name: 'Bermuda ZSX Sport Comfort',
+        category: 'Bermudas & Shorts',
+        tag: 'EVERYDAY FIT',
+        price: 109.90,
+        originalPrice: 159.90,
+        discount: '31% OFF',
+        installments: '3x de R$ 36,63 sem juros',
+        rating: 4.7,
+        reviewsCount: 48,
+        image: '../images/shorts.png',
+        gallery: [
+            '../images/shorts.png',
+            '../images/shorts3d.png',
+            '../images/shorts.png',
+            '../images/shorts3d.png'
+        ],
+        colors: [
+            { name: 'Preto ZSX', hex: '#111111' },
+            { name: 'Azul Marinho', hex: '#1e3a8a' }
+        ],
+        sizes: ['P', 'M', 'G'],
+        description: 'Bermuda casual esportiva com modelagem anatômica para o dia a dia.',
+        specs: [
+            'Tecido macio com elastano',
+            'Cós reforçado com elástico',
+            'Bolsos funcionais profundos'
+        ],
+        materialsText: '95% algodão e 5% elastano.',
+        fitText: 'Caimento regular.',
+        shippingText: 'Envio garantido.'
+    },
+
+    // --- BONÉS ---
+    'bone-1': {
+        id: 'bone-1',
+        name: 'Boné Dad Hat ZSX Logo Bordado',
+        category: 'Bonés & Acessórios',
+        tag: 'BESTSELLER',
+        price: 79.90,
+        originalPrice: 119.90,
+        discount: '33% OFF',
+        installments: '2x de R$ 39,95 sem juros',
+        rating: 4.9,
+        reviewsCount: 168,
+        image: '../images/hats3d.png',
+        gallery: [
+            '../images/hats3d.png',
+            '../images/caps.png',
+            '../images/hats3d.png',
+            '../images/caps.png'
+        ],
+        colors: [
+            { name: 'Preto ZSX', hex: '#111111' },
+            { name: 'Bege Areia', hex: '#d6cebf' }
+        ],
+        sizes: ['Único (Ajustável)'],
+        description: 'Boné dad hat desestruturado em sarja 100% algodão pré-lavada. Fivela de metal antioxidante com passador de tecido embutido.',
+        specs: [
+            'Copa desestruturada anatômica de 6 gomos',
+            'Bordado frontal em alto relevo 3D',
+            'Fivela metálica com fecho strapback personalizado',
+            'Aba curva com costuras reforçadas'
+        ],
+        materialsText: '100% sarja de algodão peletizada.',
+        fitText: 'Ajuste universal via fivela traseira (circunferência de 54 a 62 cm).',
+        shippingText: 'Enviado em caixa protetora rígida para não amassar a aba.'
+    },
+
+    'bone-2': {
+        id: 'bone-2',
+        name: 'Boné 5 Panel Streetwear Preto',
+        category: 'Bonés & Acessórios',
+        tag: 'URBAN ICON',
+        price: 89.90,
+        originalPrice: 129.90,
+        discount: '31% OFF',
+        installments: '3x de R$ 29,96 sem juros',
+        rating: 4.8,
+        reviewsCount: 82,
+        image: '../images/caps.png',
+        gallery: [
+            '../images/caps.png',
+            '../images/hats3d.png',
+            '../images/caps.png',
+            '../images/hats3d.png'
+        ],
+        colors: [
+            { name: 'Preto ZSX', hex: '#111111' }
+        ],
+        sizes: ['Único (Ajustável)'],
+        description: 'Boné 5-panel em tecido ripstop com ilhoses respiráveis e fecho de fita de nylon com clipe rápido.',
+        specs: [
+            'Modelagem 5-panel rasa contemporânea',
+            'Aba reta moldável',
+            'Fecho rápido em nylon com engate esportivo'
+        ],
+        materialsText: 'Tecido técnico ripstop de alta densidade.',
+        fitText: 'Ajuste rápido.',
+        shippingText: 'Envio rápido.'
+    },
+
+    'bone-3': {
+        id: 'bone-3',
+        name: 'Boné Trucker Vintage ZSX Racing',
+        category: 'Bonés & Acessórios',
+        tag: 'VINTAGE DROP',
+        price: 84.90,
+        originalPrice: 119.90,
+        discount: '29% OFF',
+        installments: '2x de R$ 42,45 sem juros',
+        rating: 4.7,
+        reviewsCount: 63,
+        image: '../images/hats3d.png',
+        gallery: [
+            '../images/hats3d.png',
+            '../images/caps.png',
+            '../images/hats3d.png',
+            '../images/caps.png'
+        ],
+        colors: [
+            { name: 'Preto e Branco', hex: '#18181b' }
+        ],
+        sizes: ['Único (Ajustável)'],
+        description: 'Boné trucker com tela traseira respirável e patch emborrachado frontal.',
+        specs: [
+            'Tela traseira de alta ventilação',
+            'Fecho snapback regulável clássico',
+            'Patch frontal de alta definição'
+        ],
+        materialsText: 'Frente em algodão e tela em poliéster.',
+        fitText: 'Regulagem snapback.',
+        shippingText: 'Embalagem rígida protetora.'
+    },
+
+    'bone-4': {
+        id: 'bone-4',
+        name: 'Gorro Beanie Heavy Knit ZSX',
+        category: 'Bonés & Acessórios',
+        tag: 'WINTER ESSENTIAL',
+        price: 69.90,
+        originalPrice: 99.90,
+        discount: '30% OFF',
+        installments: '2x de R$ 34,95 sem juros',
+        rating: 4.9,
+        reviewsCount: 95,
+        image: '../images/caps.png',
+        gallery: [
+            '../images/caps.png',
+            '../images/hats3d.png',
+            '../images/caps.png',
+            '../images/hats3d.png'
+        ],
+        colors: [
+            { name: 'Preto ZSX', hex: '#111111' },
+            { name: 'Cinza Mescla', hex: '#6b7280' }
+        ],
+        sizes: ['Único'],
+        description: 'Gorro em malha canelada pesada com dobra ajustável e etiqueta bordada exclusiva.',
+        specs: [
+            'Ponto canelado elástico e encorpado',
+            'Etiqueta tecida ZSX no punho',
+            'Retenção térmica sem apertar a cabeça'
+        ],
+        materialsText: '100% acrílico térmico antialérgico.',
+        fitText: 'Modelagem elástica adapta-se confortavelmente.',
+        shippingText: 'Envio seguro.'
+    },
+
+    // --- CAMISAS DE TIME (JERSEYS) ---
+    'jersey-1': {
+        id: 'jersey-1',
+        name: 'Jersey Brasil ZSX Copa Street Edition',
+        category: 'Camisas de Time',
+        tag: 'COPA DO MUNDO • ICONIC',
+        price: 159.90,
+        originalPrice: 229.90,
+        discount: '30% OFF',
+        installments: '5x de R$ 31,98 sem juros',
+        rating: 5.0,
+        reviewsCount: 224,
+        image: '../images/newRelease.png',
+        gallery: [
+            '../images/newRelease.png',
+            '../images/jerseys3d.png',
+            '../images/jerseys.png',
+            '../images/newRelease.png'
+        ],
+        colors: [
+            { name: 'Amarelo Canarinho Street', hex: '#fbbf24' },
+            { name: 'Azul Royal', hex: '#1d4ed8' }
+        ],
+        sizes: ['P', 'M', 'G', 'GG'],
+        description: 'A peça principal do drop da Copa: modelagem esportiva oversized com gola polo vintage em ribana e tecido jacquard texturizado com detalhes em relevo.',
+        specs: [
+            'Tecido Dry-Fit respirável com controle térmico',
+            'Gola polo retrô canelada',
+            'Escudo bordado com acabamento dourado',
+            'Costuras duplas anti-rasgo'
+        ],
+        materialsText: '100% poliéster tecnológico texturizado.',
+        fitText: 'Caimento oversized casual para uso nas ruas.',
+        shippingText: 'Envio expresso rastreado.'
+    },
+
+    'jersey-2': {
+        id: 'jersey-2',
+        name: 'Jersey Vintage Retro Football Black',
+        category: 'Camisas de Time',
+        tag: 'RETRO DROP',
+        price: 149.90,
+        originalPrice: 219.90,
+        discount: '32% OFF',
+        installments: '4x de R$ 37,47 sem juros',
+        rating: 4.8,
+        reviewsCount: 104,
+        image: '../images/jerseys3d.png',
+        gallery: [
+            '../images/jerseys3d.png',
+            '../images/jerseys.png',
+            '../images/newRelease.png',
+            '../images/jerseys3d.png'
+        ],
+        colors: [
+            { name: 'Preto e Prata', hex: '#111111' }
+        ],
+        sizes: ['M', 'G', 'GG'],
+        description: 'Design inspirado nos anos 90 com gola V estruturada e listras sublimadas de alta definição.',
+        specs: [
+            'Gola V canelada estruturada',
+            'Tecido jacquard com brilho fosco',
+            'Secagem ultra rápida'
+        ],
+        materialsText: '100% poliéster premium sublimado.',
+        fitText: 'Modelagem boxy esportiva.',
+        shippingText: 'Entrega rápida.'
+    },
+
+    'jersey-3': {
+        id: 'jersey-3',
+        name: 'Jersey Basketball Oversized ZSX 98',
+        category: 'Camisas de Time',
+        tag: 'STREET HOOPS',
+        price: 139.90,
+        originalPrice: 199.90,
+        discount: '30% OFF',
+        installments: '4x de R$ 34,97 sem juros',
+        rating: 4.9,
+        reviewsCount: 92,
+        image: '../images/jerseys.png',
+        gallery: [
+            '../images/jerseys.png',
+            '../images/jerseys3d.png',
+            '../images/newRelease.png',
+            '../images/jerseys.png'
+        ],
+        colors: [
+            { name: 'Preto e Branco', hex: '#18181b' },
+            { name: 'Vermelho ZSX', hex: '#e11d48' }
+        ],
+        sizes: ['P', 'M', 'G', 'GG', 'XGG'],
+        description: 'Regata de basquete em mesh pesado com debrum canelado em dois tons e número 98 aplicado em sarja bordada.',
+        specs: [
+            'Mesh aberto com forro duplo interno',
+            'Aplicações em sarja costurada',
+            'Cavas amplas para usar com camiseta por baixo'
+        ],
+        materialsText: '100% poliéster mesh pesado.',
+        fitText: 'Modelagem ampla de basquete.',
+        shippingText: 'Envio seguro.'
+    },
+
+    'jersey-4': {
+        id: 'jersey-4',
+        name: 'Jersey Streetwear Blockcore Edition',
+        category: 'Camisas de Time',
+        tag: 'BLOCKCORE',
+        price: 149.90,
+        originalPrice: 209.90,
+        discount: '28% OFF',
+        installments: '4x de R$ 37,47 sem juros',
+        rating: 4.8,
+        reviewsCount: 76,
+        image: '../images/jerseys3d.png',
+        gallery: [
+            '../images/jerseys3d.png',
+            '../images/jerseys.png',
+            '../images/newRelease.png',
+            '../images/jerseys3d.png'
+        ],
+        colors: [
+            { name: 'Branco e Preto', hex: '#ffffff' }
+        ],
+        sizes: ['M', 'G', 'GG'],
+        description: 'A tendência global do blockcore com caimento streetwear e acabamentos de alfaiataria esportiva.',
+        specs: [
+            'Tecido jacquard com padrão geométrico',
+            'Logo metálico prensado a quente'
+        ],
+        materialsText: '100% poliéster tecnológico.',
+        fitText: 'Caimento regular solto.',
+        shippingText: 'Envio imediato.'
+    },
+
+    // --- CALÇADOS ---
+    'calcado-1': {
+        id: 'calcado-1',
+        name: 'Tênis ZSX Chunky Runner 3D',
+        category: 'Calçados & Tênis',
+        tag: 'BESTSELLER • ARCHIVE',
+        price: 299.90,
+        originalPrice: 449.90,
+        discount: '33% OFF',
+        installments: '6x de R$ 49,98 sem juros',
+        rating: 4.9,
+        reviewsCount: 188,
+        image: '../images/shoes3d.png',
+        gallery: [
+            '../images/shoes3d.png',
+            '../images/shoes-original.png',
+            '../images/shoes3d.png',
+            '../images/shoes-original.png'
+        ],
+        colors: [
+            { name: 'Branco & Off-White', hex: '#f4f4f5' },
+            { name: 'Preto Total', hex: '#111111' }
+        ],
+        sizes: ['38', '39', '40', '41', '42', '43'],
+        description: 'Tênis chunky futurista com solado robusto em EVA expandido e cabedal multicamadas em couro sintético nobre e mesh respirável.',
+        specs: [
+            'Solado tratorado em EVA leve e borracha antiderrapante',
+            'Cabedal com camadas reforçadas em couro sintético e mesh',
+            'Palmilha anatômica anti-impacto com memória',
+            'Cadarços tubulares reforçados com passadores metálicos'
+        ],
+        materialsText: 'Cabedal em couro sintético PU e poliéster mesh. Solado em EVA e borracha natural.',
+        fitText: 'Forma padrão brasileira. Recomendamos comprar o tamanho habitual.',
+        shippingText: 'Enviado em caixa dupla reforçada ZSX com saco em tecido de proteção.'
+    },
+
+    'calcado-2': {
+        id: 'calcado-2',
+        name: 'Tênis Streetwear Low Profile Black',
+        category: 'Calçados & Tênis',
+        tag: 'MINIMAL LUXURY',
+        price: 279.90,
+        originalPrice: 399.90,
+        discount: '30% OFF',
+        installments: '6x de R$ 46,65 sem juros',
+        rating: 4.8,
+        reviewsCount: 94,
+        image: '../images/shoes-original.png',
+        gallery: [
+            '../images/shoes-original.png',
+            '../images/shoes3d.png',
+            '../images/shoes-original.png',
+            '../images/shoes3d.png'
+        ],
+        colors: [
+            { name: 'Preto Total', hex: '#111111' }
+        ],
+        sizes: ['39', '40', '41', '42'],
+        description: 'Silhueta baixa clássica em camurça e lona encorpada para um visual clean e versátil.',
+        specs: [
+            'Solado vulcanizado emborrachado resistente',
+            'Cabedal em lona pesada e detalhes em camurça',
+            'Palmilha confortável de espuma de alta densidade'
+        ],
+        materialsText: 'Lona de algodão e camurça bovina.',
+        fitText: 'Tamanho padrão.',
+        shippingText: 'Envio rápido.'
+    },
+
+    'calcado-3': {
+        id: 'calcado-3',
+        name: 'Tênis Skate Retro ZSX White',
+        category: 'Calçados & Tênis',
+        tag: 'SKATE ARCHIVE',
+        price: 259.90,
+        originalPrice: 379.90,
+        discount: '31% OFF',
+        installments: '6x de R$ 43,31 sem juros',
+        rating: 4.8,
+        reviewsCount: 78,
+        image: '../images/shoes-original.png',
+        gallery: [
+            '../images/shoes-original.png',
+            '../images/shoes3d.png',
+            '../images/shoes-original.png',
+            '../images/shoes3d.png'
+        ],
+        colors: [
+            { name: 'Branco Puro', hex: '#ffffff' }
+        ],
+        sizes: ['38', '39', '40', '41', '42'],
+        description: 'Tênis retro skate com solado de alta aderência e língua acolchoada.',
+        specs: [
+            'Língua acolchoada com espuma densa',
+            'Solado waffle com alta tração',
+            'Costura dupla em toda a biqueira'
+        ],
+        materialsText: 'Couro sintético microfibra e borracha.',
+        fitText: 'Tamanho padrão.',
+        shippingText: 'Envio seguro com garantia.'
+    },
+
+    'calcado-4': {
+        id: 'calcado-4',
+        name: 'Slide ZSX Cloud Sandal',
+        category: 'Calçados & Tênis',
+        tag: 'COMFORT CLOUD',
+        price: 129.90,
+        originalPrice: 179.90,
+        discount: '28% OFF',
+        installments: '4x de R$ 32,47 sem juros',
+        rating: 4.7,
+        reviewsCount: 88,
+        image: '../images/shoes3d.png',
+        gallery: [
+            '../images/shoes3d.png',
+            '../images/shoes-original.png',
+            '../images/shoes3d.png',
+            '../images/shoes-original.png'
+        ],
+        colors: [
+            { name: 'Preto ZSX', hex: '#111111' },
+            { name: 'Areia Nude', hex: '#d6cebf' }
+        ],
+        sizes: ['37/38', '39/40', '41/42', '43/44'],
+        description: 'Slide anatômico monobloco em EVA ultra macio. Sensação de caminhar nas nuvens com estilo minimalista.',
+        specs: [
+            'Moldado em bloco único de EVA injetado',
+            'Secagem instantânea e impermeável',
+            'Palmilha com relevos de massagem para os pés'
+        ],
+        materialsText: '100% EVA injetado ultra macio.',
+        fitText: 'Forma ampla e confortável.',
+        shippingText: 'Envio rápido.'
+    },
+
     'casaco-1': {
         id: 'casaco-1',
         name: 'Moletom Adidas Preto Oversized',
@@ -401,7 +1087,21 @@ function loadProductPage() {
     // Breadcrumb
     const breadcrumbCat = document.getElementById('pdpBreadcrumbCategory');
     const breadcrumbCurrent = document.getElementById('pdpBreadcrumbCurrent');
-    if (breadcrumbCat) breadcrumbCat.textContent = currentProduct.category;
+    if (breadcrumbCat) {
+        const catMap = {
+            'Casacos & Moletons': 'casacos',
+            'Casacos & Jaquetas': 'casacos',
+            'Casacos & Tricôs': 'casacos',
+            'Camisas Polo': 'polos',
+            'Camisas & Camisetas': 'camisas',
+            'Bermudas & Shorts': 'bermudas',
+            'Bonés & Acessórios': 'bones',
+            'Camisas de Time': 'jerseys',
+            'Calçados & Tênis': 'calcados'
+        };
+        const catKey = catMap[currentProduct.category] || 'all';
+        breadcrumbCat.innerHTML = `<a href="category.html?cat=${catKey}">${currentProduct.category}</a>`;
+    }
     if (breadcrumbCurrent) breadcrumbCurrent.textContent = currentProduct.name;
 
     // Badge
@@ -544,7 +1244,7 @@ function renderTabContents() {
     if (specsList && currentProduct.specs) {
         specsList.innerHTML = currentProduct.specs.map(spec => `
             <li class="pdp-spec-item">
-                <span class="pdp-spec-icon">✦</span>
+                <span class="pdp-spec-icon"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 14.8 9.2 22 12 14.8 14.8 12 22 9.2 14.8 2 12 9.2 9.2 12 2"/></svg></span>
                 <span>${spec}</span>
             </li>
         `).join('');
@@ -767,8 +1467,59 @@ function setupPurchaseButtons() {
     }
 }
 
+// Sincronizar productsDB com Painel Administrativo
+function syncProductsDBWithAdmin() {
+    const overrides = JSON.parse(localStorage.getItem('zsx_catalog_overrides')) || {};
+    const customList = JSON.parse(localStorage.getItem('zsx_custom_products')) || [];
+
+    customList.forEach(cp => {
+        productsDB[cp.id] = {
+            id: cp.id,
+            name: cp.name,
+            category: cp.category || 'Coleção ZSX',
+            tag: cp.badge || 'NEW DROP',
+            price: parseFloat(cp.price) || 99.90,
+            originalPrice: parseFloat(cp.originalPrice) || 149.90,
+            discount: cp.discount || '30% OFF',
+            installments: cp.installments || '3x sem juros',
+            rating: 5.0,
+            reviewsCount: 18,
+            image: cp.image || '../images/shirts3d.png',
+            gallery: [cp.image || '../images/shirts3d.png', '../images/shirts.png'],
+            colors: [{ name: 'Padrão ZSX', hex: '#111111' }],
+            sizes: cp.sizes || ['P', 'M', 'G', 'GG'],
+            description: cp.description || 'Peça exclusiva ZSX Outlet confeccionada com materiais de alta gramatura.',
+            specs: [
+                'Acabamento premium ZSX Outlet',
+                'Tecido de alta durabilidade e conforto',
+                'Costura reforçada de alto padrão'
+            ],
+            materialsText: 'Algodão nobre selecionado com toque macio.',
+            fitText: 'Caimento autêntico streetwear.',
+            shippingText: 'Envio imediato em até 24h úteis.'
+        };
+    });
+
+    Object.keys(overrides).forEach(pid => {
+        if (productsDB[pid]) {
+            const ov = overrides[pid];
+            Object.assign(productsDB[pid], ov);
+            const p = parseFloat(productsDB[pid].price) || 0;
+            const orig = parseFloat(productsDB[pid].originalPrice) || p;
+            if (orig > p && orig > 0) {
+                productsDB[pid].discount = `${Math.round(((orig - p) / orig) * 100)}% OFF`;
+            }
+            productsDB[pid].installments = `3x de R$ ${(p / 3).toFixed(2).replace('.', ',')} sem juros`;
+            if (ov.image) {
+                productsDB[pid].gallery = [ov.image, ...(productsDB[pid].gallery || []).slice(1)];
+            }
+        }
+    });
+}
+
 // Inicialização da Página
 document.addEventListener('DOMContentLoaded', () => {
+    syncProductsDBWithAdmin();
     loadProductPage();
     setupQuantityControls();
     setupTabs();

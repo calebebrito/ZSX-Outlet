@@ -161,11 +161,14 @@ function showToast(message, type = 'info') {
     const toast = document.createElement('div');
     toast.className = `toast ${type}`;
     
-    let icon = 'ℹ️';
-    if (type === 'success') icon = '✓';
-    if (type === 'error') icon = '✕';
+    let iconSvg = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>';
+    if (type === 'success') {
+        iconSvg = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><polyline points="20 6 9 17 4 12"/></svg>';
+    } else if (type === 'error') {
+        iconSvg = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle;"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+    }
 
-    toast.innerHTML = `<span>${icon}</span> <span>${message}</span>`;
+    toast.innerHTML = `<span class="toast-icon">${iconSvg}</span> <span>${message}</span>`;
     container.appendChild(toast);
 
     setTimeout(() => {
@@ -245,7 +248,7 @@ function renderCart() {
     if (cart.length === 0) {
         listContainer.innerHTML = `
             <div class="cart-empty-state">
-                <span class="cart-empty-icon">🛍️</span>
+                <span class="cart-empty-icon"><svg viewBox="0 0 48 48" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 12L4 18v22a3 3 0 0 0 3 3h34a3 3 0 0 0 3-3V18l-4-6z"/><line x1="4" y1="18" x2="44" y2="18"/><path d="M30 24a6 6 0 0 1-12 0"/></svg></span>
                 <h3>Seu carrinho está vazio</h3>
                 <p>Nenhum item adicionado por enquanto. Confira nossas coleções!</p>
                 <button type="button" class="modal-btn-confirm" onclick="closeCartDrawer()">Explorar Produtos</button>
@@ -334,6 +337,13 @@ function handleApplyCoupon() {
         'OFF20': 20,
         'VIP30': 30
     };
+    const storedCoupons = JSON.parse(localStorage.getItem('zsx_coupons'));
+    if (Array.isArray(storedCoupons)) {
+        Object.keys(validCoupons).forEach(k => delete validCoupons[k]);
+        storedCoupons.filter(c => c.active).forEach(c => {
+            validCoupons[c.code.toUpperCase()] = Number(c.percent);
+        });
+    }
 
     if (validCoupons[code]) {
         activeCoupon = { code: code, percent: validCoupons[code] };
@@ -553,7 +563,7 @@ function copyPixCode() {
     navigator.clipboard.writeText(input.value).then(() => {
         if (btn) {
             const originalText = btn.textContent;
-            btn.textContent = 'Copiado! ✓';
+            btn.innerHTML = 'Copiado! <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="vertical-align: middle; margin-left: 4px;"><polyline points="20 6 9 17 4 12"/></svg>';
             setTimeout(() => { btn.textContent = originalText; }, 2000);
         }
         showToast('Código PIX copiado para a área de transferência!', 'success');
@@ -666,7 +676,7 @@ function renderOrders(statusFilter = currentOrderStatusFilter) {
 
         container.innerHTML = `
             <div class="orders-empty-state">
-                <span class="orders-empty-icon">📦</span>
+                <span class="orders-empty-icon"><svg viewBox="0 0 48 48" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M42 32V16a4 4 0 0 0-2-3.46l-14-8a4 4 0 0 0-4 0l-14 8A4 4 0 0 0 6 16v16a4 4 0 0 0 2 3.46l14 8a4 4 0 0 0 4 0l14-8A4 4 0 0 0 42 32z"/><polyline points="6.54 13.92 24 24.02 41.46 13.92"/><line x1="24" y1="44.16" x2="24" y2="24"/></svg></span>
                 <h4>Nenhum Pedido Encontrado</h4>
                 <p>${emptyMsg}</p>
             </div>
@@ -863,7 +873,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const menuMyCouponsBtn = document.getElementById('menuMyCouponsBtn');
     if (menuMyCouponsBtn) {
         menuMyCouponsBtn.addEventListener('click', () => {
-            showToast('Cupons ativos: ZSX10 (10%), OFF20 (20%) e VIP30 (30%)', 'success');
+            const cList = JSON.parse(localStorage.getItem('zsx_coupons')) || [
+                { code: 'ZSX10', percent: 10, active: true },
+                { code: 'OFF20', percent: 20, active: true },
+                { code: 'VIP30', percent: 30, active: true }
+            ];
+            const activeStr = cList.filter(c => c.active).map(c => `${c.code} (${c.percent}%)`).join(', ');
+            showToast(activeStr ? `Cupons ativos: ${activeStr}` : 'Nenhum cupom ativo no momento.', 'success');
         });
     }
 
@@ -919,6 +935,52 @@ document.addEventListener('DOMContentLoaded', () => {
         tab.addEventListener('click', () => {
             switchOrderStatusTab(tab.dataset.orderStatus);
         });
+    });
+
+    // Sincronizar Cards da Home com Edições do Painel Administrativo
+    const adminOverrides = JSON.parse(localStorage.getItem('zsx_catalog_overrides')) || {};
+    const adminDeleted = JSON.parse(localStorage.getItem('zsx_deleted_products')) || [];
+
+    document.querySelectorAll('.prods').forEach(prodEl => {
+        const rawId = prodEl.dataset.id;
+        if (rawId && adminDeleted.includes(rawId)) {
+            prodEl.style.display = 'none';
+            return;
+        }
+        if (rawId && adminOverrides[rawId]) {
+            const ov = adminOverrides[rawId];
+            if (ov.active === false) {
+                prodEl.style.display = 'none';
+                return;
+            }
+            if (ov.name) {
+                prodEl.dataset.name = ov.name;
+                const nameEl = prodEl.querySelector('.prod-nome');
+                if (nameEl) nameEl.textContent = ov.name;
+            }
+            if (ov.price !== undefined) {
+                prodEl.dataset.price = String(ov.price);
+                const priceEl = prodEl.querySelector('.prod-preco');
+                if (priceEl) priceEl.textContent = formatBRL(ov.price);
+            }
+            if (ov.image) {
+                prodEl.dataset.image = ov.image;
+                const imgEl = prodEl.querySelector('img');
+                if (imgEl) imgEl.src = ov.image;
+            }
+            if (ov.stock !== undefined && Number(ov.stock) <= 0) {
+                const priceEl = prodEl.querySelector('.prod-preco');
+                if (priceEl) priceEl.textContent = 'ESGOTADO';
+            }
+        }
+    });
+
+    // Atalho de Teclado Exclusivo (Ctrl + Shift + A) para abrir o Painel Administrativo
+    window.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.shiftKey && (e.key === 'A' || e.key === 'a')) {
+            e.preventDefault();
+            window.location.href = 'admin.html';
+        }
     });
 
     // Botões dos Produtos (Comprar e Adicionar ao Carrinho)

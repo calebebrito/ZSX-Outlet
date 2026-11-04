@@ -2432,3 +2432,54 @@ body {
     transform: translateX(4px);
     color: #111111;
 }
+
+/* Suporte a cones SVG no estilo da seo de benefcios */
+.inline-svg-icon {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.address-badge {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 6px;
+}
+
+.cart-btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pix-badge-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.support-contact-icon.whatsapp-bg svg {
+    stroke: #16a34a;
+}
+
+.support-contact-icon.email-bg svg {
+    stroke: #0284c7;
+}
+
+.toast-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pdp-star-svg {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 2px;
+}
+
+.cat-pill-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}

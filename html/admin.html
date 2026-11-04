@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZSX Outlet — Painel Administrativo & Gestão</title>
+    <link rel="stylesheet" href="../admin.css">
+</head>
+
+<body class="admin-body">
+
+    <!-- ======================================================================
+         OVERLAY DE AUTENTICAÇÃO RESTRITA (APENAS VOCÊ E O DONO DA LOJA)
+         ====================================================================== -->
+    <div id="adminAuthOverlay" class="admin-auth-overlay">
+        <div class="admin-auth-card">
+            <div class="admin-auth-header">
+                <img src="../images/zsx.png" alt="ZSX Outlet" class="admin-auth-logo">
+                <div>
+                    <span class="admin-auth-badge">
+                        <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                        Acesso Restrito
+                    </span>
+                </div>
+                <h1 class="admin-auth-title">CENTRAL DE GESTÃO ZSX</h1>
+                <p class="admin-auth-subtitle">Acesso exclusivo para o Desenvolvedor e o Proprietário da loja.</p>
+            </div>
+
+            <!-- Botões Rápidos de Seleção de Perfil Autorizado -->
+            <div class="admin-role-switcher">
+                <button type="button" class="role-quick-btn active" id="quickRoleDev" onclick="selectQuickRole('dev')">
+                    <span class="role-quick-top">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="16 18 22 12 16 6"/>
+                            <polyline points="8 6 2 12 8 18"/>
+                        </svg>
+                        Você (Admin/Dev)
+                    </span>
+                    <span class="role-quick-sub">dev@zsxoutlet.com.br</span>
+                </button>
+
+                <button type="button" class="role-quick-btn" id="quickRoleOwner" onclick="selectQuickRole('owner')">
+                    <span class="role-quick-top">
+                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                        Dono da Loja
+                    </span>
+                    <span class="role-quick-sub">dono@zsxoutlet.com.br</span>
+                </button>
+            </div>
+
+            <form id="adminLoginForm" class="admin-auth-form">
+                <div class="admin-field-group">
+                    <label for="adminLoginEmail">E-mail ou Credencial</label>
+                    <input type="text" id="adminLoginEmail" class="admin-input" value="dev@zsxoutlet.com.br" placeholder="Digite seu e-mail autorizado" required>
+                </div>
+
+                <div class="admin-field-group">
+                    <label for="adminLoginPass">Chave de Segurança</label>
+                    <input type="password" id="adminLoginPass" class="admin-input" value="zsx2026" placeholder="••••••••" required>
+                </div>
+
+                <div id="adminAuthError" class="admin-auth-error">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="12" y1="8" x2="12" y2="12"/>
+                        <line x1="12" y1="16" x2="12.01" y2="16"/>
+                    </svg>
+                    <span>Credenciais inválidas. Apenas você e o dono da loja possuem permissão.</span>
+                </div>
+
+                <button type="submit" class="btn-admin-login">
+                    <span>Entrar no Painel de Controle</span>
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                        <polyline points="12 5 19 12 12 19"/>
+                    </svg>
+                </button>
+            </form>
+
+            <div class="admin-auth-footer">
+                <a href="index.html" class="admin-back-store-link">
+                    <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="19" y1="12" x2="5" y2="12"/>
+                        <polyline points="12 19 5 12 12 5"/>
+                    </svg>
+                    Voltar para a Loja
+                </a>
+                <span style="color: #8c8170; font-size: 11.5px;">ZSX Security v2.6</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================================
+         ESTRUTURA PRINCIPAL DO PAINEL ADMINISTRATIVO
+         ====================================================================== -->
+    <div class="admin-layout">
+
+        <!-- SIDEBAR -->
+        <aside class="admin-sidebar">
+            <div>
+                <div class="sidebar-brand">
+                    <img src="../images/zsx.png" alt="ZSX" class="sidebar-logo">
+                    <div class="sidebar-brand-text">
+                        <span class="sidebar-brand-title">ZSX ADMIN</span>
+                        <span class="sidebar-brand-sub">Painel de Controle</span>
+                    </div>
+                </div>
+
+                <div class="sidebar-user-box">
+                    <div class="sidebar-user-avatar">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                        </svg>
+                    </div>
+                    <div class="sidebar-user-info">
+                        <span class="sidebar-user-role" id="activeAdminRole">Acesso Master</span>
+                        <span class="sidebar-user-name" id="activeAdminName">Desenvolvedor ZSX</span>
+                    </div>
+                </div>
+
+                <nav class="sidebar-nav">
+                    <button type="button" class="sidebar-nav-btn active" data-section="dashboard">
+                        <span class="sidebar-nav-btn-left">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="3" width="7" height="7"/>
+                                <rect x="14" y="3" width="7" height="7"/>
+                                <rect x="14" y="14" width="7" height="7"/>
+                                <rect x="3" y="14" width="7" height="7"/>
+                            </svg>
+                            <span>Visão Geral</span>
+                        </span>
+                    </button>
+
+                    <button type="button" class="sidebar-nav-btn" data-section="products">
+                        <span class="sidebar-nav-btn-left">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M6 3l-3 4 3 2v12h12V9l3-2-3-4-4 2a4 4 0 0 1-4 0L6 3z"/>
+                            </svg>
+                            <span>Produtos & Estoque</span>
+                        </span>
+                        <span class="sidebar-badge" id="navBadgeProducts">30</span>
+                    </button>
+
+                    <button type="button" class="sidebar-nav-btn" data-section="orders">
+                        <span class="sidebar-nav-btn-left">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                                <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
+                                <line x1="12" y1="22.08" x2="12" y2="12"/>
+                            </svg>
+                            <span>Pedidos & Envios</span>
+                        </span>
+                        <span class="sidebar-badge badge-alert" id="navBadgeOrders">0</span>
+                    </button>
+
+                    <button type="button" class="sidebar-nav-btn" data-section="coupons">
+                        <span class="sidebar-nav-btn-left">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                                <line x1="7" y1="7" x2="7.01" y2="7"/>
+                            </svg>
+                            <span>Cupons & Descontos</span>
+                        </span>
+                        <span class="sidebar-badge" id="navBadgeCoupons">3</span>
+                    </button>
+
+                    <button type="button" class="sidebar-nav-btn" data-section="settings">
+                        <span class="sidebar-nav-btn-left">
+                            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                            </svg>
+                            <span>Configurações & Acessos</span>
+                        </span>
+                    </button>
+                </nav>
+            </div>
+
+            <div class="sidebar-footer">
+                <a href="index.html" class="btn-view-store">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                        <polyline points="15 3 21 3 21 9"/>
+                        <line x1="10" y1="14" x2="21" y2="3"/>
+                    </svg>
+                    <span>Ver Loja em Tempo Real</span>
+                </a>
+                <button type="button" id="btnAdminLogout" class="btn-admin-logout">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    <span>Encerrar Sessão</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- MAIN CONTENT -->
+        <div class="admin-main">
+            <!-- TOPBAR -->
+            <header class="admin-topbar">
+                <div class="topbar-left">
+                    <h1 id="adminPageTitle">Visão Geral da Operação</h1>
+                    <p id="adminPageSubtitle">Todas as alterações refletem instantaneamente na loja ZSX Outlet.</p>
+                </div>
+
+                <div class="topbar-right">
+                    <div class="sync-indicator">
+                        <span class="sync-dot"></span>
+                        <span>Sincronizado Ao Vivo</span>
+                    </div>
+                    <button type="button" class="btn-primary-admin" onclick="openProductModal()">
+                        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        <span>Novo Produto</span>
+                    </button>
+                </div>
+            </header>
+
+            <div class="admin-content-area">
+
+                <!-- ==========================================================
+                     ABA 1: DASHBOARD GERAL
+                     ========================================================== -->
+                <section id="section-dashboard" class="admin-section active">
+                    <div class="kpi-grid">
+                        <div class="kpi-card">
+                            <div class="kpi-top">
+                                <span class="kpi-label">Receita Bruta</span>
+                                <div class="kpi-icon">
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="12" y1="1" x2="12" y2="23"/>
+                                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="kpi-value" id="kpiTotalRevenue">R$ 0,00</div>
+                            <div class="kpi-sub" id="kpiAvgTicket">Ticket médio: R$ 0,00</div>
+                        </div>
+
+                        <div class="kpi-card">
+                            <div class="kpi-top">
+                                <span class="kpi-label">Pedidos Totais</span>
+                                <div class="kpi-icon">
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                                        <line x1="3" y1="6" x2="21" y2="6"/>
+                                        <path d="M16 10a4 4 0 0 1-8 0"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="kpi-value" id="kpiTotalOrders">0</div>
+                            <div class="kpi-sub" id="kpiPendingOrders">0 aguardando pagamento</div>
+                        </div>
+
+                        <div class="kpi-card">
+                            <div class="kpi-top">
+                                <span class="kpi-label">Produtos & Estoque</span>
+                                <div class="kpi-icon">
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="kpi-value" id="kpiTotalProducts">30</div>
+                            <div class="kpi-sub" id="kpiTotalUnits">0 unidades totais em estoque</div>
+                        </div>
+
+                        <div class="kpi-card">
+                            <div class="kpi-top">
+                                <span class="kpi-label">Alerta de Estoque</span>
+                                <div class="kpi-icon" style="color: #e11d48; background: #fef2f2;">
+                                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+                                        <line x1="12" y1="9" x2="12" y2="13"/>
+                                        <line x1="12" y1="17" x2="12.01" y2="17"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="kpi-value" id="kpiLowStockCount">0</div>
+                            <div class="kpi-sub">Itens com 5 un. ou menos</div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-two-cols">
+                        <div class="admin-panel-card">
+                            <div class="panel-card-header">
+                                <span class="panel-card-title">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <line x1="18" y1="20" x2="18" y2="10"/>
+                                        <line x1="12" y1="20" x2="12" y2="4"/>
+                                        <line x1="6" y1="20" x2="6" y2="14"/>
+                                    </svg>
+                                    Distribuição de Estoque e Valor por Categoria
+                                </span>
+                                <button type="button" class="btn-secondary-admin" onclick="switchAdminSection('products')">Gerenciar Tudo</button>
+                            </div>
+                            <div id="dashboardCategoryBars" class="category-stats-list"></div>
+                        </div>
+
+                        <div class="admin-panel-card">
+                            <div class="panel-card-header">
+                                <span class="panel-card-title">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                                    </svg>
+                                    Reposição Rápida de Estoque
+                                </span>
+                            </div>
+                            <div id="dashboardLowStockList" class="low-stock-list"></div>
+                        </div>
+                    </div>
+
+                    <div class="admin-panel-card">
+                        <div class="panel-card-header">
+                            <span class="panel-card-title">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12 6 12 12 16 14"/>
+                                </svg>
+                                Últimos Pedidos Recebidos
+                            </span>
+                            <button type="button" class="btn-secondary-admin" onclick="switchAdminSection('orders')">Ver Todos os Pedidos</button>
+                        </div>
+                        <div id="dashboardRecentOrders" class="orders-admin-grid"></div>
+                    </div>
+                </section>
+
+                <!-- ==========================================================
+                     ABA 2: PRODUTOS, PREÇOS, DESCONTOS E ESTOQUE
+                     ========================================================== -->
+                <section id="section-products" class="admin-section">
+                    <!-- Barra de Ações em Massa (Desconto & Estoque por Categoria) -->
+                    <div class="bulk-actions-bar">
+                        <div class="bulk-title-group">
+                            <span class="bulk-title">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                                </svg>
+                                Ações Rápidas em Massa (Descontos, Preços & Estoque)
+                            </span>
+                            <span class="bulk-desc">Aplique promoções ou reponha o estoque de uma categoria inteira com 1 clique.</span>
+                        </div>
+
+                        <div class="bulk-controls">
+                            <select id="bulkCategorySelect" class="bulk-input-select">
+                                <option value="all">Todas as Categorias</option>
+                                <option value="camisas">Camisas</option>
+                                <option value="bermudas">Bermudas</option>
+                                <option value="bones">Bonés</option>
+                                <option value="jerseys">Camisas de Time</option>
+                                <option value="calcados">Calçados</option>
+                                <option value="casacos">Casacos</option>
+                                <option value="polos">Camisas Polo</option>
+                            </select>
+
+                            <input type="number" id="bulkDiscountInput" class="bulk-input-num" min="0" max="90" value="20" placeholder="% OFF">
+
+                            <button type="button" class="btn-bulk-apply" onclick="applyBulkCategoryDiscount()">
+                                Aplicar % OFF na Categoria
+                            </button>
+
+                            <button type="button" class="btn-bulk-apply" style="background: #ffffff;" onclick="applyBulkRestock(15)">
+                                +15 Estoque na Categoria
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Filtros de Busca e Categoria -->
+                    <div class="admin-filters-bar">
+                        <div class="search-box-admin">
+                            <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"/>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            </svg>
+                            <input type="text" id="adminProductSearch" placeholder="Buscar produto por nome, ID ou tag...">
+                        </div>
+
+                        <div class="filter-group-right">
+                            <select id="adminCategoryFilter" class="admin-select" style="width: auto;">
+                                <option value="all">Categoria: Todas</option>
+                                <option value="camisas">Camisas</option>
+                                <option value="bermudas">Bermudas</option>
+                                <option value="bones">Bonés</option>
+                                <option value="jerseys">Camisas de Time</option>
+                                <option value="calcados">Calçados</option>
+                                <option value="casacos">Casacos</option>
+                                <option value="polos">Camisas Polo</option>
+                            </select>
+
+                            <select id="adminStockFilter" class="admin-select" style="width: auto;">
+                                <option value="all">Estoque: Todos</option>
+                                <option value="ok">Em Estoque (&gt; 5)</option>
+                                <option value="low">Estoque Baixo (1 a 5)</option>
+                                <option value="out">Esgotados (0)</option>
+                            </select>
+
+                            <button type="button" class="btn-primary-admin" onclick="openProductModal()">
+                                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"/>
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                </svg>
+                                Adicionar Produto
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Tabela de Produtos Editável -->
+                    <div class="admin-table-wrapper">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Produto</th>
+                                    <th>Categoria</th>
+                                    <th>Preço "De" (Original)</th>
+                                    <th>Preço "Por" (Venda)</th>
+                                    <th>Desconto Rápido</th>
+                                    <th>Estoque Atual</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminProductsTableBody"></tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- ==========================================================
+                     ABA 3: PEDIDOS & LOGÍSTICA
+                     ========================================================== -->
+                <section id="section-orders" class="admin-section">
+                    <div class="admin-filters-bar">
+                        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                            <button type="button" class="btn-secondary-admin order-filter-pill active" data-ostatus="all" onclick="filterAdminOrders('all', this)">Todos os Pedidos</button>
+                            <button type="button" class="btn-secondary-admin order-filter-pill" data-ostatus="pending" onclick="filterAdminOrders('pending', this)">Aguardando Pagamento</button>
+                            <button type="button" class="btn-secondary-admin order-filter-pill" data-ostatus="confirmed" onclick="filterAdminOrders('confirmed', this)">Confirmados / Em Separação</button>
+                            <button type="button" class="btn-secondary-admin order-filter-pill" data-ostatus="finished" onclick="filterAdminOrders('finished', this)">Finalizados / Entregues</button>
+                        </div>
+                    </div>
+
+                    <div id="adminOrdersContainer" class="orders-admin-grid"></div>
+                </section>
+
+                <!-- ==========================================================
+                     ABA 4: CUPONS & PROMOÇÕES
+                     ========================================================== -->
+                <section id="section-coupons" class="admin-section">
+                    <div class="admin-panel-card">
+                        <div class="panel-card-header">
+                            <span class="panel-card-title">
+                                <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+                                    <line x1="7" y1="7" x2="7.01" y2="7"/>
+                                </svg>
+                                Criar Novo Cupom de Desconto para o Carrinho
+                            </span>
+                        </div>
+
+                        <form id="createCouponForm" style="display: flex; flex-wrap: wrap; gap: 14px; align-items: flex-end;">
+                            <div class="admin-field-group" style="flex: 1; min-width: 180px;">
+                                <label>Código do Cupom</label>
+                                <input type="text" id="newCouponCode" class="admin-input" placeholder="Ex: ZSX40, DROP15" style="text-transform: uppercase;" required>
+                            </div>
+                            <div class="admin-field-group" style="width: 160px;">
+                                <label>Desconto (%)</label>
+                                <input type="number" id="newCouponPercent" class="admin-input" min="1" max="90" value="15" required>
+                            </div>
+                            <div class="admin-field-group" style="flex: 1; min-width: 200px;">
+                                <label>Descrição / Campanha</label>
+                                <input type="text" id="newCouponDesc" class="admin-input" placeholder="Ex: Desconto Especial de Lançamento">
+                            </div>
+                            <button type="submit" class="btn-primary-admin" style="height: 44px;">
+                                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="12" y1="5" x2="12" y2="19"/>
+                                    <line x1="5" y1="12" x2="19" y2="12"/>
+                                </svg>
+                                Ativar Cupom
+                            </button>
+                        </form>
+
+                        <div id="adminCouponsList" class="coupons-grid"></div>
+                    </div>
+                </section>
+
+                <!-- ==========================================================
+                     ABA 5: CONFIGURAÇÕES DA LOJA & ACESSOS
+                     ========================================================== -->
+                <section id="section-settings" class="admin-section">
+                    <div class="settings-grid">
+                        <!-- Configurações Comerciais -->
+                        <div class="admin-panel-card">
+                            <div class="panel-card-header">
+                                <span class="panel-card-title">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="1" y="3" width="15" height="13"/>
+                                        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                                        <circle cx="5.5" cy="18.5" r="2.5"/>
+                                        <circle cx="18.5" cy="18.5" r="2.5"/>
+                                    </svg>
+                                    Frete, Pagamento PIX & Avisos da Loja
+                                </span>
+                            </div>
+
+                            <form id="storeSettingsForm" class="admin-auth-form">
+                                <div class="admin-field-group">
+                                    <label>Meta para Frete Grátis (R$)</label>
+                                    <input type="number" step="0.01" id="settingFreeShippingMin" class="admin-input" value="199.00">
+                                </div>
+
+                                <div class="admin-field-group">
+                                    <label>Valor do Frete Padrão (R$)</label>
+                                    <input type="number" step="0.01" id="settingDefaultShipping" class="admin-input" value="24.00">
+                                </div>
+
+                                <div class="admin-field-group">
+                                    <label>Desconto Automático no PIX (%)</label>
+                                    <input type="number" step="1" min="0" max="50" id="settingPixDiscount" class="admin-input" value="5">
+                                </div>
+
+                                <div class="admin-field-group">
+                                    <label>Texto da Barra de Anúncio no Topo</label>
+                                    <input type="text" id="settingTopBarText" class="admin-input" value="FRETE GRÁTIS EM COMPRAS ACIMA DE R$ 199">
+                                </div>
+
+                                <div class="admin-field-group">
+                                    <label>WhatsApp Oficial de Suporte</label>
+                                    <input type="text" id="settingWhatsapp" class="admin-input" value="(11) 99999-9999">
+                                </div>
+
+                                <button type="submit" class="btn-primary-admin" style="justify-content: center; margin-top: 8px;">
+                                    Salvar Configurações da Loja
+                                </button>
+                            </form>
+                        </div>
+
+                        <!-- Controle de Credenciais (Você e o Dono da Loja) -->
+                        <div class="admin-panel-card">
+                            <div class="panel-card-header">
+                                <span class="panel-card-title">
+                                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                    </svg>
+                                    Credenciais Exclusivas (Você & Dono da Loja)
+                                </span>
+                            </div>
+
+                            <form id="credentialsForm" class="admin-auth-form">
+                                <div class="admin-field-group">
+                                    <label>Seu E-mail (Desenvolvedor / Admin Master)</label>
+                                    <input type="text" id="credDevEmail" class="admin-input" value="dev@zsxoutlet.com.br">
+                                </div>
+                                <div class="admin-field-group">
+                                    <label>Sua Senha</label>
+                                    <input type="text" id="credDevPass" class="admin-input" value="zsx2026">
+                                </div>
+
+                                <hr style="border: none; border-top: 1px solid #ebe4dc; margin: 8px 0;">
+
+                                <div class="admin-field-group">
+                                    <label>E-mail do Dono da Loja (Proprietário)</label>
+                                    <input type="text" id="credOwnerEmail" class="admin-input" value="dono@zsxoutlet.com.br">
+                                </div>
+                                <div class="admin-field-group">
+                                    <label>Senha do Dono da Loja</label>
+                                    <input type="text" id="credOwnerPass" class="admin-input" value="owner2026">
+                                </div>
+
+                                <button type="submit" class="btn-primary-admin" style="justify-content: center; margin-top: 8px;">
+                                    Atualizar Credenciais de Acesso
+                                </button>
+                            </form>
+
+                            <div style="margin-top: 28px; padding-top: 20px; border-top: 1px solid #ebe4dc;">
+                                <h4 style="font-size: 13.5px; font-weight: 800; margin-bottom: 6px; color: #b91c1c;">Restaurar Catálogo Original</h4>
+                                <p style="font-size: 12.5px; color: #6e6659; margin-bottom: 12px;">
+                                    Caso deseje reverter todas as edições de preços, descontos e estoques para os valores originais de fábrica:
+                                </p>
+                                <button type="button" class="btn-secondary-admin" style="border-color: #fecaca; color: #b91c1c;" onclick="resetAllStoreData()">
+                                    Restaurar Padrões de Fábrica
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================================
+         MODAL DE CRIAR / EDITAR PRODUTO COMPLETO
+         ====================================================================== -->
+    <div id="adminProductModal" class="admin-modal-overlay">
+        <div class="admin-modal-card">
+            <div class="admin-modal-header">
+                <h3 class="panel-card-title" id="productModalTitle">Editar Produto</h3>
+                <button type="button" class="btn-icon-action" onclick="closeProductModal()">&times;</button>
+            </div>
+
+            <form id="adminProductForm" class="admin-form-grid">
+                <input type="hidden" id="editProdId">
+
+                <div class="admin-field-group admin-form-full">
+                    <label>Nome do Produto</label>
+                    <input type="text" id="editProdName" class="admin-input" placeholder="Ex: Camiseta Oversized ZSX Heavyweight" required>
+                </div>
+
+                <div class="admin-field-group">
+                    <label>Categoria</label>
+                    <select id="editProdCategoryKey" class="admin-select" required>
+                        <option value="camisas">Camisas</option>
+                        <option value="bermudas">Bermudas</option>
+                        <option value="bones">Bonés</option>
+                        <option value="jerseys">Camisas de Time</option>
+                        <option value="calcados">Calçados</option>
+                        <option value="casacos">Casacos</option>
+                        <option value="polos">Camisas Polo</option>
+                    </select>
+                </div>
+
+                <div class="admin-field-group">
+                    <label>Selo / Tag de Destaque</label>
+                    <input type="text" id="editProdBadge" class="admin-input" placeholder="Ex: NEW DROP, BESTSELLER, 35% OFF">
+                </div>
+
+                <div class="admin-field-group">
+                    <label>Preço Original "De" (R$)</label>
+                    <input type="number" step="0.01" id="editProdOriginalPrice" class="admin-input" required>
+                </div>
+
+                <div class="admin-field-group">
+                    <label>Preço de Venda "Por" (R$)</label>
+                    <input type="number" step="0.01" id="editProdPrice" class="admin-input" required>
+                </div>
+
+                <div class="admin-field-group">
+                    <label>Quantidade em Estoque</label>
+                    <input type="number" id="editProdStock" class="admin-input" min="0" value="20" required>
+                </div>
+
+                <div class="admin-field-group">
+                    <label>Imagem do Produto</label>
+                    <select id="editProdImageSelect" class="admin-select" onchange="document.getElementById('editProdImage').value = this.value">
+                        <option value="../images/shirts3d.png">Camiseta 3D Preta (shirts3d.png)</option>
+                        <option value="../images/shirts.png">Camiseta Streetwear (shirts.png)</option>
+                        <option value="../images/shorts.png">Bermuda Streetwear (shorts.png)</option>
+                        <option value="../images/caps.png">Boné ZSX (caps.png)</option>
+                        <option value="../images/jerseys.png">Camisa de Time / Jersey (jerseys.png)</option>
+                        <option value="../images/shoes.png">Tênis / Sneaker (shoes.png)</option>
+                        <option value="../images/products/camisa-polo-preta-e-branca.png">Polo Preta e Branca</option>
+                        <option value="../images/products/camisa-polo-branca-e-verde.png">Polo Branca e Verde</option>
+                        <option value="../images/products/camisa-polo-preta-e-vermelha.png">Polo Preta e Vermelha</option>
+                        <option value="../images/products/camisa-polo-azul.png">Polo Azul</option>
+                        <option value="../images/products/camisa-polo-branca.png">Polo Branca</option>
+                        <option value="../images/products/corta-vento-nike.jpg">Corta-Vento Nike</option>
+                        <option value="../images/products/blusao-adidas.jpg">Blusão Moletom Adidas</option>
+                        <option value="../images/products/casaco-puffer.jpg">Casaco Puffer</option>
+                        <option value="../images/products/jaqueta-jeans.jpg">Jaqueta Jeans</option>
+                        <option value="../images/products/moletom-canguru.jpg">Moletom Canguru</option>
+                    </select>
+                </div>
+
+                <div class="admin-field-group admin-form-full">
+                    <label>Caminho / URL da Imagem (Personalizável)</label>
+                    <input type="text" id="editProdImage" class="admin-input" value="../images/shirts3d.png" required>
+                </div>
+
+                <div class="admin-field-group admin-form-full">
+                    <label>Tamanhos Disponíveis</label>
+                    <div class="size-checkboxes" id="editProdSizesBox">
+                        <label class="size-check-label"><input type="checkbox" value="P" checked> P</label>
+                        <label class="size-check-label"><input type="checkbox" value="M" checked> M</label>
+                        <label class="size-check-label"><input type="checkbox" value="G" checked> G</label>
+                        <label class="size-check-label"><input type="checkbox" value="GG" checked> GG</label>
+                        <label class="size-check-label"><input type="checkbox" value="XGG"> XGG</label>
+                    </div>
+                </div>
+
+                <div class="admin-field-group admin-form-full">
+                    <label>Descrição Detalhada do Produto</label>
+                    <textarea id="editProdDesc" class="admin-textarea" rows="3" placeholder="Descreva a modelagem, tecido e acabamento da peça..."></textarea>
+                </div>
+
+                <div class="admin-form-full" style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 10px;">
+                    <button type="button" class="btn-secondary-admin" onclick="closeProductModal()">Cancelar</button>
+                    <button type="submit" class="btn-primary-admin">Salvar Alterações no Catálogo</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Container de Toasts -->
+    <div id="adminToastContainer" class="admin-toast-container"></div>
+
+    <script src="../JS/admin.js"></script>
+</body>
+
+</html>
+

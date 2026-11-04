@@ -4,6 +4,11 @@
    ========================================================================== */
 
 
+p {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
 /* Header Fixo Adaptado na Tela do Produto */
 .pdp-body #head {
     position: fixed;
