@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZSX Outlet</title>
+    <link rel="stylesheet" href="\style.css">
+
+</head>
+
+<body id="indexBody">
+
+    <div id="head">
+        <div class="zsx1" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" style="cursor: pointer;" title="Voltar ao início">
+            <img src="\images/zsx.png" alt="ZSX Outlet">
+        </div>
+
+        <div id="icons">
+            <div class="leftIcons">
+                <div class="supportIcon" id="headerSupportBtn" title="Suporte 24h">
+                    <img src="\images/support.png" alt="Suporte">
+                </div>
+            </div>
+
+            <div class="rightIcons">
+                <div class="profile" id="headerProfileBtn" title="Minha Conta">
+                    <img src="\images/profile-icon-removebg-preview.png" alt="Perfil">
+                </div>
+                <div class="cart" id="headerCartBtn" title="Ver Carrinho">
+                    <img src="\images/cart-icon.webp" alt="Carrinho">
+                    <span id="cartCountBadge" class="cart-count-badge">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="lineContainer">
+            <div class="line"></div>
+        </div>
+    </div>
+
+    <!-- Seta animada (3 setas) apontando para baixo -->
+    <div class="scroll-arrow" onclick="window.scrollBy({top: window.innerHeight, behavior: 'smooth'})">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+
+    <!-- Espaço vazio temporário para você poder rolar a tela e ver o efeito -->
+    <div class="conteudo-site">
+
+        <div class="classe1container">
+            <h2 class="classe1 sans">Camisas Polo</h2>
+            <p class="verTudo1 sans">Ver tudo ></p>
+        </div>
+
+        <div class="grade reveal">
+            <div class="prods" data-id="polo-1" data-name="Camisa Polo ZSX Branca" data-price="89.90" data-image="\images/products/Captura de tela 2026-09-24 113712.png" data-size="M" data-color="Branca">
+                <img src="\images/products/Captura de tela 2026-09-24 113712.png" alt="Camisa Polo ZSX Branca">
+                <h3 class="prod-nome sans">Camisa Polo ZSX Branca</h3>
+                <p class="prod-preco sans">R$ 89,90</p>
+                <div class="prod-actions">
+                    <button type="button" class="btn-action btn-buy" title="Comprar" aria-label="Comprar">
+                        <span class="btn-bg"></span>
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                    </button>
+                    <button type="button" class="btn-action btn-add-cart" title="Adicionar ao Carrinho" aria-label="Adicionar ao Carrinho">
+                        <span class="btn-bg"></span>
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            <line x1="12" y1="9" x2="16" y2="9"></line>
+                            <line x1="14" y1="7" x2="14" y2="11"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="prods" data-id="polo-2" data-name="Camisa Polo ZSX Preta" data-price="89.90" data-image="\images/products/Captura de tela 2026-09-24 113730.png" data-size="G" data-color="Preta">
+                <img src="\images/products/Captura de tela 2026-09-24 113730.png" alt="Camisa Polo ZSX Preta">
+                <h3 class="prod-nome sans">Camisa Polo ZSX Preta</h3>
+                <p class="prod-preco sans">R$ 89,90</p>
+                <div class="prod-actions">
+                    <button type="button" class="btn-action btn-buy" title="Comprar" aria-label="Comprar">
+                        <span class="btn-bg"></span>
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                    </button>
+                    <button type="button" class="btn-action btn-add-cart" title="Adicionar ao Carrinho" aria-label="Adicionar ao Carrinho">
+                        <span class="btn-bg"></span>
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            <line x1="12" y1="9" x2="16" y2="9"></line>
+                            <line x1="14" y1="7" x2="14" y2="11"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="prods" data-id="polo-3" data-name="Camisa Polo ZSX Listrada" data-price="89.90" data-image="\images/products/Captura de tela 2026-09-24 113712.png" data-size="M" data-color="Off-White">
+                <img src="\images/products/Captura de tela 2026-09-24 113712.png" alt="Camisa Polo ZSX Listrada">
+                <h3 class="prod-nome sans">Camisa Polo ZSX Listrada</h3>
+                <p class="prod-preco sans">R$ 89,90</p>
+                <div class="prod-actions">
+                    <button type="button" class="btn-action btn-buy" title="Comprar" aria-label="Comprar">
+                        <span class="btn-bg"></span>
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                    </button>
+                    <button type="button" class="btn-action btn-add-cart" title="Adicionar ao Carrinho" aria-label="Adicionar ao Carrinho">
+                        <span class="btn-bg"></span>
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            <line x1="12" y1="9" x2="16" y2="9"></line>
+                            <line x1="14" y1="7" x2="14" y2="11"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="prods" data-id="polo-4" data-name="Camisa Polo ZSX Night" data-price="89.90" data-image="\images/products/Captura de tela 2026-09-24 113730.png" data-size="GG" data-color="Preta">
+                <img src="\images/products/Captura de tela 2026-09-24 113730.png" alt="Camisa Polo ZSX Night">
+                <h3 class="prod-nome sans">Camisa Polo ZSX Night</h3>
+                <p class="prod-preco sans">R$ 89,90</p>
+                <div class="prod-actions">
+                    <button type="button" class="btn-action btn-buy" title="Comprar" aria-label="Comprar">
+                        <span class="btn-bg"></span>
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                    </button>
+                    <button type="button" class="btn-action btn-add-cart" title="Adicionar ao Carrinho" aria-label="Adicionar ao Carrinho">
+                        <span class="btn-bg"></span>
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            <line x1="12" y1="9" x2="16" y2="9"></line>
+                            <line x1="14" y1="7" x2="14" y2="11"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="prods" data-id="polo-5" data-name="Camisa Polo ZSX Classic" data-price="89.90" data-image="\images/products/Captura de tela 2026-09-24 113712.png" data-size="P" data-color="Branca">
+                <img src="\images/products/Captura de tela 2026-09-24 113712.png" alt="Camisa Polo ZSX Classic">
+                <h3 class="prod-nome sans">Camisa Polo ZSX Classic</h3>
+                <p class="prod-preco sans">R$ 89,90</p>
+                <div class="prod-actions">
+                    <button type="button" class="btn-action btn-buy" title="Comprar" aria-label="Comprar">
+                        <span class="btn-bg"></span>
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                    </button>
+                    <button type="button" class="btn-action btn-add-cart" title="Adicionar ao Carrinho" aria-label="Adicionar ao Carrinho">
+                        <span class="btn-bg"></span>
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            <line x1="12" y1="9" x2="16" y2="9"></line>
+                            <line x1="14" y1="7" x2="14" y2="11"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="classes">
+            <div class="classe2">
+                <div class="classe2-img-container">
+                    <img class="classe2-bg" src="\images/fundo-classes.png" alt="Classe 2">
+                    <img class="classe2-shirts" src="\images/shirts3d.png" alt="Camisas">
+                </div>
+                <h3 class="classe2-text sans">Camisas</h3>
+            </div>
+
+            <div class="classe2">
+                <div class="classe2-img-container">
+                    <img class="classe2-bg" src="\images/fundo-classes.png" alt="Classe 2">
+                    <img class="classe2-shorts" src="\images/shorts3d.png" alt="Bermudas">
+                </div>
+                <h3 class="classe2-text sans">Bermudas</h3>
+            </div>
+
+            <div class="classe2">
+                <div class="classe2-img-container">
+                    <img class="classe2-bg" src="\images/fundo-classes.png" alt="Classe 2">
+                    <img class="classe2-hats" src="\images/hats3d.png" alt="Bonés">
+                </div>
+                <h3 class="classe2-text sans">Bonés</h3>
+            </div>
+
+            <div class="classe2">
+                <div class="classe2-img-container">
+                    <img class="classe2-bg" src="\images/fundo-classes.png" alt="Classe 2">
+                    <img class="classe2-jerseys" src="\images/jerseys3d.png" alt="Camisas de Time">
+                </div>
+                <h3 class="classe2-text sans">Camisas de Time</h3>
+            </div>
+
+            <div class="classe2 classe2-shoes">
+                <div class="classe2-img-container">
+                    <img class="classe2-bg" src="\images/fundo-classes.png" alt="Classe 2">
+                    <img class="classe2-shoe" src="\images/shoes3d.png" alt="Calçados">
+                </div>
+                <h3 class="classe2-text sans">Calçados</h3>
+            </div>
+        </div>
+
+        <div class="newRelease reveal">
+            <img src="\images/newRelease.png" alt="Coleção Copa do Mundo">
+
+            <div class="newButton sans" onclick="window.location.href='product.html?id=casaco-1'" style="cursor: pointer;" title="Conferir Coleção">
+                <span class="btn-icon">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </span>
+                <span class="btn-text">Conferir</span>
+            </div>
+
+        </div>
+
+        <!-- Seção de Benefícios (Frete Grátis, Suporte 24h, Entrega Brasil) -->
+        <div class="beneficios reveal">
+            <div class="beneficio-item">
+                <div class="beneficio-icon">
+                    <svg viewBox="0 0 48 48" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="16" width="25" height="17" rx="2" stroke-width="2.2"/>
+                        <path d="M28 22h8l6 6v5h-14v-11z" stroke-width="2.2"/>
+                        <circle cx="10" cy="35" r="4" stroke-width="2.2"/>
+                        <circle cx="36" cy="35" r="4" stroke-width="2.2"/>
+                        <path d="M14 35h18"/>
+                        <path d="M11 11h9v5h-9z" stroke-width="1.8"/>
+                        <path d="M15.5 11v5"/>
+                        <path d="M13 9c-1-1.8-2.5-1.8-2.5 0s2.5 2 2.5 2"/>
+                        <path d="M18 9c1-1.8 2.5-1.8 2.5 0s-2.5 2-2.5 2"/>
+                        <line x1="2" y1="21" x2="6" y2="21" stroke-width="2"/>
+                        <line x1="1" y1="26" x2="5" y2="26" stroke-width="2"/>
+                    </svg>
+                </div>
+                <h4 class="beneficio-titulo sans">Frete Grátis</h4>
+                <p class="beneficio-legenda sans">Para compras acima de R$ 199 com envio rápido</p>
+            </div>
+
+            <div class="beneficio-divisor"></div>
+
+            <div class="beneficio-item">
+                <div class="beneficio-icon">
+                    <svg viewBox="0 0 48 48" width="40" height="40" fill="none">
+                        <circle cx="24" cy="24" r="18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="78 30"/>
+                        <path d="M21 4.5l3.5 2.5-3.5 2.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="40" cy="18" r="1.6" fill="currentColor"/>
+                        <circle cx="42" cy="24" r="1.6" fill="currentColor"/>
+                        <circle cx="40" cy="30" r="1.6" fill="currentColor"/>
+                        <circle cx="36" cy="36" r="1.6" fill="currentColor"/>
+                        <text x="24" y="29" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="800" fill="currentColor" text-anchor="middle">24</text>
+                    </svg>
+                </div>
+                <h4 class="beneficio-titulo sans">Suporte 24h</h4>
+                <p class="beneficio-legenda sans">Atendimento exclusivo e dedicado via WhatsApp</p>
+            </div>
+
+            <div class="beneficio-divisor"></div>
+
+            <div class="beneficio-item">
+                <div class="beneficio-icon">
+                    <svg viewBox="0 0 48 48" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M24 5C16.8 5 11 10.8 11 18c0 9.5 13 23 13 23s13-13.5 13-23c0-7.2-5.8-13-13-13z"/>
+                        <circle cx="24" cy="18" r="4.5" fill="none" stroke-width="2.2"/>
+                        <path d="M8 43h32" stroke-width="2.4"/>
+                    </svg>
+                </div>
+                <h4 class="beneficio-titulo sans">Entrega para Todo o Brasil</h4>
+                <p class="beneficio-legenda sans">Rastreamento completo do pedido até sua casa</p>
+            </div>
+        </div>
+
+        <!-- Seção de Casacos -->
+        <div class="classe1container">
+            <h2 class="classe1 sans">Casacos</h2>
+            <p class="verTudo1 sans">Ver tudo ></p>
+        </div>
+
+        <div class="grade reveal">
+            <div class="prods" data-id="casaco-1" data-name="Moletom Adidas Preto" data-price="189.90" data-image="\images/products/blusao-adidas.jpg" data-size="G" data-color="Preto">
+                <img src="\images/products/blusao-adidas.jpg" alt="Moletom Adidas">
+                <h3 class="prod-nome sans">Moletom Adidas Preto</h3>
+                <p class="prod-preco sans">R$ 189,90</p>
+                <div class="prod-actions">
+                    <button type="button" class="btn-action btn-buy" title="Comprar" aria-label="Comprar">
+                        <span class="btn-bg"></span>
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                    </button>
+                    <button type="button" class="btn-action btn-add-cart" title="Adicionar ao Carrinho" aria-label="Adicionar ao Carrinho">
+                        <span class="btn-bg"></span>
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            <line x1="12" y1="9" x2="16" y2="9"></line>
+                            <line x1="14" y1="7" x2="14" y2="11"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="prods" data-id="casaco-2" data-name="Corta-Vento Preto" data-price="219.90" data-image="\images/products/corta-vento.jpg" data-size="M" data-color="Preto">
+                <img src="\images/products/corta-vento.jpg" alt="Corta-Vento">
+                <h3 class="prod-nome sans">Corta-Vento Preto</h3>
+                <p class="prod-preco sans">R$ 219,90</p>
+                <div class="prod-actions">
+                    <button type="button" class="btn-action btn-buy" title="Comprar" aria-label="Comprar">
+                        <span class="btn-bg"></span>
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                    </button>
+                    <button type="button" class="btn-action btn-add-cart" title="Adicionar ao Carrinho" aria-label="Adicionar ao Carrinho">
+                        <span class="btn-bg"></span>
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            <line x1="12" y1="9" x2="16" y2="9"></line>
+                            <line x1="14" y1="7" x2="14" y2="11"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="prods" data-id="casaco-3" data-name="Jaqueta Puffer Preto" data-price="249.90" data-image="\images/products/bobojaco.jpg" data-size="GG" data-color="Preto">
+                <img src="\images/products/bobojaco.jpg" alt="Jaqueta Puffer">
+                <h3 class="prod-nome sans">Jaqueta Puffer Preto</h3>
+                <p class="prod-preco sans">R$ 249,90</p>
+                <div class="prod-actions">
+                    <button type="button" class="btn-action btn-buy" title="Comprar" aria-label="Comprar">
+                        <span class="btn-bg"></span>
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                    </button>
+                    <button type="button" class="btn-action btn-add-cart" title="Adicionar ao Carrinho" aria-label="Adicionar ao Carrinho">
+                        <span class="btn-bg"></span>
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            <line x1="12" y1="9" x2="16" y2="9"></line>
+                            <line x1="14" y1="7" x2="14" y2="11"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="prods" data-id="casaco-4" data-name="Sueter High" data-price="199.90" data-image="\images/products/sueter.jpg" data-size="M" data-color="Estampado">
+                <img src="\images/products/sueter.jpg" alt="Sueter High">
+                <h3 class="prod-nome sans">Sueter High</h3>
+                <p class="prod-preco sans">R$ 199,90</p>
+                <div class="prod-actions">
+                    <button type="button" class="btn-action btn-buy" title="Comprar" aria-label="Comprar">
+                        <span class="btn-bg"></span>
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                    </button>
+                    <button type="button" class="btn-action btn-add-cart" title="Adicionar ao Carrinho" aria-label="Adicionar ao Carrinho">
+                        <span class="btn-bg"></span>
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            <line x1="12" y1="9" x2="16" y2="9"></line>
+                            <line x1="14" y1="7" x2="14" y2="11"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="prods" data-id="casaco-5" data-name="Corta-Vento Nike Preto" data-price="219.90" data-image="\images/products/corta-vento-nike.jpg" data-size="G" data-color="Preto">
+                <img src="\images/products/corta-vento-nike.jpg" alt="Corta-Vento Nike">
+                <h3 class="prod-nome sans">Corta-Vento Nike Preto</h3>
+                <p class="prod-preco sans">R$ 219,90</p>
+                <div class="prod-actions">
+                    <button type="button" class="btn-action btn-buy" title="Comprar" aria-label="Comprar">
+                        <span class="btn-bg"></span>
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                        </svg>
+                    </button>
+                    <button type="button" class="btn-action btn-add-cart" title="Adicionar ao Carrinho" aria-label="Adicionar ao Carrinho">
+                        <span class="btn-bg"></span>
+                        <svg class="btn-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="9" cy="21" r="1"></circle>
+                            <circle cx="20" cy="21" r="1"></circle>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                            <line x1="12" y1="9" x2="16" y2="9"></line>
+                            <line x1="14" y1="7" x2="14" y2="11"></line>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+    <!-- MODAL / DRAWER DO CARRINHO (ESTILO SHOPPING CART DA FOTO) -->
+    <div id="cartDrawerOverlay" class="cart-drawer-overlay">
+        <div class="cart-drawer">
+            <!-- Header do Carrinho -->
+            <div class="cart-header">
+                <div class="cart-header-left">
+                    <img src="\images/zsx.png" alt="ZSX Outlet" class="cart-header-logo">
+                    <h2 class="cart-title">CARRINHO</h2>
+                </div>
+                <button type="button" id="closeCartBtn" class="cart-close-btn" aria-label="Fechar Carrinho">&times;</button>
+            </div>
+
+            <!-- Corpo do Carrinho em 2 Colunas -->
+            <div class="cart-body">
+                <!-- Coluna da Esquerda: Lista de Itens -->
+                <div class="cart-items-column">
+                    <div id="cartItemsList" class="cart-items-list">
+                        <!-- Itens renderizados dinamicamente via JS -->
+                    </div>
+                </div>
+
+                <!-- Coluna da Direita: Order Summary -->
+                <div class="cart-summary-column">
+                    <div class="order-summary-box">
+                        <h3 class="order-summary-title">RESUMO DO PEDIDO</h3>
+                        
+                        <div class="summary-line">
+                            <span class="summary-label">SUBTOTAL</span>
+                            <span id="cartSubtotal" class="summary-val">R$ 0,00</span>
+                        </div>
+                        <div class="summary-line">
+                            <span class="summary-label">FRETE</span>
+                            <span id="cartShipping" class="summary-val text-free">Grátis</span>
+                        </div>
+                        <div id="summaryDiscountRow" class="summary-line summary-discount" style="display: none;">
+                            <span class="summary-label">DESCONTO (CUPOM)</span>
+                            <span id="cartDiscount" class="summary-val text-discount">- R$ 0,00</span>
+                        </div>
+                        <div class="summary-divider"></div>
+                        <div class="summary-line summary-total-line">
+                            <span class="summary-label">TOTAL</span>
+                            <span id="cartTotal" class="summary-val summary-total-val">R$ 0,00</span>
+                        </div>
+
+                        <!-- Área do Cupom de Desconto -->
+                        <div class="coupon-area">
+                            <label class="coupon-label">CUPOM DE DESCONTO</label>
+                            <div class="coupon-input-group">
+                                <input type="text" id="couponInput" placeholder="Ex: ZSX10" class="coupon-input">
+                                <button type="button" id="applyCouponBtn" class="coupon-btn">Aplicar</button>
+                            </div>
+                            <p id="couponMsg" class="coupon-msg"></p>
+                        </div>
+
+                        <!-- Card de Endereço Ativo -->
+                        <div id="activeAddressCard" class="active-address-card" style="display: none;">
+                            <div class="address-card-header">
+                                <span class="address-badge">📍 Endereço de Entrega</span>
+                                <div class="address-card-actions">
+                                    <button type="button" id="editAddressBtn" class="address-action-link">Editar</button>
+                                    <span class="address-action-sep">•</span>
+                                    <button type="button" id="removeAddressBtn" class="address-action-link text-danger">Remover</button>
+                                </div>
+                            </div>
+                            <p id="activeAddressText" class="address-card-text"></p>
+                        </div>
+
+                        <!-- Botões de Ação lado a lado -->
+                        <div class="cart-action-buttons">
+                            <button type="button" id="openAddressBtn" class="cart-btn btn-secondary-address">
+                                <span class="cart-btn-icon">📍</span>
+                                <span id="addressBtnText">Adicionar Endereço</span>
+                            </button>
+                            <button type="button" id="goToCheckoutBtn" class="cart-btn btn-primary-checkout">
+                                <span>Ir para o Pagamento</span>
+                                <span class="cart-btn-arrow">&rarr;</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- POPUP DE ALERTA: ENDEREÇO OBRIGATÓRIO -->
+    <div id="addressAlertModal" class="custom-modal-overlay">
+        <div class="custom-modal-card alert-modal-card">
+            <div class="modal-icon-badge alert-icon">
+                <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+            </div>
+            <h3 class="modal-card-title">Endereço Necessário</h3>
+            <p class="modal-card-desc">
+                Para calcular o envio e prosseguir para a etapa de pagamento, precisamos do seu endereço de entrega cadastrado.
+            </p>
+            <div class="modal-actions-stacked">
+                <button type="button" id="alertGoToAddressBtn" class="modal-btn-confirm">Cadastrar Endereço Agora</button>
+                <button type="button" id="alertCloseBtn" class="modal-btn-cancel">Voltar ao Carrinho</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CADASTRO DE ENDEREÇO -->
+    <div id="addressFormModal" class="custom-modal-overlay">
+        <div class="custom-modal-card form-modal-card">
+            <div class="modal-card-header">
+                <h3 class="modal-card-title">Cadastrar Endereço de Entrega</h3>
+                <button type="button" id="closeAddressFormBtn" class="modal-close-icon">&times;</button>
+            </div>
+            <form id="addressForm" class="address-form-grid">
+                <div class="form-group col-full">
+                    <label for="addrCep">CEP</label>
+                    <div class="cep-input-wrapper">
+                        <input type="text" id="addrCep" placeholder="00000-000" maxlength="9" required>
+                        <button type="button" id="btnSearchCep" class="btn-search-cep">Buscar CEP</button>
+                    </div>
+                </div>
+                <div class="form-group col-full">
+                    <label for="addrStreet">Rua / Logradouro</label>
+                    <input type="text" id="addrStreet" placeholder="Ex: Av. Paulista" required>
+                </div>
+                <div class="form-group col-half">
+                    <label for="addrNumber">Número</label>
+                    <input type="text" id="addrNumber" placeholder="123" required>
+                </div>
+                <div class="form-group col-half">
+                    <label for="addrComp">Complemento</label>
+                    <input type="text" id="addrComp" placeholder="Apto 42, Bloco B">
+                </div>
+                <div class="form-group col-half">
+                    <label for="addrNeighborhood">Bairro</label>
+                    <input type="text" id="addrNeighborhood" placeholder="Bairro" required>
+                </div>
+                <div class="form-group col-half">
+                    <label for="addrCity">Cidade / UF</label>
+                    <input type="text" id="addrCity" placeholder="São Paulo - SP" required>
+                </div>
+                <div class="form-group col-full">
+                    <label for="addrName">Nome do Destinatário</label>
+                    <input type="text" id="addrName" placeholder="Quem irá receber a encomenda" required>
+                </div>
+                <div class="modal-actions-row col-full">
+                    <button type="button" id="deleteAddressModalBtn" class="modal-btn-delete" style="display: none;">Excluir Endereço</button>
+                    <div class="modal-actions-right">
+                        <button type="button" id="cancelAddressBtn" class="modal-btn-cancel">Cancelar</button>
+                        <button type="submit" class="modal-btn-confirm">Salvar Endereço</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DE CHECKOUT / PAGAMENTO (CARTÃO CRÉDITO, DÉBITO E PIX) -->
+    <div id="checkoutModal" class="custom-modal-overlay">
+        <div class="custom-modal-card checkout-modal-card">
+            <div class="modal-card-header">
+                <h3 class="modal-card-title">PAGAMENTO</h3>
+                <button type="button" id="closeCheckoutBtn" class="modal-close-icon">&times;</button>
+            </div>
+
+            <!-- Resumo Rápido -->
+            <div class="checkout-quick-summary">
+                <div class="quick-summary-item">
+                    <span class="quick-summary-label">Total a Pagar:</span>
+                    <strong id="checkoutFinalTotal" class="checkout-total-val">R$ 0,00</strong>
+                </div>
+                <div class="quick-summary-item">
+                    <span class="quick-summary-label">Entregar em:</span>
+                    <span id="checkoutDeliveryAddress" class="checkout-addr-val">...</span>
+                </div>
+            </div>
+
+            <!-- Abas de Pagamento: Crédito, Débito e PIX -->
+            <div class="payment-tabs">
+                <button type="button" class="payment-tab active" data-tab="credit">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    <span>Crédito</span>
+                </button>
+                <button type="button" class="payment-tab" data-tab="debit">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    <span>Débito</span>
+                </button>
+                <button type="button" class="payment-tab" data-tab="pix">
+                    <span class="pix-badge-icon">⚡</span>
+                    <span>PIX (-5%)</span>
+                </button>
+            </div>
+
+            <!-- Conteúdo das Abas -->
+            <div class="payment-tab-contents">
+                <!-- Cartão de Crédito -->
+                <div id="tabCredit" class="tab-pane active">
+                    <div class="payment-form-grid">
+                        <div class="form-group col-full">
+                            <label for="ccNumber">Número do Cartão</label>
+                            <input type="text" id="ccNumber" placeholder="0000 0000 0000 0000" maxlength="19">
+                        </div>
+                        <div class="form-group col-full">
+                            <label for="ccName">Nome Impresso no Cartão</label>
+                            <input type="text" id="ccName" placeholder="NOME COMPLETO">
+                        </div>
+                        <div class="form-group col-half">
+                            <label for="ccExpiry">Validade (MM/AA)</label>
+                            <input type="text" id="ccExpiry" placeholder="12/28" maxlength="5">
+                        </div>
+                        <div class="form-group col-half">
+                            <label for="ccCvv">CVV</label>
+                            <input type="text" id="ccCvv" placeholder="123" maxlength="4">
+                        </div>
+                        <div class="form-group col-full">
+                            <label for="ccInstallments">Opções de Parcelamento</label>
+                            <select id="ccInstallments" class="installment-select">
+                                <!-- Preenchido dinamicamente via JS -->
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cartão de Débito -->
+                <div id="tabDebit" class="tab-pane">
+                    <div class="payment-form-grid">
+                        <div class="form-group col-full">
+                            <label for="debNumber">Número do Cartão de Débito</label>
+                            <input type="text" id="debNumber" placeholder="0000 0000 0000 0000" maxlength="19">
+                        </div>
+                        <div class="form-group col-full">
+                            <label for="debName">Nome do Titular</label>
+                            <input type="text" id="debName" placeholder="NOME DO TITULAR">
+                        </div>
+                        <div class="form-group col-half">
+                            <label for="debExpiry">Validade</label>
+                            <input type="text" id="debExpiry" placeholder="12/28" maxlength="5">
+                        </div>
+                        <div class="form-group col-half">
+                            <label for="debCvv">CVV</label>
+                            <input type="text" id="debCvv" placeholder="123" maxlength="4">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PIX -->
+                <div id="tabPix" class="tab-pane">
+                    <div class="pix-payment-box">
+                        <div class="pix-badge-promo">
+                            <span>⚡ Desconto exclusivo de 5% aplicado no PIX!</span>
+                        </div>
+                        <div class="pix-qrcode-wrapper">
+                            <svg viewBox="0 0 100 100" width="160" height="160" class="pix-svg-qr">
+                                <rect width="100" height="100" fill="#ffffff" rx="6"/>
+                                <rect x="10" y="10" width="30" height="30" fill="#111"/>
+                                <rect x="15" y="15" width="20" height="20" fill="#fff"/>
+                                <rect x="20" y="20" width="10" height="10" fill="#111"/>
+                                <rect x="60" y="10" width="30" height="30" fill="#111"/>
+                                <rect x="65" y="15" width="20" height="20" fill="#fff"/>
+                                <rect x="70" y="20" width="10" height="10" fill="#111"/>
+                                <rect x="10" y="60" width="30" height="30" fill="#111"/>
+                                <rect x="15" y="65" width="20" height="20" fill="#fff"/>
+                                <rect x="20" y="70" width="10" height="10" fill="#111"/>
+                                <rect x="45" y="15" width="8" height="8" fill="#111"/>
+                                <rect x="45" y="30" width="8" height="8" fill="#111"/>
+                                <rect x="50" y="45" width="10" height="10" fill="#111"/>
+                                <rect x="65" y="55" width="8" height="8" fill="#111"/>
+                                <rect x="75" y="65" width="15" height="15" fill="#111"/>
+                                <rect x="50" y="75" width="8" height="8" fill="#111"/>
+                                <rect x="35" y="80" width="8" height="8" fill="#111"/>
+                            </svg>
+                        </div>
+                        <p class="pix-instructions">Escaneie o QR Code ou utilize o código Copia e Cola:</p>
+                        <div class="pix-copy-paste-group">
+                            <input type="text" readonly id="pixCodeInput" value="00020126580014br.gov.bcb.pix0136zsxoutlet-pix-chave-aleatoria5204000053039865802BR5910ZSX OUTLET6009SAO PAULO62070503***6304" class="pix-code-field">
+                            <button type="button" id="btnCopyPix" class="btn-copy-pix">Copiar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botão de Confirmação Final -->
+            <div class="checkout-footer">
+                <button type="button" id="btnFinishOrder" class="btn-finish-order">
+                    <span>Confirmar e Finalizar Pedido</span>
+                    <span>&rarr;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE PEDIDO CONFIRMADO (SUCESSO) -->
+    <div id="orderSuccessModal" class="custom-modal-overlay">
+        <div class="custom-modal-card success-modal-card">
+            <div class="modal-icon-badge success-icon">
+                <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
+            <h3 class="modal-card-title">Pedido Confirmado!</h3>
+            <p class="order-number-tag">Pedido <span id="successOrderNum">#ZSX-74921</span></p>
+            <p class="modal-card-desc">
+                Obrigado por comprar na ZSX Outlet! Seu pedido já está sendo preparado e enviamos todos os detalhes do rastreio para o seu e-mail.
+            </p>
+            <div class="success-details-box">
+                <div class="success-row"><span>Forma de Pagamento:</span><strong id="successPaymentMethod">Cartão de Crédito</strong></div>
+                <div class="success-row"><span>Total Pago:</span><strong id="successTotalPaid">R$ 0,00</strong></div>
+                <div class="success-row"><span>Prazo Estimado:</span><strong>2 a 4 dias úteis</strong></div>
+            </div>
+            <button type="button" id="btnContinueShopping" class="modal-btn-confirm">Continuar Comprando</button>
+        </div>
+    </div>
+
+    <!-- MODAL / OVERLAY DO SUPORTE -->
+    <div id="supportModal" class="custom-modal-overlay">
+        <div class="custom-modal-card support-modal-card">
+            <div class="modal-card-header">
+                <h3 class="modal-card-title">SUPORTE E ATENDIMENTO</h3>
+                <button type="button" id="closeSupportBtn" class="modal-close-icon" aria-label="Fechar Suporte">&times;</button>
+            </div>
+            <div class="support-content">
+                <p class="support-desc">
+                    Precisa de ajuda com seu pedido, dúvidas sobre produtos ou entregas? Nossa equipe de suporte está disponível 24 horas por dia, 7 dias por semana.
+                </p>
+                <div class="support-contact-options">
+                    <a href="https://wa.me/5511999999999" target="_blank" class="support-contact-card">
+                        <div class="support-contact-icon whatsapp-bg">💬</div>
+                        <div class="support-contact-info">
+                            <span class="support-contact-name">WhatsApp 24h</span>
+                            <span class="support-contact-val">(11) 99999-9999</span>
+                            <span class="support-contact-sub">Atendimento imediato</span>
+                        </div>
+                        <span class="support-card-arrow">&rarr;</span>
+                    </a>
+                    <a href="mailto:sac@zsxoutlet.com.br" class="support-contact-card">
+                        <div class="support-contact-icon email-bg">✉️</div>
+                        <div class="support-contact-info">
+                            <span class="support-contact-name">E-mail SAC</span>
+                            <span class="support-contact-val">sac@zsxoutlet.com.br</span>
+                            <span class="support-contact-sub">Resposta em até 2 horas</span>
+                        </div>
+                        <span class="support-card-arrow">&rarr;</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL / OVERLAY DO PERFIL -->
+    <div id="profileModal" class="custom-modal-overlay">
+        <div class="custom-modal-card profile-modal-card">
+            <div class="profile-card-header">
+                <div class="profile-user-info">
+                    <div class="profile-avatar-wrapper">
+                        <img src="\images/profile-icon-removebg-preview.png" alt="Perfil" class="profile-avatar-img">
+                        <span class="profile-badge-status">VIP</span>
+                    </div>
+                    <div class="profile-user-meta">
+                        <h3 class="profile-user-name">Cliente ZSX</h3>
+                        <p class="profile-user-email">membro@zsxoutlet.com.br</p>
+                    </div>
+                </div>
+                <button type="button" id="closeProfileBtn" class="modal-close-icon" aria-label="Fechar Perfil">&times;</button>
+            </div>
+
+            <div class="profile-menu-list">
+                <button type="button" class="profile-menu-item" id="menuMyOrdersBtn">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                    </div>
+                    <div class="menu-item-text">
+                        <span class="menu-item-title">Minhas Compras</span>
+                        <span class="menu-item-desc">Acompanhe seus pedidos em andamento</span>
+                    </div>
+                    <span class="menu-item-arrow">&rarr;</span>
+                </button>
+
+                <button type="button" class="profile-menu-item" id="menuMyAddressesBtn">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    </div>
+                    <div class="menu-item-text">
+                        <span class="menu-item-title">Meus Endereços</span>
+                        <span class="menu-item-desc">Gerenciar endereço de entrega</span>
+                    </div>
+                    <span class="menu-item-arrow">&rarr;</span>
+                </button>
+
+                <button type="button" class="profile-menu-item" id="menuMyCouponsBtn">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                    </div>
+                    <div class="menu-item-text">
+                        <span class="menu-item-title">Cupons Disponíveis</span>
+                        <span class="menu-item-desc">ZSX10, OFF20 e VIP30 ativos</span>
+                    </div>
+                    <span class="menu-item-arrow">&rarr;</span>
+                </button>
+
+                <button type="button" class="profile-menu-item" id="menuSupportBtn">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    </div>
+                    <div class="menu-item-text">
+                        <span class="menu-item-title">Suporte e Atendimento</span>
+                        <span class="menu-item-desc">Atendimento 24h via WhatsApp</span>
+                    </div>
+                    <span class="menu-item-arrow">&rarr;</span>
+                </button>
+
+                <button type="button" class="profile-menu-item text-danger-item" id="menuLogoutBtn">
+                    <div class="menu-item-icon icon-danger">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    </div>
+                    <div class="menu-item-text">
+                        <span class="menu-item-title">Sair da Conta</span>
+                        <span class="menu-item-desc">Desconectar da sessão</span>
+                    </div>
+                    <span class="menu-item-arrow">&rarr;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE MINHAS COMPRAS COM ABAS E BOLINHAS VERMELHAS -->
+    <div id="ordersModal" class="custom-modal-overlay">
+        <div class="custom-modal-card orders-modal-card">
+            <div class="orders-modal-header">
+                <div class="orders-header-title-box">
+                    <h2 class="orders-modal-title">MINHAS COMPRAS</h2>
+                    <p class="orders-modal-subtitle">Acompanhe todos os seus pedidos na ZSX Outlet</p>
+                </div>
+                <button type="button" id="closeOrdersBtn" class="modal-close-icon" aria-label="Fechar Pedidos">&times;</button>
+            </div>
+
+            <!-- Abas com as bolinhas vermelhas idênticas à do carrinho -->
+            <div class="orders-tabs">
+                <button type="button" class="orders-tab active" data-order-status="pending">
+                    <span>Aguardando Pagamento</span>
+                    <span class="order-tab-badge" id="badgePendingOrders">0</span>
+                </button>
+                <button type="button" class="orders-tab" data-order-status="confirmed">
+                    <span>Confirmado</span>
+                    <span class="order-tab-badge" id="badgeConfirmedOrders">0</span>
+                </button>
+                <button type="button" class="orders-tab" data-order-status="finished">
+                    <span>Finalizado</span>
+                    <span class="order-tab-badge" id="badgeFinishedOrders">0</span>
+                </button>
+            </div>
+
+            <!-- Lista de Pedidos na Aba Ativa -->
+            <div id="ordersListContainer" class="orders-list-container">
+                <!-- Renderizado dinamicamente via JS -->
+            </div>
+        </div>
+    </div>
+
+
+    <!-- TOAST NOTIFICATIONS -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="\JS/index.js"></script>
+</body>
+</html>

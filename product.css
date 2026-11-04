@@ -1,0 +1,1151 @@
+/* ==========================================================================
+   TELA DEDICADA DE PRODUTO (PDP) - ZSX OUTLET
+   Inspirado no layout Velora / Streetwear de Luxo Minimalista
+   ========================================================================== */
+
+
+/* Header Fixo Adaptado na Tela do Produto */
+.pdp-body #head {
+    position: fixed;
+    left: 0;
+    width: 100%;
+    z-index: 1001;
+}
+
+/* Espaçador para o cabeçalho fixo */
+.pdp-page-container {
+    padding-top: 132px;
+    background-color: #d3c8bd;
+    min-height: 100vh;
+    color: #111111;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Breadcrumb e Botão Voltar */
+.pdp-breadcrumb-container {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 18px 24px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 13px;
+    color: #78716c;
+}
+
+.pdp-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.pdp-breadcrumb a {
+    color: #78716c;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.pdp-breadcrumb a:hover {
+    color: #111111;
+}
+
+.pdp-breadcrumb-sep {
+    color: #a8a29e;
+    font-size: 11px;
+}
+
+.pdp-breadcrumb-current {
+    color: #111111;
+    font-weight: 700;
+}
+
+.pdp-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #111111;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 12.5px;
+    padding: 6px 14px;
+    border: 1px solid #e7e5e4;
+    border-radius: 20px;
+    background-color: #ebe3daf8;
+    transition: all 0.2s ease;
+}
+
+.pdp-back-link:hover {
+    background-color: #111111;
+    color: #ffffff;
+    border-color: #111111;
+    transform: translateX(-3px);
+}
+
+/* Seção Principal do Produto (2 Colunas) */
+.pdp-main-section {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 16px 24px 60px;
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 48px;
+}
+
+/* Coluna da Esquerda: Galeria e Imagem Principal */
+.pdp-gallery-column {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    position: sticky;
+    top: 120px;
+}
+
+/* Tira Vertical de Miniaturas */
+.pdp-thumbnails-strip {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 82px;
+    flex-shrink: 0;
+}
+
+.pdp-thumb-item {
+    width: 82px;
+    height: 98px;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: #f5f0eb;
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    box-sizing: border-box;
+    padding: 0;
+}
+
+.pdp-thumb-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.pdp-thumb-item:hover img {
+    transform: scale(1.08);
+}
+
+.pdp-thumb-item.active {
+    border-color: #111111;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+}
+
+/* Box da Imagem Principal */
+.pdp-hero-container {
+    flex: 1;
+    position: relative;
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: #f5f0eb;
+    border: 1.5px solid #ece7df;
+    height: 590px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+.pdp-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+}
+
+.pdp-hero-container:hover .pdp-hero-img {
+    transform: scale(1.04);
+}
+
+/* Tag / Badge no topo esquerdo da foto */
+.pdp-hero-badge {
+    position: absolute;
+    top: 18px;
+    left: 18px;
+    background-color: #111111;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    z-index: 2;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Botão de Favorito Flutuante */
+.pdp-wishlist-btn {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    border: 1px solid #e7e5e4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    color: #111111;
+}
+
+.pdp-wishlist-btn:hover {
+    transform: scale(1.1);
+    background-color: #fff1f2;
+    color: #e11d48;
+}
+
+.pdp-wishlist-btn.active {
+    background-color: #fff1f2;
+    color: #e11d48;
+    border-color: #fecdd3;
+}
+
+.pdp-wishlist-btn.active svg {
+    fill: #e11d48;
+}
+
+/* Botão de Zoom na imagem */
+.pdp-zoom-btn {
+    position: absolute;
+    bottom: 18px;
+    right: 18px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    border: 1px solid #e7e5e4;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 2;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    color: #111111;
+}
+
+.pdp-zoom-btn:hover {
+    background-color: #111111;
+    color: #ffffff;
+    transform: scale(1.1);
+}
+
+/* Coluna da Direita: Buy Box / Informações */
+.pdp-info-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.pdp-badge-category {
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: #8C8170;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.pdp-product-title {
+    font-family: 'Impact', 'Arial Black', Arial, sans-serif;
+    font-size: 38px;
+    letter-spacing: 0.5px;
+    color: #111111;
+    margin: 0 0 10px 0;
+    line-height: 1.15;
+}
+
+/* Avaliações */
+.pdp-rating-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.pdp-stars {
+    display: flex;
+    gap: 3px;
+    color: #f59e0b;
+    font-size: 15px;
+}
+
+.pdp-rating-score {
+    font-size: 13.5px;
+    font-weight: 800;
+    color: #111111;
+}
+
+.pdp-rating-count {
+    font-size: 13px;
+    color: #78716c;
+}
+
+/* Preço e Desconto */
+.pdp-price-box {
+    background-color: #ebe3daf8;
+    border: 1px solid #ece7df;
+    border-radius: 12px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+}
+
+.pdp-price-main-row {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 6px;
+}
+
+.pdp-price-current {
+    font-size: 34px;
+    font-weight: 900;
+    color: #111111;
+    letter-spacing: -0.5px;
+}
+
+.pdp-price-original {
+    font-size: 18px;
+    font-weight: 600;
+    color: #a8a29e;
+    text-decoration: line-through;
+}
+
+.pdp-discount-tag {
+    background-color: #111111;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+}
+
+.pdp-installment-text {
+    font-size: 13px;
+    color: #57534e;
+    margin: 0;
+}
+
+.pdp-pix-discount {
+    color: #16a34a;
+    font-weight: 700;
+}
+
+/* Descrição Curta */
+.pdp-description-short {
+    font-size: 14.5px;
+    line-height: 1.6;
+    color: #44403c;
+    margin: 0 0 24px 0;
+}
+
+/* Seletor de Cor */
+.pdp-option-group {
+    margin-bottom: 22px;
+}
+
+.pdp-option-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #44403c;
+}
+
+.pdp-option-header strong {
+    color: #111111;
+    font-weight: 800;
+}
+
+.pdp-colors-row {
+    display: flex;
+    gap: 12px;
+}
+
+.pdp-color-swatch {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    outline: 2px solid #e7e5e4;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    padding: 0;
+}
+
+.pdp-color-swatch:hover {
+    transform: scale(1.15);
+}
+
+.pdp-color-swatch.active {
+    outline-color: #111111;
+    transform: scale(1.1);
+}
+
+/* Seletor de Tamanho */
+.pdp-size-guide-btn {
+    background: none;
+    border: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #111111;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 0;
+}
+
+.pdp-size-guide-btn:hover {
+    color: #e11d48;
+}
+
+.pdp-sizes-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.pdp-size-btn {
+    min-width: 52px;
+    height: 48px;
+    border: 1.5px solid #d6d3d1;
+    border-radius: 8px;
+    background-color: #ebe3daf8;
+    font-size: 14px;
+    font-weight: 700;
+    color: #111111;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 12px;
+}
+
+.pdp-size-btn:hover {
+    border-color: #111111;
+    transform: translateY(-2px);
+}
+
+.pdp-size-btn.active {
+    background-color: #111111;
+    color: #ffffff;
+    border-color: #111111;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Status do Estoque */
+.pdp-stock-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #15803d;
+    background-color: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    padding: 7px 14px;
+    border-radius: 20px;
+    margin-bottom: 22px;
+    width: fit-content;
+}
+
+.pdp-stock-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #22c55e;
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+}
+
+/* Área de Compra e Quantidade */
+.pdp-purchase-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 28px;
+}
+
+.pdp-actions-main-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+/* Seletor de Quantidade */
+.pdp-quantity-selector {
+    display: inline-flex;
+    align-items: center;
+    border: 1.5px solid #111111;
+    border-radius: 6px;
+    background-color: #ebe3daf8;
+    height: 52px;
+}
+
+.pdp-qty-btn {
+    width: 44px;
+    height: 100%;
+    background: none;
+    border: none;
+    font-size: 18px;
+    font-weight: 800;
+    color: #111111;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 6px;
+}
+
+.pdp-qty-btn:hover {
+    background-color: #f5f0eb;
+    border-radius: 6px;
+}
+
+.pdp-qty-value {
+    width: 40px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 800;
+    color: #111111;
+}
+
+/* Botão Adicionar ao Carrinho (Sweep Efeito Esquerda para Direita) */
+.btn-pdp-add-cart {
+    flex: 1;
+    position: relative;
+    height: 52px;
+    background-color: #111111;
+    border: 2px solid #111111;
+    border-radius: 6px;
+    color: #ffffff;
+    font-size: 13.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: color 0.35s ease, box-shadow 0.25s ease;
+}
+
+.btn-pdp-add-cart .btn-bg-sweep {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background-color: #ffffff;
+    transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 1;
+}
+
+.btn-pdp-add-cart:hover .btn-bg-sweep {
+    width: 100%;
+}
+
+.btn-pdp-add-cart .btn-content {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: color 0.35s ease;
+}
+
+.btn-pdp-add-cart:hover .btn-content {
+    color: #111111;
+}
+
+.btn-pdp-add-cart:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+/* Botão Comprar Agora */
+.btn-pdp-buy-now {
+    width: 100%;
+    height: 48px;
+    background-color: #ebe3daf8;
+    border: 1.5px solid #111111;
+    border-radius: 6px;
+    color: #111111;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.25s ease;
+}
+
+.btn-pdp-buy-now:hover {
+    background-color: #ebe3d8;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Benefícios Rápidos (3 Itens da Foto de Inspiração) */
+.pdp-quick-perks {
+    border-top: 1px solid #e7e5e4;
+    padding-top: 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+}
+
+.pdp-perk-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pdp-perk-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    background-color: #f5f0eb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.pdp-perk-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.pdp-perk-title {
+    font-size: 12px;
+    font-weight: 800;
+    color: #111111;
+    margin-bottom: 2px;
+}
+
+.pdp-perk-desc {
+    font-size: 11px;
+    color: #78716c;
+}
+
+/* ==========================================================================
+   SEÇÃO DE ABAS INFORMATIVAS (DETALHES, MATERIAIS, TAMANHO, ENVIO)
+   ========================================================================== */
+
+.pdp-tabs-section {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 24px 70px;
+}
+
+.pdp-tabs-nav {
+    display: flex;
+    gap: 12px;
+    border-bottom: 2px solid #e7e5e4;
+    margin-bottom: 30px;
+}
+
+.pdp-tab-trigger {
+    background: none;
+    border: none;
+    padding: 14px 20px;
+    font-size: 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #78716c;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.2s ease;
+    white-space: nowrap;
+}
+
+.pdp-tab-trigger:hover {
+    color: #111111;
+}
+
+.pdp-tab-trigger.active {
+    color: #111111;
+}
+
+.pdp-tab-trigger.active::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #111111;
+}
+
+/* Conteúdo das Abas */
+.pdp-tab-pane {
+    display: none;
+}
+
+.pdp-tab-pane.active {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+    animation: pdpFadeIn 0.3s ease;
+}
+
+@keyframes pdpFadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.pdp-tab-text-side {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.pdp-tab-text-side p {
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: #44403c;
+    margin: 0;
+}
+
+/* Lista de Especificações com Ícones */
+.pdp-specs-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.pdp-spec-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 13.5px;
+    color: #111111;
+    font-weight: 600;
+}
+
+.pdp-spec-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    background-color: #ebe3daf8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: #111111;
+    flex-shrink: 0;
+}
+
+/* Card Visual de Detalhe na Direita */
+.pdp-detail-visual-card {
+    position: relative;
+    height: 320px;
+    border-radius: 16px;
+    overflow: hidden;
+    background-color: #111111;
+    border: 1.5px solid #ece7df;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+}
+
+.pdp-detail-visual-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.9;
+    filter: brightness(0.9);
+    transition: transform 0.5s ease;
+}
+
+.pdp-detail-visual-card:hover img {
+    transform: scale(1.05);
+}
+
+.pdp-detail-overlay-badge {
+    position: absolute;
+    bottom: 24px;
+    right: 24px;
+    background: rgba(17, 17, 17, 0.88);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 12px 20px;
+    border-radius: 8px;
+    color: #ffffff;
+    text-align: right;
+}
+
+.pdp-detail-badge-title {
+    font-family: 'Impact', 'Arial Black', Arial, sans-serif;
+    font-size: 18px;
+    letter-spacing: 1px;
+    margin: 0;
+}
+
+.pdp-detail-badge-sub {
+    font-size: 11px;
+    color: #d3c8bd;
+    margin: 0;
+    text-transform: uppercase;
+}
+
+/* ==========================================================================
+   SEÇÃO DE PRODUTOS RECOMENDADOS (VOCÊ TAMBÉM PODE GOSTAR)
+   ========================================================================== */
+
+.pdp-related-section {
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 0 24px 90px;
+    border-top: 1px solid #e7e5e4;
+    padding-top: 50px;
+}
+
+.pdp-related-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 28px;
+}
+
+.pdp-related-title {
+    font-family: 'Impact', 'Arial Black', Arial, sans-serif;
+    font-size: 26px;
+    letter-spacing: 0.5px;
+    color: #111111;
+    margin: 0 0 4px 0;
+}
+
+.pdp-related-subtitle {
+    font-size: 13px;
+    color: #78716c;
+    margin: 0;
+}
+
+.pdp-view-all-link {
+    font-size: 13px;
+    font-weight: 800;
+    color: #111111;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: transform 0.2s ease;
+}
+
+.pdp-view-all-link:hover {
+    transform: translateX(4px);
+    color: #e11d48;
+}
+
+/* Grid de Produtos Relacionados */
+.pdp-related-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 22px;
+}
+
+.pdp-related-card {
+    background-color: #ebe3daf8;
+    border: 1.5px solid #ece7df;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.pdp-related-card:hover {
+    transform: translateY(-6px);
+    border-color: #111111;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
+}
+
+.pdp-related-img-box {
+    position: relative;
+    height: 250px;
+    background-color: #ebe3daf8;
+    overflow: hidden;
+}
+
+.pdp-related-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.35s ease;
+}
+
+.pdp-related-card:hover .pdp-related-img-box img {
+    transform: scale(1.06);
+}
+
+.pdp-related-info {
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.pdp-related-name {
+    font-size: 15px;
+    font-weight: 800;
+    color: #111111;
+    margin: 0 0 6px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pdp-related-price {
+    font-size: 16px;
+    font-weight: 800;
+    color: #111111;
+    margin: 0 0 10px 0;
+}
+
+.pdp-related-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: auto;
+}
+
+.btn-related-view {
+    flex: 1;
+    padding: 8px 10px;
+    background-color: #111111;
+    color: #ffffff;
+    border: 1.5px solid #111111;
+    border-radius: 6px;
+    font-size: 11.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    text-align: center;
+}
+
+.btn-related-view:hover {
+    background-color: #333333;
+}
+
+/* ==========================================================================
+   MODAL DE GUIA DE MEDIDAS (SIZE GUIDE)
+   ========================================================================== */
+
+.size-guide-card {
+    max-width: 620px;
+    padding: 30px 34px;
+}
+
+.size-guide-desc {
+    font-size: 13.5px;
+    color: #555555;
+    margin: 0 0 20px 0;
+    line-height: 1.5;
+}
+
+.size-guide-table-wrapper {
+    overflow-x: auto;
+    margin-bottom: 20px;
+}
+
+.size-guide-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    text-align: center;
+}
+
+.size-guide-table th {
+    background-color: #111111;
+    color: #ffffff;
+    padding: 10px 14px;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 12px;
+}
+
+.size-guide-table td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #e7e5e4;
+    color: #44403c;
+    font-weight: 600;
+}
+
+.size-guide-table tr:nth-child(even) {
+    background-color: #f9f8f6;
+}
+
+.size-guide-tip {
+    background-color: #fff7ed;
+    border-left: 3px solid #f97316;
+    padding: 12px 16px;
+    border-radius: 4px;
+    font-size: 12.5px;
+    color: #9a3412;
+    margin: 0;
+}
+
+/* ==========================================================================
+   MODAL DE ZOOM EM TELA CHEIA (LIGHTBOX)
+   ========================================================================== */
+
+.zoom-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.88);
+    backdrop-filter: blur(10px);
+    z-index: 20000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    box-sizing: border-box;
+}
+
+.zoom-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.zoom-img-wrapper {
+    max-width: 90vw;
+    max-height: 90vh;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+}
+
+.zoom-img-wrapper img {
+    max-width: 100%;
+    max-height: 85vh;
+    object-fit: contain;
+    display: block;
+}
+
+.zoom-close-btn {
+    position: absolute;
+    top: 25px;
+    right: 35px;
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 40px;
+    line-height: 1;
+    cursor: pointer;
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.zoom-close-btn:hover {
+    color: #e11d48;
+    transform: scale(1.15) rotate(90deg);
+}
+
+/* ==========================================================================
+   RESPONSIVIDADE (TABLETS E CELULARES)
+   ========================================================================== */
+
+@media (max-width: 1024px) {
+    .pdp-main-section {
+        grid-template-columns: 1fr;
+        gap: 36px;
+    }
+
+    .pdp-gallery-column {
+        position: static;
+    }
+
+    .pdp-related-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .pdp-tab-pane.active {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 680px) {
+    .pdp-gallery-column {
+        flex-direction: column-reverse;
+    }
+
+    .pdp-thumbnails-strip {
+        flex-direction: row;
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .pdp-thumb-item {
+        width: 70px;
+        height: 84px;
+        flex-shrink: 0;
+    }
+
+    .pdp-hero-container {
+        height: 420px;
+        width: 100%;
+    }
+
+    .pdp-product-title {
+        font-size: 28px;
+    }
+
+    .pdp-quick-perks {
+        grid-template-columns: 1fr;
+    }
+
+    .pdp-actions-main-row {
+        flex-direction: column;
+    }
+
+    .pdp-quantity-selector {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .btn-pdp-add-cart {
+        width: 100%;
+    }
+
+    .pdp-related-grid {
+        grid-template-columns: 1fr;
+    }
+}

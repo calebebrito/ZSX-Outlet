@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZSX Outlet | Detalhes do Produto</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../product.css">
+</head>
+
+<body class="pdp-body">
+
+    <!-- Header Fixo ZSX Outlet -->
+    <div id="head">
+        <div class="zsx1" onclick="window.location.href='index.html'" style="cursor: pointer;" title="Voltar à página inicial">
+            <img src="../images/zsx.png" alt="ZSX Outlet">
+        </div>
+
+        <div id="icons">
+            <div class="leftIcons">
+                <div class="supportIcon" id="headerSupportBtn" title="Suporte 24h">
+                    <img src="../images/support.png" alt="Suporte">
+                </div>
+            </div>
+
+            <div class="rightIcons">
+                <div class="profile" id="headerProfileBtn" title="Minha Conta">
+                    <img src="../images/profile-icon-removebg-preview.png" alt="Perfil">
+                </div>
+                <div class="cart" id="headerCartBtn" title="Ver Carrinho">
+                    <img src="../images/cart-icon.webp" alt="Carrinho">
+                    <span id="cartCountBadge" class="cart-count-badge">0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="lineContainer">
+            <div class="line"></div>
+        </div>
+    </div>
+
+    <!-- Container da Página do Produto -->
+    <main class="pdp-page-container">
+        
+        <!-- Breadcrumbs & Botão de Retorno -->
+        <div class="pdp-breadcrumb-container">
+            <div class="pdp-breadcrumb">
+                <a href="index.html">Início</a>
+                <span class="pdp-breadcrumb-sep">&gt;</span>
+                <span id="pdpBreadcrumbCategory">Coleção</span>
+                <span class="pdp-breadcrumb-sep">&gt;</span>
+                <span id="pdpBreadcrumbCurrent" class="pdp-breadcrumb-current">Produto</span>
+            </div>
+            <a href="index.html" class="pdp-back-link">
+                <span>&larr;</span>
+                <span>Voltar ao Catálogo</span>
+            </a>
+        </div>
+
+        <!-- Seção Principal do Produto (Galeria + Buy Box) -->
+        <section class="pdp-main-section">
+            
+            <!-- Coluna da Esquerda: Galeria de Fotos e Hero Image -->
+            <div class="pdp-gallery-column">
+                
+                <!-- Miniaturas Verticais -->
+                <div class="pdp-thumbnails-strip" id="pdpThumbsStrip">
+                    <!-- Geradas dinamicamente via JS -->
+                </div>
+
+                <!-- Box da Imagem Principal -->
+                <div class="pdp-hero-container">
+                    <span class="pdp-hero-badge" id="pdpTagBadge">NEW DROP</span>
+                    
+                    <button type="button" class="pdp-wishlist-btn" id="pdpWishlistBtn" title="Salvar nos Favoritos" aria-label="Favoritar Produto">
+                        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+                        </svg>
+                    </button>
+
+                    <img src="" alt="Produto ZSX" id="pdpHeroImg" class="pdp-hero-img">
+
+                    <button type="button" class="pdp-zoom-btn" id="btnZoomImg" title="Ampliar Imagem" aria-label="Ampliar Imagem">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            <line x1="11" y1="8" x2="11" y2="14"></line>
+                            <line x1="8" y1="11" x2="14" y2="11"></line>
+                        </svg>
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- Coluna da Direita: Buy Box / Detalhes & Compra -->
+            <div class="pdp-info-column">
+                
+                <span class="pdp-badge-category" id="pdpCategoryLabel">ZSX OUTLET • STREETWEAR</span>
+                <h1 class="pdp-product-title" id="pdpProductTitle">Nome do Produto</h1>
+
+                <!-- Avaliações -->
+                <div class="pdp-rating-row">
+                    <div class="pdp-stars">
+                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                    </div>
+                    <span class="pdp-rating-score" id="pdpRatingScore">4.9</span>
+                    <span class="pdp-rating-count" id="pdpRatingCount">(148 avaliações)</span>
+                </div>
+
+                <!-- Preço -->
+                <div class="pdp-price-box">
+                    <div class="pdp-price-main-row">
+                        <span class="pdp-price-current" id="pdpCurrentPrice">R$ 0,00</span>
+                        <span class="pdp-price-original" id="pdpOriginalPrice">R$ 0,00</span>
+                        <span class="pdp-discount-tag" id="pdpDiscountBadge">35% OFF</span>
+                    </div>
+                    <p class="pdp-installment-text" id="pdpInstallmentText">
+                        em até 6x sem juros
+                    </p>
+                </div>
+
+                <!-- Descrição Curta -->
+                <p class="pdp-description-short" id="pdpDescription">
+                    Carregando detalhes do produto...
+                </p>
+
+                <!-- Seletor de Cor -->
+                <div class="pdp-option-group">
+                    <div class="pdp-option-header">
+                        <span>Cor: <strong id="pdpSelectedColor">Padrão</strong></span>
+                    </div>
+                    <div class="pdp-colors-row" id="pdpColorsContainer">
+                        <!-- Swatches dinâmicos -->
+                    </div>
+                </div>
+
+                <!-- Seletor de Tamanho -->
+                <div class="pdp-option-group">
+                    <div class="pdp-option-header">
+                        <span>Tamanho: <strong id="pdpSelectedSize">M</strong></span>
+                        <button type="button" class="pdp-size-guide-btn" id="btnOpenSizeGuide">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12h20M2 12l5-5m-5 5l5 5M22 12l-5-5m5 5l-5 5"/></svg>
+                            Tabela de Medidas
+                        </button>
+                    </div>
+                    <div class="pdp-sizes-row" id="pdpSizesContainer">
+                        <!-- Tamanhos dinâmicos -->
+                    </div>
+                </div>
+
+                <!-- Status de Estoque -->
+                <div class="pdp-stock-status">
+                    <span class="pdp-stock-dot"></span>
+                    <span>Em estoque • Envio imediato em até 24h úteis</span>
+                </div>
+
+                <!-- Botões de Compra e Quantidade -->
+                <div class="pdp-purchase-actions">
+                    <div class="pdp-actions-main-row">
+                        <!-- Contador de Quantidade -->
+                        <div class="pdp-quantity-selector">
+                            <button type="button" class="pdp-qty-btn" id="pdpQtyMinus" aria-label="Diminuir quantidade">&minus;</button>
+                            <span class="pdp-qty-value" id="pdpQtyValue">1</span>
+                            <button type="button" class="pdp-qty-btn" id="pdpQtyPlus" aria-label="Aumentar quantidade">&plus;</button>
+                        </div>
+
+                        <!-- Botão Adicionar ao Carrinho (Efeito Sweep) -->
+                        <button type="button" class="btn-pdp-add-cart" id="btnAddCartPdp">
+                            <span class="btn-bg-sweep"></span>
+                            <span class="btn-content">
+                                <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="9" cy="21" r="1"></circle>
+                                    <circle cx="20" cy="21" r="1"></circle>
+                                    <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                </svg>
+                                <span>Adicionar ao Carrinho</span>
+                            </span>
+                        </button>
+                    </div>
+
+                    <!-- Botão Comprar Agora -->
+                    <button type="button" class="btn-pdp-buy-now" id="btnBuyNowPdp">
+                        <span>Comprar Agora</span>
+                        <span>&rarr;</span>
+                    </button>
+                </div>
+
+                <!-- Benefícios Rápidos (Conforme Foto de Inspiração) -->
+                <div class="pdp-quick-perks">
+                    <div class="pdp-perk-item">
+                        <svg viewBox="0 0 48 48" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="16" width="25" height="17" rx="2" stroke-width="2.2"/>
+                        <path d="M28 22h8l6 6v5h-14v-11z" stroke-width="2.2"/>
+                        <circle cx="10" cy="35" r="4" stroke-width="2.2"/>
+                        <circle cx="36" cy="35" r="4" stroke-width="2.2"/>
+                        <path d="M14 35h18"/>
+                        <path d="M11 11h9v5h-9z" stroke-width="1.8"/>
+                        <path d="M15.5 11v5"/>
+                        <path d="M13 9c-1-1.8-2.5-1.8-2.5 0s2.5 2 2.5 2"/>
+                        <path d="M18 9c1-1.8 2.5-1.8 2.5 0s-2.5 2-2.5 2"/>
+                        <line x1="2" y1="21" x2="6" y2="21" stroke-width="2"/>
+                        <line x1="1" y1="26" x2="5" y2="26" stroke-width="2"/>
+                    </svg>
+                        <div class="pdp-perk-text">
+                            <span class="pdp-perk-title">Frete Grátis</span>
+                            <span class="pdp-perk-desc">Em pedidos acima de R$ 199</span>
+                        </div>
+                    </div>
+
+                    <div class="pdp-perk-item">
+                        <svg viewBox="0 0 48 48" width="30" height="30" fill="none">
+                        <circle cx="24" cy="24" r="18" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-dasharray="78 30"/>
+                        <path d="M21 4.5l3.5 2.5-3.5 2.5" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="40" cy="18" r="1.6" fill="currentColor"/>
+                        <circle cx="42" cy="24" r="1.6" fill="currentColor"/>
+                        <circle cx="40" cy="30" r="1.6" fill="currentColor"/>
+                        <circle cx="36" cy="36" r="1.6" fill="currentColor"/>
+                        <text x="24" y="29" font-family="'Segoe UI', Arial, sans-serif" font-size="13" font-weight="800" fill="currentColor" text-anchor="middle">24</text>
+                    </svg>
+                        <div class="pdp-perk-text">
+                            <span class="pdp-perk-title">Troca Fácil</span>
+                            <span class="pdp-perk-desc">30 dias sem custos adicionais</span>
+                        </div>
+                    </div>
+
+                    <div class="pdp-perk-item">
+                        <svg viewBox="0 0 48 48" width="30" height="30" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M24 5C16.8 5 11 10.8 11 18c0 9.5 13 23 13 23s13-13.5 13-23c0-7.2-5.8-13-13-13z"/>
+                        <circle cx="24" cy="18" r="4.5" fill="none" stroke-width="2.2"/>
+                        <path d="M8 43h32" stroke-width="2.4"/>
+                    </svg>
+                        <div class="pdp-perk-text">
+                            <span class="pdp-perk-title">Compra Segura</span>
+                            <span class="pdp-perk-desc">100% Criptografada SSL</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Seção de Abas Informativas (Detalhes, Materiais, Tamanho, Envio) -->
+        <section class="pdp-tabs-section">
+            <div class="pdp-tabs-nav">
+                <button type="button" class="pdp-tab-trigger active" data-tab="details">Detalhes</button>
+                <button type="button" class="pdp-tab-trigger" data-tab="materials">Materiais & Composição</button>
+                <button type="button" class="pdp-tab-trigger" data-tab="fit">Tamanho & Caimento</button>
+                <button type="button" class="pdp-tab-trigger" data-tab="shipping">Envio & Devoluções</button>
+            </div>
+
+            <div class="pdp-tab-contents">
+                
+                <!-- Aba Detalhes -->
+                <div class="pdp-tab-pane active" id="tabPane-details">
+                    <div class="pdp-tab-text-side">
+                        <p id="pdpTabDescParagraph">
+                            Confeccionado com atenção rigorosa a cada detalhe estrutural, esta peça combina a essência do luxo casual contemporâneo com a atitude visual do streetwear global.
+                        </p>
+                        <ul class="pdp-specs-list" id="pdpSpecsList">
+                            <!-- Preenchido dinamicamente -->
+                        </ul>
+                    </div>
+
+                    <div class="pdp-detail-visual-card">
+                        <img src="" alt="Detalhe do Tecido ZSX" id="pdpDetailVisualImg">
+                        <div class="pdp-detail-overlay-badge">
+                            <p class="pdp-detail-badge-title" id="pdpDetailBadgeTitle">ESSENTIALS ZSX</p>
+                            <p class="pdp-detail-badge-sub">HIGH QUALITY CRAFTSMANSHIP</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Aba Materiais -->
+                <div class="pdp-tab-pane" id="tabPane-materials">
+                    <div class="pdp-tab-text-side">
+                        <p id="pdpTabMaterialsText">
+                            Composição nobre com toque macio e resistente ao desgaste.
+                        </p>
+                        <ul class="pdp-specs-list">
+                            <li class="pdp-spec-item"><span class="pdp-spec-icon">🌱</span><span>Fibras selecionadas com fiação compacta anti-pilling</span></li>
+                            <li class="pdp-spec-item"><span class="pdp-spec-icon">🧼</span><span>Lavável à máquina em ciclo suave (não usar alvejante com cloro)</span></li>
+                            <li class="pdp-spec-item"><span class="pdp-spec-icon">🌡️</span><span>Secagem natural à sombra recomendada para preservar a cor viva</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="pdp-detail-visual-card">
+                        <img src="../images/newRelease.png" alt="Materiais ZSX">
+                        <div class="pdp-detail-overlay-badge">
+                            <p class="pdp-detail-badge-title">PREMIUM FABRICS</p>
+                            <p class="pdp-detail-badge-sub">SUSTAINABLE & DURABLE</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Aba Tamanho & Caimento -->
+                <div class="pdp-tab-pane" id="tabPane-fit">
+                    <div class="pdp-tab-text-side">
+                        <p id="pdpTabFitText">
+                            Modelagem oversized pensada para garantir liberdade total de movimentos e visual imponente.
+                        </p>
+                        <ul class="pdp-specs-list">
+                            <li class="pdp-spec-item"><span class="pdp-spec-icon">📐</span><span>Ombros rebaixados (drop shoulder) com estética brutalista</span></li>
+                            <li class="pdp-spec-item"><span class="pdp-spec-icon">👕</span><span>Comprimento proporcional para visual em camadas (layering)</span></li>
+                            <li class="pdp-spec-item"><span class="pdp-spec-icon">✨</span><span>Consulte a Tabela de Medidas para tirar dúvidas sobre o seu tamanho</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="pdp-detail-visual-card">
+                        <img src="../images/body2.png" alt="Caimento ZSX">
+                        <div class="pdp-detail-overlay-badge">
+                            <p class="pdp-detail-badge-title">OVERSIZED FIT</p>
+                            <p class="pdp-detail-badge-sub">MODERN STREETWEAR PROPORTIONS</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Aba Envio & Devoluções -->
+                <div class="pdp-tab-pane" id="tabPane-shipping">
+                    <div class="pdp-tab-text-side">
+                        <p id="pdpTabShippingText">
+                            Enviamos com código de rastreamento direto no seu WhatsApp e e-mail.
+                        </p>
+                        <ul class="pdp-specs-list">
+                            <li class="pdp-spec-item"><span class="pdp-spec-icon">⚡</span><span>Postagem rápida em até 24h úteis para todo o território nacional</span></li>
+                            <li class="pdp-spec-item"><span class="pdp-spec-icon">📦</span><span>Embalagem reforçada anti-violação ZSX Outlet</span></li>
+                            <li class="pdp-spec-item"><span class="pdp-spec-icon">🛡️</span><span>Seguro total da carga incluso até o momento da entrega</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="pdp-detail-visual-card">
+                        <img src="../images/fundo2.png" alt="Envio ZSX">
+                        <div class="pdp-detail-overlay-badge">
+                            <p class="pdp-detail-badge-title">FAST DELIVERY</p>
+                            <p class="pdp-detail-badge-sub">SECURE DISPATCH</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Seção: Você Também Pode Gostar (Recomendados) -->
+        <section class="pdp-related-section">
+            <div class="pdp-related-header">
+                <div>
+                    <h2 class="pdp-related-title">VOCÊ TAMBÉM PODE GOSTAR</h2>
+                    <p class="pdp-related-subtitle">Peças selecionadas que combinam com o seu estilo</p>
+                </div>
+                <a href="index.html" class="pdp-view-all-link">
+                    <span>Ver Coleção Completa</span>
+                    <span>&rarr;</span>
+                </a>
+            </div>
+
+            <div class="pdp-related-grid" id="pdpRelatedGrid">
+                <!-- Renderizado via JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL DE GUIA DE MEDIDAS -->
+    <div id="sizeGuideModal" class="custom-modal-overlay">
+        <div class="custom-modal-card size-guide-card">
+            <div class="modal-card-header">
+                <h3 class="modal-card-title">TABELA DE MEDIDAS (CM)</h3>
+                <button type="button" id="closeSizeGuideBtn" class="modal-close-icon" aria-label="Fechar Guia">&times;</button>
+            </div>
+            <p class="size-guide-desc">
+                Meça uma peça sua similar estendida em uma superfície plana e compare com as dimensões abaixo:
+            </p>
+            <div class="size-guide-table-wrapper">
+                <table class="size-guide-table">
+                    <thead>
+                        <tr>
+                            <th>Tamanho</th>
+                            <th>Tórax</th>
+                            <th>Comprimento</th>
+                            <th>Manga</th>
+                            <th>Ombro a Ombro</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>P</strong></td><td>54 cm</td><td>70 cm</td><td>62 cm</td><td>48 cm</td></tr>
+                        <tr><td><strong>M</strong></td><td>58 cm</td><td>73 cm</td><td>64 cm</td><td>51 cm</td></tr>
+                        <tr><td><strong>G</strong></td><td>62 cm</td><td>76 cm</td><td>66 cm</td><td>54 cm</td></tr>
+                        <tr><td><strong>GG</strong></td><td>66 cm</td><td>78 cm</td><td>68 cm</td><td>57 cm</td></tr>
+                        <tr><td><strong>XGG</strong></td><td>70 cm</td><td>80 cm</td><td>70 cm</td><td>60 cm</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="size-guide-tip">
+                💡 <strong>Dica de Caimento:</strong> Nossa modelagem já conta com corte ligeiramente oversized. Se preferir um ajuste mais rente ao corpo, selecione um tamanho menor do que costuma usar.
+            </p>
+        </div>
+    </div>
+
+    <!-- MODAL DE ZOOM EM TELA CHEIA (LIGHTBOX) -->
+    <div id="zoomModal" class="zoom-modal-overlay">
+        <button type="button" id="closeZoomBtn" class="zoom-close-btn" aria-label="Fechar Zoom">&times;</button>
+        <div class="zoom-img-wrapper">
+            <img src="" alt="Zoom do Produto" id="zoomModalImg">
+        </div>
+    </div>
+
+    <!-- MODAL / DRAWER DO CARRINHO (ESTILO SHOPPING CART DA FOTO) -->
+    <div id="cartDrawerOverlay" class="cart-drawer-overlay">
+        <div class="cart-drawer">
+            <div class="cart-header">
+                <div class="cart-header-left">
+                    <img src="../images/zsx.png" alt="ZSX Outlet" class="cart-header-logo">
+                    <h2 class="cart-title">CARRINHO</h2>
+                </div>
+                <button type="button" id="closeCartBtn" class="cart-close-btn" aria-label="Fechar Carrinho">&times;</button>
+            </div>
+
+            <div class="cart-body">
+                <div class="cart-items-column">
+                    <div id="cartItemsList" class="cart-items-list"></div>
+                </div>
+
+                <div class="cart-summary-column">
+                    <div class="order-summary-box">
+                        <h3 class="order-summary-title">RESUMO DO PEDIDO</h3>
+                        
+                        <div class="summary-line">
+                            <span class="summary-label">SUBTOTAL</span>
+                            <span id="cartSubtotal" class="summary-val">R$ 0,00</span>
+                        </div>
+                        <div class="summary-line">
+                            <span class="summary-label">FRETE</span>
+                            <span id="cartShipping" class="summary-val text-free">Grátis</span>
+                        </div>
+                        <div id="summaryDiscountRow" class="summary-line summary-discount" style="display: none;">
+                            <span class="summary-label">DESCONTO (CUPOM)</span>
+                            <span id="cartDiscount" class="summary-val text-discount">- R$ 0,00</span>
+                        </div>
+                        <div class="summary-divider"></div>
+                        <div class="summary-line summary-total-line">
+                            <span class="summary-label">TOTAL</span>
+                            <span id="cartTotal" class="summary-val summary-total-val">R$ 0,00</span>
+                        </div>
+
+                        <!-- Cupom -->
+                        <div class="coupon-area">
+                            <label class="coupon-label">CUPOM DE DESCONTO</label>
+                            <div class="coupon-input-group">
+                                <input type="text" id="couponInput" placeholder="Ex: ZSX10" class="coupon-input">
+                                <button type="button" id="applyCouponBtn" class="coupon-btn">Aplicar</button>
+                            </div>
+                            <p id="couponMsg" class="coupon-msg"></p>
+                        </div>
+
+                        <!-- Endereço Ativo -->
+                        <div id="activeAddressCard" class="active-address-card" style="display: none;">
+                            <div class="address-card-header">
+                                <span class="address-badge">📍 Endereço de Entrega</span>
+                                <div class="address-card-actions">
+                                    <button type="button" id="editAddressBtn" class="address-action-link">Editar</button>
+                                    <span class="address-action-sep">•</span>
+                                    <button type="button" id="removeAddressBtn" class="address-action-link text-danger">Remover</button>
+                                </div>
+                            </div>
+                            <p id="activeAddressText" class="address-card-text"></p>
+                        </div>
+
+                        <!-- Botões de Ação lado a lado -->
+                        <div class="cart-action-buttons">
+                            <button type="button" id="openAddressBtn" class="cart-btn btn-secondary-address">
+                                <span class="cart-btn-icon">📍</span>
+                                <span id="addressBtnText">Adicionar Endereço</span>
+                            </button>
+                            <button type="button" id="goToCheckoutBtn" class="cart-btn btn-primary-checkout">
+                                <span>Ir para o Pagamento</span>
+                                <span class="cart-btn-arrow">&rarr;</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- POPUP DE ALERTA: ENDEREÇO OBRIGATÓRIO -->
+    <div id="addressAlertModal" class="custom-modal-overlay">
+        <div class="custom-modal-card alert-modal-card">
+            <div class="modal-icon-badge alert-icon">
+                <svg viewBox="0 0 24 24" width="34" height="34" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                </svg>
+            </div>
+            <h3 class="modal-card-title">Endereço Necessário</h3>
+            <p class="modal-card-desc">
+                Para calcular o envio e prosseguir para a etapa de pagamento, precisamos do seu endereço de entrega cadastrado.
+            </p>
+            <div class="modal-actions-stacked">
+                <button type="button" id="alertGoToAddressBtn" class="modal-btn-confirm">Cadastrar Endereço Agora</button>
+                <button type="button" id="alertCloseBtn" class="modal-btn-cancel">Voltar ao Carrinho</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE CADASTRO DE ENDEREÇO -->
+    <div id="addressFormModal" class="custom-modal-overlay">
+        <div class="custom-modal-card form-modal-card">
+            <div class="modal-card-header">
+                <h3 class="modal-card-title">Cadastrar Endereço de Entrega</h3>
+                <button type="button" id="closeAddressFormBtn" class="modal-close-icon">&times;</button>
+            </div>
+            <form id="addressForm" class="address-form-grid">
+                <div class="form-group col-full">
+                    <label for="addrCep">CEP</label>
+                    <div class="cep-input-wrapper">
+                        <input type="text" id="addrCep" placeholder="00000-000" maxlength="9" required>
+                        <button type="button" id="btnSearchCep" class="btn-search-cep">Buscar CEP</button>
+                    </div>
+                </div>
+                <div class="form-group col-full">
+                    <label for="addrStreet">Rua / Logradouro</label>
+                    <input type="text" id="addrStreet" placeholder="Ex: Av. Paulista" required>
+                </div>
+                <div class="form-group col-half">
+                    <label for="addrNumber">Número</label>
+                    <input type="text" id="addrNumber" placeholder="123" required>
+                </div>
+                <div class="form-group col-half">
+                    <label for="addrComp">Complemento</label>
+                    <input type="text" id="addrComp" placeholder="Apto 42, Bloco B">
+                </div>
+                <div class="form-group col-half">
+                    <label for="addrNeighborhood">Bairro</label>
+                    <input type="text" id="addrNeighborhood" placeholder="Bairro" required>
+                </div>
+                <div class="form-group col-half">
+                    <label for="addrCity">Cidade / UF</label>
+                    <input type="text" id="addrCity" placeholder="São Paulo - SP" required>
+                </div>
+                <div class="form-group col-full">
+                    <label for="addrName">Nome do Destinatário</label>
+                    <input type="text" id="addrName" placeholder="Quem irá receber a encomenda" required>
+                </div>
+                <div class="modal-actions-row col-full">
+                    <button type="button" id="deleteAddressModalBtn" class="modal-btn-delete" style="display: none;">Excluir Endereço</button>
+                    <div class="modal-actions-right">
+                        <button type="button" id="cancelAddressBtn" class="modal-btn-cancel">Cancelar</button>
+                        <button type="submit" class="modal-btn-confirm">Salvar Endereço</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL DE CHECKOUT / PAGAMENTO (CARTÃO CRÉDITO, DÉBITO E PIX) -->
+    <div id="checkoutModal" class="custom-modal-overlay">
+        <div class="custom-modal-card checkout-modal-card">
+            <div class="modal-card-header">
+                <h3 class="modal-card-title">PAGAMENTO</h3>
+                <button type="button" id="closeCheckoutBtn" class="modal-close-icon">&times;</button>
+            </div>
+
+            <!-- Resumo Rápido -->
+            <div class="checkout-quick-summary">
+                <div class="quick-summary-item">
+                    <span class="quick-summary-label">Total a Pagar:</span>
+                    <strong id="checkoutFinalTotal" class="checkout-total-val">R$ 0,00</strong>
+                </div>
+                <div class="quick-summary-item">
+                    <span class="quick-summary-label">Entregar em:</span>
+                    <span id="checkoutDeliveryAddress" class="checkout-addr-val">...</span>
+                </div>
+            </div>
+
+            <!-- Abas de Pagamento: Crédito, Débito e PIX -->
+            <div class="payment-tabs">
+                <button type="button" class="payment-tab active" data-tab="credit">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    <span>Crédito</span>
+                </button>
+                <button type="button" class="payment-tab" data-tab="debit">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect><line x1="1" y1="10" x2="23" y2="10"></line></svg>
+                    <span>Débito</span>
+                </button>
+                <button type="button" class="payment-tab" data-tab="pix">
+                    <span class="pix-badge-icon">⚡</span>
+                    <span>PIX (-5%)</span>
+                </button>
+            </div>
+
+            <!-- Conteúdo das Abas -->
+            <div class="payment-tab-contents">
+                <div id="tabCredit" class="tab-pane active">
+                    <div class="payment-form-grid">
+                        <div class="form-group col-full">
+                            <label for="ccNumber">Número do Cartão</label>
+                            <input type="text" id="ccNumber" placeholder="0000 0000 0000 0000" maxlength="19">
+                        </div>
+                        <div class="form-group col-full">
+                            <label for="ccName">Nome Impresso no Cartão</label>
+                            <input type="text" id="ccName" placeholder="NOME COMPLETO">
+                        </div>
+                        <div class="form-group col-half">
+                            <label for="ccExpiry">Validade (MM/AA)</label>
+                            <input type="text" id="ccExpiry" placeholder="12/28" maxlength="5">
+                        </div>
+                        <div class="form-group col-half">
+                            <label for="ccCvv">CVV</label>
+                            <input type="text" id="ccCvv" placeholder="123" maxlength="4">
+                        </div>
+                        <div class="form-group col-full">
+                            <label for="ccInstallments">Opções de Parcelamento</label>
+                            <select id="ccInstallments" class="installment-select"></select>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tabDebit" class="tab-pane">
+                    <div class="payment-form-grid">
+                        <div class="form-group col-full">
+                            <label for="debNumber">Número do Cartão de Débito</label>
+                            <input type="text" id="debNumber" placeholder="0000 0000 0000 0000" maxlength="19">
+                        </div>
+                        <div class="form-group col-full">
+                            <label for="debName">Nome do Titular</label>
+                            <input type="text" id="debName" placeholder="NOME DO TITULAR">
+                        </div>
+                        <div class="form-group col-half">
+                            <label for="debExpiry">Validade</label>
+                            <input type="text" id="debExpiry" placeholder="12/28" maxlength="5">
+                        </div>
+                        <div class="form-group col-half">
+                            <label for="debCvv">CVV</label>
+                            <input type="text" id="debCvv" placeholder="123" maxlength="4">
+                        </div>
+                    </div>
+                </div>
+
+                <div id="tabPix" class="tab-pane">
+                    <div class="pix-payment-box">
+                        <div class="pix-badge-promo">
+                            <span>⚡ Desconto exclusivo de 5% aplicado no PIX!</span>
+                        </div>
+                        <div class="pix-qrcode-wrapper">
+                            <svg viewBox="0 0 100 100" width="160" height="160" class="pix-svg-qr">
+                                <rect width="100" height="100" fill="#ffffff" rx="6"/>
+                                <rect x="10" y="10" width="30" height="30" fill="#111"/>
+                                <rect x="15" y="15" width="20" height="20" fill="#fff"/>
+                                <rect x="20" y="20" width="10" height="10" fill="#111"/>
+                                <rect x="60" y="10" width="30" height="30" fill="#111"/>
+                                <rect x="65" y="15" width="20" height="20" fill="#fff"/>
+                                <rect x="70" y="20" width="10" height="10" fill="#111"/>
+                                <rect x="10" y="60" width="30" height="30" fill="#111"/>
+                                <rect x="15" y="65" width="20" height="20" fill="#fff"/>
+                                <rect x="20" y="70" width="10" height="10" fill="#111"/>
+                                <rect x="45" y="15" width="8" height="8" fill="#111"/>
+                                <rect x="45" y="30" width="8" height="8" fill="#111"/>
+                                <rect x="50" y="45" width="10" height="10" fill="#111"/>
+                                <rect x="65" y="55" width="8" height="8" fill="#111"/>
+                                <rect x="75" y="65" width="15" height="15" fill="#111"/>
+                                <rect x="50" y="75" width="8" height="8" fill="#111"/>
+                                <rect x="35" y="80" width="8" height="8" fill="#111"/>
+                            </svg>
+                        </div>
+                        <p class="pix-instructions">Escaneie o QR Code ou utilize o código Copia e Cola:</p>
+                        <div class="pix-copy-paste-group">
+                            <input type="text" readonly id="pixCodeInput" value="00020126580014br.gov.bcb.pix0136zsxoutlet-pix-chave-aleatoria5204000053039865802BR5910ZSX OUTLET6009SAO PAULO62070503***6304" class="pix-code-field">
+                            <button type="button" id="btnCopyPix" class="btn-copy-pix">Copiar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="checkout-footer">
+                <button type="button" id="btnFinishOrder" class="btn-finish-order">
+                    <span>Confirmar e Finalizar Pedido</span>
+                    <span>&rarr;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE PEDIDO CONFIRMADO (SUCESSO) -->
+    <div id="orderSuccessModal" class="custom-modal-overlay">
+        <div class="custom-modal-card success-modal-card">
+            <div class="modal-icon-badge success-icon">
+                <svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#22c55e" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+            </div>
+            <h3 class="modal-card-title">Pedido Confirmado!</h3>
+            <p class="order-number-tag">Pedido <span id="successOrderNum">#ZSX-74921</span></p>
+            <p class="modal-card-desc">
+                Obrigado por comprar na ZSX Outlet! Seu pedido já está sendo preparado e enviamos todos os detalhes do rastreio para o seu e-mail.
+            </p>
+            <div class="success-details-box">
+                <div class="success-row"><span>Forma de Pagamento:</span><strong id="successPaymentMethod">Cartão de Crédito</strong></div>
+                <div class="success-row"><span>Total Pago:</span><strong id="successTotalPaid">R$ 0,00</strong></div>
+                <div class="success-row"><span>Prazo Estimado:</span><strong>2 a 4 dias úteis</strong></div>
+            </div>
+            <button type="button" id="btnContinueShopping" class="modal-btn-confirm">Continuar Comprando</button>
+        </div>
+    </div>
+
+    <!-- MODAL / OVERLAY DO SUPORTE -->
+    <div id="supportModal" class="custom-modal-overlay">
+        <div class="custom-modal-card support-modal-card">
+            <div class="modal-card-header">
+                <h3 class="modal-card-title">SUPORTE E ATENDIMENTO</h3>
+                <button type="button" id="closeSupportBtn" class="modal-close-icon" aria-label="Fechar Suporte">&times;</button>
+            </div>
+            <div class="support-content">
+                <p class="support-desc">
+                    Precisa de ajuda com seu pedido, dúvidas sobre produtos ou entregas? Nossa equipe de suporte está disponível 24 horas por dia, 7 dias por semana.
+                </p>
+                <div class="support-contact-options">
+                    <a href="https://wa.me/5511999999999" target="_blank" class="support-contact-card">
+                        <div class="support-contact-icon whatsapp-bg">💬</div>
+                        <div class="support-contact-info">
+                            <span class="support-contact-name">WhatsApp 24h</span>
+                            <span class="support-contact-val">(11) 99999-9999</span>
+                            <span class="support-contact-sub">Atendimento imediato</span>
+                        </div>
+                        <span class="support-card-arrow">&rarr;</span>
+                    </a>
+                    <a href="mailto:sac@zsxoutlet.com.br" class="support-contact-card">
+                        <div class="support-contact-icon email-bg">✉️</div>
+                        <div class="support-contact-info">
+                            <span class="support-contact-name">E-mail SAC</span>
+                            <span class="support-contact-val">sac@zsxoutlet.com.br</span>
+                            <span class="support-contact-sub">Resposta em até 2 horas</span>
+                        </div>
+                        <span class="support-card-arrow">&rarr;</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL / OVERLAY DO PERFIL -->
+    <div id="profileModal" class="custom-modal-overlay">
+        <div class="custom-modal-card profile-modal-card">
+            <div class="profile-card-header">
+                <div class="profile-user-info">
+                    <div class="profile-avatar-wrapper">
+                        <img src="../images/profile-icon-removebg-preview.png" alt="Perfil" class="profile-avatar-img">
+                        <span class="profile-badge-status">VIP</span>
+                    </div>
+                    <div class="profile-user-meta">
+                        <h3 class="profile-user-name">Cliente ZSX</h3>
+                        <p class="profile-user-email">membro@zsxoutlet.com.br</p>
+                    </div>
+                </div>
+                <button type="button" id="closeProfileBtn" class="modal-close-icon" aria-label="Fechar Perfil">&times;</button>
+            </div>
+
+            <div class="profile-menu-list">
+                <button type="button" class="profile-menu-item" id="menuMyOrdersBtn">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><line x1="3" y1="6" x2="21" y2="6"></line><path d="M16 10a4 4 0 0 1-8 0"></path></svg>
+                    </div>
+                    <div class="menu-item-text">
+                        <span class="menu-item-title">Minhas Compras</span>
+                        <span class="menu-item-desc">Acompanhe seus pedidos em andamento</span>
+                    </div>
+                    <span class="menu-item-arrow">&rarr;</span>
+                </button>
+
+                <button type="button" class="profile-menu-item" id="menuMyAddressesBtn">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                    </div>
+                    <div class="menu-item-text">
+                        <span class="menu-item-title">Meus Endereços</span>
+                        <span class="menu-item-desc">Gerenciar endereço de entrega</span>
+                    </div>
+                    <span class="menu-item-arrow">&rarr;</span>
+                </button>
+
+                <button type="button" class="profile-menu-item" id="menuMyCouponsBtn">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+                    </div>
+                    <div class="menu-item-text">
+                        <span class="menu-item-title">Cupons Disponíveis</span>
+                        <span class="menu-item-desc">ZSX10, OFF20 e VIP30 ativos</span>
+                    </div>
+                    <span class="menu-item-arrow">&rarr;</span>
+                </button>
+
+                <button type="button" class="profile-menu-item" id="menuSupportBtn">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+                    </div>
+                    <div class="menu-item-text">
+                        <span class="menu-item-title">Suporte e Atendimento</span>
+                        <span class="menu-item-desc">Atendimento 24h via WhatsApp</span>
+                    </div>
+                    <span class="menu-item-arrow">&rarr;</span>
+                </button>
+
+                <button type="button" class="profile-menu-item text-danger-item" id="menuLogoutBtn">
+                    <div class="menu-item-icon icon-danger">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                    </div>
+                    <div class="menu-item-text">
+                        <span class="menu-item-title">Sair da Conta</span>
+                        <span class="menu-item-desc">Desconectar da sessão</span>
+                    </div>
+                    <span class="menu-item-arrow">&rarr;</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE MINHAS COMPRAS COM ABAS E BOLINHAS VERMELHAS -->
+    <div id="ordersModal" class="custom-modal-overlay">
+        <div class="custom-modal-card orders-modal-card">
+            <div class="orders-modal-header">
+                <div class="orders-header-title-box">
+                    <h2 class="orders-modal-title">MINHAS COMPRAS</h2>
+                    <p class="orders-modal-subtitle">Acompanhe todos os seus pedidos na ZSX Outlet</p>
+                </div>
+                <button type="button" id="closeOrdersBtn" class="modal-close-icon" aria-label="Fechar Pedidos">&times;</button>
+            </div>
+
+            <!-- Abas com as bolinhas vermelhas idênticas à do carrinho -->
+            <div class="orders-tabs">
+                <button type="button" class="orders-tab active" data-order-status="pending">
+                    <span>Aguardando Pagamento</span>
+                    <span class="order-tab-badge" id="badgePendingOrders">0</span>
+                </button>
+                <button type="button" class="orders-tab" data-order-status="confirmed">
+                    <span>Confirmado</span>
+                    <span class="order-tab-badge" id="badgeConfirmedOrders">0</span>
+                </button>
+                <button type="button" class="orders-tab" data-order-status="finished">
+                    <span>Finalizado</span>
+                    <span class="order-tab-badge" id="badgeFinishedOrders">0</span>
+                </button>
+            </div>
+
+            <!-- Lista de Pedidos na Aba Ativa -->
+            <div id="ordersListContainer" class="orders-list-container"></div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATIONS -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- Scripts compartilhados e específicos do Produto -->
+    <script src="../JS/index.js"></script>
+    <script src="../JS/product.js"></script>
+</body>
+</html>
