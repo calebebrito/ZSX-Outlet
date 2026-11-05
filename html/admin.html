@@ -30,39 +30,15 @@
                 <p class="admin-auth-subtitle">Acesso exclusivo para o Desenvolvedor e o Proprietário da loja.</p>
             </div>
 
-            <!-- Botões Rápidos de Seleção de Perfil Autorizado -->
-            <div class="admin-role-switcher">
-                <button type="button" class="role-quick-btn active" id="quickRoleDev" onclick="selectQuickRole('dev')">
-                    <span class="role-quick-top">
-                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <polyline points="16 18 22 12 16 6"/>
-                            <polyline points="8 6 2 12 8 18"/>
-                        </svg>
-                        Você (Admin/Dev)
-                    </span>
-                    <span class="role-quick-sub">dev@zsxoutlet.com.br</span>
-                </button>
-
-                <button type="button" class="role-quick-btn" id="quickRoleOwner" onclick="selectQuickRole('owner')">
-                    <span class="role-quick-top">
-                        <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                        </svg>
-                        Dono da Loja
-                    </span>
-                    <span class="role-quick-sub">dono@zsxoutlet.com.br</span>
-                </button>
-            </div>
-
-            <form id="adminLoginForm" class="admin-auth-form">
+            <form id="adminLoginForm" class="admin-auth-form" autocomplete="on">
                 <div class="admin-field-group">
-                    <label for="adminLoginEmail">E-mail ou Credencial</label>
-                    <input type="text" id="adminLoginEmail" class="admin-input" value="dev@zsxoutlet.com.br" placeholder="Digite seu e-mail autorizado" required>
+                    <label for="adminLoginEmail">E-mail Corporativo / Usuário</label>
+                    <input type="text" id="adminLoginEmail" class="admin-input" placeholder="Digite seu e-mail ou usuário autorizado" required>
                 </div>
 
                 <div class="admin-field-group">
-                    <label for="adminLoginPass">Chave de Segurança</label>
-                    <input type="password" id="adminLoginPass" class="admin-input" value="zsx2026" placeholder="••••••••" required>
+                    <label for="adminLoginPass">Senha de Acesso</label>
+                    <input type="password" id="adminLoginPass" class="admin-input" placeholder="Digite sua senha" required>
                 </div>
 
                 <div id="adminAuthError" class="admin-auth-error">
@@ -278,7 +254,7 @@
                         <div class="kpi-card">
                             <div class="kpi-top">
                                 <span class="kpi-label">Alerta de Estoque</span>
-                                <div class="kpi-icon" style="color: #e11d48; background: #fef2f2;">
+                                <div class="kpi-icon" style="color: #ff4d5e; background: rgba(225, 29, 46, 0.16);">
                                     <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                         <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
                                         <line x1="12" y1="9" x2="12" y2="13"/>
@@ -369,7 +345,7 @@
                                 Aplicar % OFF na Categoria
                             </button>
 
-                            <button type="button" class="btn-bulk-apply" style="background: #ffffff;" onclick="applyBulkRestock(15)">
+                            <button type="button" class="btn-bulk-apply" style="background: rgba(255, 255, 255, 0.1); border-color: rgba(255, 70, 90, 0.35); color: #f7f1f3;" onclick="applyBulkRestock(15)">
                                 +15 Estoque na Categoria
                             </button>
                         </div>
@@ -532,8 +508,18 @@
                                 </div>
 
                                 <div class="admin-field-group">
-                                    <label>WhatsApp Oficial de Suporte</label>
-                                    <input type="text" id="settingWhatsapp" class="admin-input" value="(11) 99999-9999">
+                                    <label>Chave PIX / Código Copia e Cola Oficial</label>
+                                    <input type="text" id="settingPixKey" class="admin-input" placeholder="CNPJ, E-mail, Telefone ou Chave Aleatória PIX">
+                                </div>
+
+                                <div class="admin-field-group">
+                                    <label>WhatsApp Oficial de Atendimento (com DDD)</label>
+                                    <input type="text" id="settingWhatsapp" class="admin-input" placeholder="Ex: (11) 98888-7777">
+                                </div>
+
+                                <div class="admin-field-group">
+                                    <label>E-mail Oficial de Suporte (SAC)</label>
+                                    <input type="email" id="settingSupportEmail" class="admin-input" placeholder="sac@zsxoutlet.com.br">
                                 </div>
 
                                 <button type="submit" class="btn-primary-admin" style="justify-content: center; margin-top: 8px;">
@@ -563,7 +549,7 @@
                                     <input type="text" id="credDevPass" class="admin-input" value="zsx2026">
                                 </div>
 
-                                <hr style="border: none; border-top: 1px solid #ebe4dc; margin: 8px 0;">
+                                <hr style="border: none; border-top: 1px solid rgba(255, 70, 90, 0.2); margin: 8px 0;">
 
                                 <div class="admin-field-group">
                                     <label>E-mail do Dono da Loja (Proprietário)</label>
@@ -579,12 +565,12 @@
                                 </button>
                             </form>
 
-                            <div style="margin-top: 28px; padding-top: 20px; border-top: 1px solid #ebe4dc;">
-                                <h4 style="font-size: 13.5px; font-weight: 800; margin-bottom: 6px; color: #b91c1c;">Restaurar Catálogo Original</h4>
-                                <p style="font-size: 12.5px; color: #6e6659; margin-bottom: 12px;">
+                            <div style="margin-top: 28px; padding-top: 20px; border-top: 1px solid rgba(255, 70, 90, 0.2);">
+                                <h4 style="font-size: 13.5px; font-weight: 800; margin-bottom: 6px; color: #ff4d5e;">Restaurar Catálogo Original</h4>
+                                <p style="font-size: 12.5px; color: #b9a4a9; margin-bottom: 12px;">
                                     Caso deseje reverter todas as edições de preços, descontos e estoques para os valores originais de fábrica:
                                 </p>
-                                <button type="button" class="btn-secondary-admin" style="border-color: #fecaca; color: #b91c1c;" onclick="resetAllStoreData()">
+                                <button type="button" class="btn-secondary-admin" style="border-color: rgba(255, 70, 90, 0.35); color: #ff4d5e;" onclick="resetAllStoreData()">
                                     Restaurar Padrões de Fábrica
                                 </button>
                             </div>

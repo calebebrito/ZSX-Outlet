@@ -10,11 +10,20 @@
 
 <body class="pdp-body">
 
-    <!-- Header Fixo ZSX Outlet -->
+    <!-- Header Flutuante ZSX Outlet -->
     <div id="head">
         <div class="zsx1" onclick="window.location.href='index.html'" style="cursor: pointer;" title="Voltar à página inicial">
             <img src="../images/zsx.png" alt="ZSX Outlet">
         </div>
+
+        <!-- Navegação central do header flutuante -->
+        <nav class="hero-nav" aria-label="Navegação principal">
+            <a href="index.html#secPolos" class="hero-nav-link">Polos</a>
+            <a href="index.html#secCategorias" class="hero-nav-link">Categorias</a>
+            <a href="index.html#secLancamentos" class="hero-nav-link">Lançamentos</a>
+            <a href="index.html#secCasacos" class="hero-nav-link">Casacos</a>
+            <a href="category.html?cat=all" class="hero-nav-link">Ver Tudo</a>
+        </nav>
 
         <div id="icons">
             <div class="leftIcons">
@@ -70,7 +79,6 @@
 
                 <!-- Box da Imagem Principal -->
                 <div class="pdp-hero-container">
-                    <span class="pdp-hero-badge" id="pdpTagBadge">NEW DROP</span>
                     
                     <button type="button" class="pdp-wishlist-btn" id="pdpWishlistBtn" title="Salvar nos Favoritos" aria-label="Favoritar Produto">
                         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -694,7 +702,7 @@
                 </svg>
             </div>
             <h3 class="modal-card-title">Pedido Confirmado!</h3>
-            <p class="order-number-tag">Pedido <span id="successOrderNum">#ZSX-74921</span></p>
+            <p class="order-number-tag">Pedido <span id="successOrderNum">#ZSX-00000</span></p>
             <p class="modal-card-desc">
                 Obrigado por comprar na ZSX Outlet! Seu pedido já está sendo preparado e enviamos todos os detalhes do rastreio para o seu e-mail.
             </p>
@@ -719,11 +727,11 @@
                     Precisa de ajuda com seu pedido, dúvidas sobre produtos ou entregas? Nossa equipe de suporte está disponível 24 horas por dia, 7 dias por semana.
                 </p>
                 <div class="support-contact-options">
-                    <a href="https://wa.me/5511999999999" target="_blank" class="support-contact-card">
+                    <a href="https://wa.me/5571992890814" target="_blank" class="support-contact-card">
                         <div class="support-contact-icon whatsapp-bg"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
                         <div class="support-contact-info">
                             <span class="support-contact-name">WhatsApp 24h</span>
-                            <span class="support-contact-val">(11) 99999-9999</span>
+                            <span class="support-contact-val">(71) 99289-0814</span>
                             <span class="support-contact-sub">Atendimento imediato</span>
                         </div>
                         <span class="support-card-arrow">&rarr;</span>
@@ -752,8 +760,8 @@
                         <span class="profile-badge-status">VIP</span>
                     </div>
                     <div class="profile-user-meta">
-                        <h3 class="profile-user-name">Cliente ZSX</h3>
-                        <p class="profile-user-email">membro@zsxoutlet.com.br</p>
+                        <h3 class="profile-user-name" id="profileUserName">Minha Conta ZSX</h3>
+                        <p class="profile-user-email" id="profileUserEmail">Identifique-se para salvar seus dados</p>
                     </div>
                 </div>
                 <button type="button" id="closeProfileBtn" class="modal-close-icon" aria-label="Fechar Perfil">&times;</button>
@@ -804,7 +812,31 @@
                     <span class="menu-item-arrow">&rarr;</span>
                 </button>
 
-                <button type="button" class="profile-menu-item" onclick="window.location.href='admin.html'">
+                <button type="button" class="profile-menu-item" id="menuEditAccountBtn">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </div>
+                    <div class="menu-item-text">
+                        <span class="menu-item-title">Meus Dados Pessoais</span>
+                        <span class="menu-item-desc" id="menuAccountDesc">Atualizar nome, e-mail e telefone</span>
+                    </div>
+                    <span class="menu-item-arrow">&rarr;</span>
+                </button>
+
+                <!-- Formulário Inline de Identificação do Cliente -->
+                <form id="customerAccountForm" style="display: none; padding: 14px; background: #f8f5f0; border-radius: 12px; margin: 6px 0; border: 1px solid #e5ddd3;">
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <input type="text" id="custNameInput" placeholder="Seu Nome Completo" required style="padding: 10px 12px; border-radius: 8px; border: 1px solid #d5ccc0; font-size: 13.5px;">
+                        <input type="email" id="custEmailInput" placeholder="Seu E-mail" required style="padding: 10px 12px; border-radius: 8px; border: 1px solid #d5ccc0; font-size: 13.5px;">
+                        <input type="tel" id="custPhoneInput" placeholder="WhatsApp / Telefone (00) 00000-0000" style="padding: 10px 12px; border-radius: 8px; border: 1px solid #d5ccc0; font-size: 13.5px;">
+                        <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                            <button type="button" id="cancelAccountEditBtn" style="padding: 8px 14px; border-radius: 8px; border: 1px solid #ccc; background: #fff; font-size: 12.5px; font-weight: 700; cursor: pointer;">Cancelar</button>
+                            <button type="submit" style="padding: 8px 16px; border-radius: 8px; border: none; background: #111; color: #fff; font-size: 12.5px; font-weight: 700; cursor: pointer;">Salvar Dados</button>
+                        </div>
+                    </div>
+                </form>
+
+                <button type="button" class="profile-menu-item" id="menuAdminPanelBtn" style="display: none;" onclick="window.location.href='admin.html'">
                     <div class="menu-item-icon">
                         <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                     </div>

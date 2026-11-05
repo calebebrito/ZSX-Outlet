@@ -15,133 +15,13 @@
     100% { background-position: 0% 50%; }
 }
 
-#head {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 1000;
-    transition: background-color 0.35s ease, backdrop-filter 0.35s ease, box-shadow 0.35s ease, padding 0.35s ease;
-}
-
-.zsx1 {
-    position: relative;
-    top: 20px;
-    left: 47%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: fit-content;
-
-}
-
-.zsx1 > img {
-    position: relative;
-    width: 140px;
-    height: 55px;
-    cursor: pointer;
-    transition: transform 0.25s ease;
-    z-index: 1001;
-}
-
-.zsx1 > img:hover {
-    transform: scale(1.05);
-}
-
-#icons {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 90%;
-    margin: 0 auto;
-    position: relative;
-    bottom: 10px;
-}
-
-.lineContainer {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.line {
-    background-color: rgba(0, 0, 0, 0.547);
-    width: 90%;
-    height: 3px;
-}
-
-.rightIcons {
-    position: relative;
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    right: 30px;
-}
-
-.leftIcons {
-    position: relative;
-    display: flex;
-    gap: 15px;
-    align-items: center;
-    left: 30px;
-}
-
-.supportIcon {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.supportIcon > img {
-    width: 33px;
-    height: 33px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.supportIcon:hover > img {
-    transform: scale(1.2);
-}
-
-.profile {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.profile > img {
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.profile:hover > img {
-    transform: scale(1.2);
-}
-
-.cart {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.cart > img {
-    width: 30px;
-    height: 30px;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-}
-
-.cart:hover > img {
-    transform: scale(1.2);
-}
+/* ==========================================================================
+   ESTRUTURA BASE
+   ========================================================================== */
 
 body {
-    background-color: #ffffff;
+    background-color: #0b0407;
+    color: #f7f1f3;
     min-height: 100vh;
     overflow-x: hidden; /* Evita rolagem horizontal */
     transition: background-color 1.2s ease; /* Transição mais lenta (1.2s) */
@@ -502,7 +382,6 @@ body {
     justify-content: center;
 
     background-color: #111111;
-    color: #ffffff;
 
     height: 58px;
     width: 175px;
@@ -524,7 +403,7 @@ body {
     width: 42px;
     height: 42px;
     border-radius: 50%;
-    background-color: #ffffff;
+    background-color: #e11d2e;
     color: #111111;
     display: flex;
     align-items: center;
@@ -543,14 +422,14 @@ body {
     font-size: 15px;
     font-weight: 700;
     letter-spacing: 0.5px;
-    color: #ffffff;
+    color: #e11d2e;
     margin-left: 28px;
     transition: color 0.45s ease, margin 0.45s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* No hover: botão inteiro se transforma em branco, a seta desliza para a direita */
 .newButton:hover {
-    background-color: #ffffff;
+    background-color: #e11d2e;
     box-shadow: 0 14px 35px rgba(0, 0, 0, 0.3);
     transform: translateX(-50%) translateY(-3px);
 }
@@ -558,11 +437,7 @@ body {
 .newButton:hover .btn-icon {
     left: calc(100% - 50px);
     background-color: #111111;
-    color: #ffffff;
-}
-
-.newButton:hover .btn-icon svg {
-    transform: translateX(2px);
+    color: #e11d2e;
 }
 
 .newButton:hover .btn-text {
@@ -578,9 +453,8 @@ body {
 /* Seção de Benefícios (Frete Grátis, Suporte 24h, Entrega Brasil) */
 .beneficios {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    max-width: 1200px;
     margin: 90px auto 50px;
     padding: 35px 20px;
 }
@@ -662,7 +536,7 @@ body {
     position: absolute;
     top: -6px;
     right: -8px;
-    background-color: #e11d48;
+    background-color: #e11d2e;
     color: #ffffff;
     font-size: 11px;
     font-weight: 800;
@@ -673,8 +547,8 @@ body {
     align-items: center;
     justify-content: center;
     padding: 0 4px;
-    border: 2px solid #ffffff;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    border: 2px solid #0b0407;
+    box-shadow: 0 2px 10px rgba(225, 29, 46, 0.5);
     transform: scale(0);
     transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
@@ -698,14 +572,14 @@ body {
     width: 100px;
     height: 38px;
     border-radius: 10px;
-    border: 1px solid rgba(0, 0, 0, 0.15);
-    background-color: #ffffff;
-    color: #1a1a1a;
+    border: 1px solid rgba(255, 70, 90, 0.25);
+    background-color: rgba(24, 9, 14, 0.92);
+    color: #f4eaec;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
     transition: color 0.35s ease, border-color 0.35s ease, transform 0.25s ease, box-shadow 0.25s ease;
     z-index: 1;
 }
@@ -717,7 +591,7 @@ body {
     left: 0;
     width: 0%;
     height: 100%;
-    background-color: #111111;
+    background: linear-gradient(90deg, #b80d1d 0%, #e11d2e 100%);
     transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: -1;
 }
@@ -728,9 +602,9 @@ body {
 
 .btn-action:hover {
     color: #ffffff;
-    border-color: #111111;
+    border-color: #ff3b4e;
     transform: translateY(-2px);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.18);
+    box-shadow: 0 8px 22px rgba(225, 29, 46, 0.45);
 }
 
 .btn-action:active {
@@ -1104,7 +978,7 @@ body {
     font-size: 13px;
     font-weight: 700;
     text-transform: uppercase;
-    color: #111111;
+    color: white;
     outline: none;
 }
 
@@ -2392,7 +2266,7 @@ body {
     background-color: #dcfce7;
 }
 
-.support-contact-icon.email-bg {
+.support-contact-icon.insta-bg {
     background-color: #e0f2fe;
 }
 
@@ -2482,4 +2356,688 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+}
+
+
+/* ==========================================================================
+   HERO PRINCIPAL ZSX — PLANETA COM ARO VERMELHO E TEMA INTEGRADO (HOME)
+   ========================================================================== */
+
+.hero-nav {
+    display: none;
+}
+
+#indexBody {
+    background-color: #060304;
+    color: #f3ecee;
+    transition: background-color 0.85s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+#indexBody.scrolled {
+    background-color: #11070a;
+}
+
+#indexBody::before {
+    display: none;
+}
+
+#indexBody .conteudo-site {
+    position: relative;
+    margin-top: 0;
+    padding-top: 70px;
+    padding-bottom: 90px;
+    background:
+        radial-gradient(ellipse 80% 22% at 50% 0%, rgba(195, 18, 40, 0.16) 0%, transparent 70%),
+        radial-gradient(ellipse 65% 30% at 50% 55%, rgba(140, 12, 28, 0.1) 0%, transparent 70%),
+        linear-gradient(180deg, #11070a 0%, #16090e 48%, #0e0609 100%);
+    z-index: 2;
+}
+
+/* Linha sutil de conexão luminosa entre o Hero e o Conteúdo */
+#indexBody .conteudo-site::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(86%, 1100px);
+    height: 1px;
+    background: linear-gradient(90deg, transparent 0%, rgba(255, 60, 80, 0.38) 50%, transparent 100%);
+    box-shadow: 0 0 24px rgba(225, 29, 46, 0.35);
+    pointer-events: none;
+}
+
+#indexBody .classe1container,
+#indexBody .classes,
+#indexBody .newRelease {
+    scroll-margin-top: 110px;
+}
+
+/* ---------- Header flutuante em pílula de vidro (Unificado para todas as páginas) ---------- */
+#head {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    width: min(1180px, 94%);
+    height: 62px;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 0 14px 0 24px;
+    box-sizing: border-box;
+    border-radius: 999px;
+    background: rgba(14, 6, 9, 0.58);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+    transition: background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, top 0.35s ease;
+    animation: zsxHeaderIn 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.4s both;
+    z-index: 1000;
+}
+
+#head.header-scrolled {
+    top: 12px;
+    background: rgba(18, 7, 11, 0.86);
+    border-color: rgba(255, 65, 85, 0.25);
+    box-shadow: 0 14px 44px rgba(0, 0, 0, 0.68), 0 0 28px rgba(225, 29, 46, 0.14);
+}
+
+.zsx1 {
+    position: static;
+    top: auto;
+    left: auto;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.zsx1 > img {
+    position: relative;
+    width: 86px;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.25s ease;
+    z-index: 1001;
+}
+
+.zsx1 > img:hover {
+    transform: scale(1.05);
+}
+
+.lineContainer {
+    display: none;
+}
+
+.hero-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    flex: 1;
+}
+
+.hero-nav-link {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    color: rgba(255, 255, 255, 0.74);
+    text-decoration: none;
+    position: relative;
+    transition: color 0.25s ease;
+}
+
+.hero-nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 2px;
+    border-radius: 2px;
+    background: #ff2a3d;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.hero-nav-link:hover {
+    color: #ffffff;
+}
+
+.hero-nav-link:hover::after {
+    transform: scaleX(1);
+}
+
+#icons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: auto;
+    margin: 0;
+    bottom: 0;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.leftIcons,
+.rightIcons {
+    position: static;
+    display: flex;
+    align-items: center;
+    left: 0;
+    right: 0;
+    gap: 6px;
+}
+
+.supportIcon,
+.profile,
+.cart {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    transition: background-color 0.25s ease, transform 0.25s ease;
+}
+
+.supportIcon:hover,
+.profile:hover {
+    background-color: rgba(255, 60, 80, 0.16);
+}
+
+.supportIcon > img,
+.profile > img,
+.cart > img {
+    width: 21px;
+    height: 21px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    filter: brightness(0) invert(1);
+}
+
+.cart {
+    position: relative;
+    background-color: #ffffff;
+    box-shadow: 0 0 22px rgba(255, 255, 255, 0.25);
+}
+
+.cart > img {
+    filter: brightness(0);
+}
+
+.supportIcon:hover > img,
+.profile:hover > img,
+.cart:hover > img {
+    transform: scale(1.1);
+}
+
+.cart-count-badge {
+    border-color: #111111;
+}
+
+/* ---------- Seção hero ---------- */
+.zsx-hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    min-height: 620px;
+    overflow: hidden;
+    background:
+        radial-gradient(ellipse 85% 32% at 50% 100%, rgba(195, 18, 40, 0.22) 0%, transparent 72%),
+        radial-gradient(ellipse 70% 45% at 50% 40%, rgba(120, 10, 25, 0.35) 0%, transparent 70%),
+        linear-gradient(180deg, #050203 0%, #090406 52%, #13070b 84%, #11070a 100%);
+    --hero-p: 0;
+    --mx: 0;
+    --my: 0;
+    transition: opacity 0.65s ease, filter 0.65s ease;
+}
+
+#indexBody.scrolled .zsx-hero {
+    opacity: 0.35;
+    filter: brightness(0.65);
+}
+
+/* Poeira/partículas sutis */
+.zsx-hero-dust {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+        radial-gradient(1.5px 1.5px at 12% 22%, rgba(255, 255, 255, 0.55), transparent),
+        radial-gradient(1px 1px at 28% 68%, rgba(255, 255, 255, 0.4), transparent),
+        radial-gradient(1.5px 1.5px at 44% 14%, rgba(255, 180, 180, 0.5), transparent),
+        radial-gradient(1px 1px at 63% 78%, rgba(255, 255, 255, 0.35), transparent),
+        radial-gradient(1.5px 1.5px at 78% 30%, rgba(255, 255, 255, 0.5), transparent),
+        radial-gradient(1px 1px at 88% 62%, rgba(255, 160, 160, 0.45), transparent),
+        radial-gradient(1px 1px at 6% 84%, rgba(255, 255, 255, 0.35), transparent),
+        radial-gradient(1.5px 1.5px at 94% 12%, rgba(255, 255, 255, 0.45), transparent);
+    opacity: 0;
+}
+
+.zsx-hero.is-visible .zsx-hero-dust {
+    animation: zsxFadeIn 1.6s ease 0.8s forwards, zsxDustDrift 18s ease-in-out 2.4s infinite alternate;
+}
+
+/* Wrapper do planeta (recebe parallax do mouse e do scroll) */
+.zsx-hero-planet-wrap {
+    position: absolute;
+    left: 50%;
+    top: calc(54vh - min(80vw, 1000px));
+    width: min(80vw, 1000px);
+    aspect-ratio: 1 / 1;
+    transform:
+        translate(-50%, 0)
+        translate(calc(var(--mx) * 14px), calc(var(--my) * 10px + var(--hero-p) * -90px))
+        scale(calc(1 + var(--hero-p) * 0.12));
+    transition: transform 0.25s ease-out;
+    pointer-events: none;
+}
+
+/* Planeta com aro vermelho brilhante */
+.zsx-hero-planet {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle at 50% 38%, #050203 0%, #0c0406 48%, #2a060c 74%, #6b0c19 90%, #b3122a 97%, #ffd6da 100%);
+    box-shadow:
+        0 0 0 1.5px rgba(255, 225, 228, 0.95),
+        0 0 18px 4px rgba(255, 70, 90, 0.95),
+        0 0 70px 22px rgba(225, 20, 45, 0.55),
+        0 0 180px 60px rgba(180, 10, 30, 0.3),
+        inset 0 -40px 90px rgba(255, 40, 60, 0.45);
+    transform-origin: 50% 100%;
+    opacity: 0;
+    overflow: hidden;
+}
+
+.zsx-hero.is-visible .zsx-hero-planet {
+    animation: zsxPlanetRise 2s cubic-bezier(0.16, 1, 0.3, 1) 0.1s forwards,
+               zsxPlanetPulse 5s ease-in-out 2.2s infinite;
+}
+
+/* Reflexos de luz internos (arcos) */
+.zsx-hero-flare {
+    position: absolute;
+    left: 50%;
+    bottom: 6%;
+    width: 46%;
+    aspect-ratio: 1 / 1;
+    border-radius: 50%;
+    border-bottom: 2px solid rgba(255, 90, 110, 0.75);
+    box-shadow: 0 14px 30px -12px rgba(255, 50, 70, 0.6);
+    transform: translateX(-50%) rotate(-8deg);
+    opacity: 0;
+}
+
+.zsx-hero.is-visible .zsx-hero-flare {
+    animation: zsxFadeIn 1.4s ease 1.1s forwards, zsxFlareSpin 9s ease-in-out 2.5s infinite alternate;
+}
+
+.zsx-hero-flare--2 {
+    width: 26%;
+    bottom: 3%;
+    border-bottom-color: rgba(255, 160, 170, 0.55);
+    transform: translateX(-10%) rotate(14deg);
+}
+
+.zsx-hero.is-visible .zsx-hero-flare--2 {
+    animation-delay: 1.35s, 2.8s;
+}
+
+/* Conteúdo central */
+.zsx-hero-inner {
+    position: absolute;
+    left: 50%;
+    top: calc(54vh - 56px);
+    width: min(92%, 760px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    transform: translate(-50%, calc(var(--hero-p) * -70px));
+    opacity: calc(1 - var(--hero-p) * 1.35);
+    z-index: 2;
+}
+
+.zsx-hero-logo {
+    width: clamp(220px, 30vw, 400px);
+    height: auto;
+    filter:
+        drop-shadow(0 0 22px rgba(255, 50, 70, 0.55))
+        drop-shadow(0 10px 30px rgba(0, 0, 0, 0.75));
+    opacity: 0;
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+.zsx-hero.is-visible .zsx-hero-logo {
+    animation: zsxLogoIn 1.45s cubic-bezier(0.16, 1, 0.3, 1) 0.65s forwards;
+}
+
+.zsx-hero-tagline {
+    margin: 26px 0 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: clamp(15px, 1.7vw, 22px);
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    color: #f3ecee;
+    opacity: 0;
+}
+
+.zsx-hero.is-visible .zsx-hero-tagline {
+    animation: zsxFadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1.35s forwards;
+}
+
+.zsx-hero-cta {
+    margin-top: 24px;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 30px;
+    border-radius: 999px;
+    background: #ffffff;
+    color: #111111;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.6), 0 0 34px rgba(255, 255, 255, 0.28);
+    opacity: 0;
+    transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.zsx-hero.is-visible .zsx-hero-cta {
+    animation: zsxFadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1.55s forwards;
+}
+
+.zsx-hero-cta svg {
+    transition: transform 0.3s ease;
+}
+
+.zsx-hero-cta:hover {
+    background: #e11d2e;
+    color: #ffffff;
+    box-shadow: 0 0 0 1px rgba(255, 80, 95, 0.8), 0 0 40px rgba(225, 29, 46, 0.6);
+}
+
+.zsx-hero-cta:hover svg {
+    transform: translateX(4px);
+}
+
+.zsx-hero-sub {
+    margin: 14px 0 0;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: rgba(255, 235, 238, 0.62);
+    letter-spacing: 0.3px;
+    opacity: 0;
+}
+
+.zsx-hero.is-visible .zsx-hero-sub {
+    animation: zsxFadeUp 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1.75s forwards;
+}
+
+/* Seta de rolagem sobre o hero */
+#indexBody .scroll-arrow {
+    top: 91vh;
+    opacity: 0;
+}
+
+#indexBody .zsx-hero.is-visible ~ .scroll-arrow {
+    animation: zsxFadeIn 1s ease 2.1s forwards;
+}
+
+#indexBody .scroll-arrow span {
+    width: 16px;
+    height: 16px;
+    border-bottom-width: 3px;
+    border-right-width: 3px;
+    border-color: rgba(255, 225, 230, 0.85);
+    filter: drop-shadow(0 0 8px rgba(255, 50, 70, 0.55));
+}
+
+#indexBody.scrolled .scroll-arrow {
+    animation: none !important;
+    opacity: 0 !important;
+}
+
+/* ==========================================================================
+   ESTILIZAÇÃO DA PARTE DE BAIXO (.conteudo-site) COMBINANDO COM O HERO
+   ========================================================================== */
+
+#indexBody .classe1container > h2 {
+    color: #f7f1f3;
+    text-shadow: 0 2px 18px rgba(225, 29, 46, 0.22);
+    letter-spacing: 1px;
+}
+
+#indexBody .classe1container .verTudo1 {
+    color: #ff4d5e;
+    font-weight: 700;
+    transition: color 0.25s ease, text-shadow 0.25s ease;
+}
+
+#indexBody .classe1container .verTudo1:hover {
+    color: #ffffff;
+    text-shadow: 0 0 14px rgba(255, 60, 80, 0.7);
+}
+
+/* Cards de Produtos no Tema Escuro Carmesim */
+#indexBody .prods > img {
+    border-radius: 18px;
+    box-shadow:
+        0 16px 36px rgba(0, 0, 0, 0.62),
+        0 0 0 1px rgba(255, 70, 90, 0.15);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+#indexBody .prods:hover > img {
+    box-shadow:
+        0 22px 46px rgba(0, 0, 0, 0.82),
+        0 0 28px rgba(225, 29, 46, 0.28),
+        0 0 0 1px rgba(255, 85, 105, 0.42);
+}
+
+#indexBody .prod-nome {
+    color: #f3ecee;
+}
+
+#indexBody .prods:hover .prod-nome {
+    color: #ff4d5e;
+}
+
+#indexBody .prod-preco {
+    color: #ff3b4e;
+    font-weight: 800;
+}
+
+#indexBody .btn-buy {
+    background: linear-gradient(135deg, #e11d2e 0%, #b31224 100%);
+    color: #ffffff;
+    box-shadow: 0 6px 18px rgba(225, 29, 46, 0.4);
+}
+
+#indexBody .btn-buy:hover {
+    background: linear-gradient(135deg, #ff2a3d 0%, #c81428 100%);
+    box-shadow: 0 8px 24px rgba(255, 42, 61, 0.6);
+}
+
+#indexBody .btn-add-cart {
+    background: rgba(18, 7, 11, 0.88);
+    border: 1px solid rgba(255, 80, 100, 0.35);
+}
+
+#indexBody .btn-add-cart img {
+    filter: brightness(0) invert(1);
+}
+
+#indexBody .btn-add-cart:hover {
+    /* background: #ffffff;
+    border-color: #ffffff; */
+}
+
+#indexBody .btn-add-cart:hover img {
+    filter: brightness(0);
+}
+
+/* Banner Central */
+#indexBody .newRelease > img {
+    border-radius: 26px;
+    box-shadow:
+        0 26px 64px rgba(0, 0, 0, 0.7),
+        0 0 45px rgba(200, 20, 40, 0.16),
+        0 0 0 1px rgba(255, 70, 90, 0.16);
+}
+
+/* Categorias (Classes) */
+#indexBody .classe2-img-container {
+    box-shadow:
+        0 16px 36px rgba(0, 0, 0, 0.62),
+        0 0 0 1px rgba(255, 70, 90, 0.16);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+#indexBody .classe2:hover .classe2-img-container {
+    box-shadow:
+        0 22px 46px rgba(0, 0, 0, 0.82),
+        0 0 32px rgba(225, 29, 46, 0.32),
+        0 0 0 1px rgba(255, 85, 105, 0.45);
+}
+
+#indexBody .classe2 > h3 {
+    color: #f3ecee;
+    transition: color 0.3s ease, transform 0.3s ease;
+}
+
+#indexBody .classe2:hover > h3 {
+    color: #ff4d5e;
+}
+
+/* Seção de Benefícios em Vidro Escuro Carmesim */
+#indexBody .beneficios {
+    margin: 110px 6% 30px;
+    padding: 55px 6%;
+}
+
+#indexBody .beneficio-icon {
+    color: #ff3b4e;
+    filter: drop-shadow(0 0 12px rgba(255, 59, 78, 0.35));
+}
+
+#indexBody .beneficio-titulo {
+    color: #f7f1f3;
+}
+
+#indexBody .beneficio-legenda {
+    color: #b9a4a9;
+}
+
+#indexBody .beneficio-divisor {
+    background-color: rgba(255, 75, 95, 0.2);
+}
+
+/* ---------- Animações ---------- */
+@keyframes zsxPlanetRise {
+    0% {
+        opacity: 0;
+        transform: scale(0.18, 0.06);
+        filter: brightness(2.2);
+    }
+    18% {
+        opacity: 1;
+    }
+    55% {
+        filter: brightness(1.4);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+        filter: brightness(1);
+    }
+}
+
+@keyframes zsxPlanetPulse {
+    0%, 100% { filter: brightness(1); }
+    50% { filter: brightness(1.18); }
+}
+
+@keyframes zsxLogoIn {
+    0% {
+        opacity: 0;
+        transform: scale(1.9);
+        filter: blur(18px) drop-shadow(0 0 22px rgba(255, 50, 70, 0.55));
+        letter-spacing: 40px;
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+        filter:
+            drop-shadow(0 0 22px rgba(255, 50, 70, 0.55))
+            drop-shadow(0 10px 30px rgba(0, 0, 0, 0.75));
+    }
+}
+
+@keyframes zsxFadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes zsxFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes zsxHeaderIn {
+    from { opacity: 0; transform: translate(-50%, -20px); }
+    to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+@keyframes zsxDustDrift {
+    from { transform: translateY(0); }
+    to { transform: translateY(-24px); }
+}
+
+@keyframes zsxFlareSpin {
+    from { transform: translateX(-50%) rotate(-8deg); }
+    to { transform: translateX(-46%) rotate(6deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .zsx-hero *,
+    #head {
+        animation-duration: 0.01s !important;
+        animation-delay: 0s !important;
+    }
+}
+
+@media (max-width: 900px) {
+    .hero-nav {
+        display: none;
+    }
+
+    #head {
+        padding: 0 10px 0 18px;
+    }
+
+    .zsx-hero-planet-wrap {
+        width: 130vw;
+        top: calc(50vh - 130vw);
+    }
+
+    .zsx-hero-inner {
+        top: calc(50vh - 40px);
+    }
+
+    #indexBody .beneficios {
+        margin: 70px 4% 20px;
+        padding: 40px 6%;
+    }
 }

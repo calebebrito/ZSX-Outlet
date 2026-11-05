@@ -1,28 +1,26 @@
 /* ==========================================================================
    TELA DEDICADA DE PRODUTO (PDP) - ZSX OUTLET
-   Inspirado no layout Velora / Streetwear de Luxo Minimalista
+   Tema Dark Obsidian & Crimson Red Streetwear
    ========================================================================== */
-
 
 p {
     font-family: Arial, Helvetica, sans-serif;
 }
 
-
-/* Header Fixo Adaptado na Tela do Produto */
-.pdp-body #head {
-    position: fixed;
-    left: 0;
-    width: 100%;
-    z-index: 1001;
+.pdp-body {
+    background-color: #0b0407;
+    color: #f3ecee;
 }
 
-/* Espaçador para o cabeçalho fixo */
+/* Espaçador para o cabeçalho flutuante fixo */
 .pdp-page-container {
-    padding-top: 132px;
-    background-color: #d3c8bd;
+    padding-top: 108px;
+    background:
+        radial-gradient(ellipse 80% 25% at 50% 0%, rgba(195, 18, 40, 0.18) 0%, transparent 70%),
+        radial-gradient(ellipse 65% 30% at 50% 55%, rgba(140, 12, 28, 0.1) 0%, transparent 70%),
+        linear-gradient(180deg, #0b0407 0%, #14080c 48%, #0c0508 100%);
     min-height: 100vh;
-    color: #111111;
+    color: #f3ecee;
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -35,7 +33,7 @@ p {
     justify-content: space-between;
     align-items: center;
     font-size: 13px;
-    color: #78716c;
+    color: #b9a4a9;
 }
 
 .pdp-breadcrumb {
@@ -46,22 +44,22 @@ p {
 }
 
 .pdp-breadcrumb a {
-    color: #78716c;
+    color: #b9a4a9;
     text-decoration: none;
     transition: color 0.2s ease;
 }
 
 .pdp-breadcrumb a:hover {
-    color: #111111;
+    color: #ff4d5e;
 }
 
 .pdp-breadcrumb-sep {
-    color: #a8a29e;
+    color: #7c686d;
     font-size: 11px;
 }
 
 .pdp-breadcrumb-current {
-    color: #111111;
+    color: #f7f1f3;
     font-weight: 700;
 }
 
@@ -69,22 +67,23 @@ p {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    color: #111111;
+    color: #f3ecee;
     text-decoration: none;
     font-weight: 700;
     font-size: 12.5px;
-    padding: 6px 14px;
-    border: 1px solid #e7e5e4;
+    padding: 7px 16px;
+    border: 1px solid rgba(255, 70, 90, 0.28);
     border-radius: 20px;
-    background-color: #ebe3daf8;
+    background: rgba(26, 10, 15, 0.85);
     transition: all 0.2s ease;
 }
 
 .pdp-back-link:hover {
-    background-color: #111111;
+    background: linear-gradient(135deg, #e11d2e 0%, #b31224 100%);
     color: #ffffff;
-    border-color: #111111;
+    border-color: #ff3b4e;
     transform: translateX(-3px);
+    box-shadow: 0 6px 18px rgba(225, 29, 46, 0.35);
 }
 
 /* Seção Principal do Produto (2 Colunas) */
@@ -103,7 +102,7 @@ p {
     gap: 18px;
     align-items: flex-start;
     position: sticky;
-    top: 120px;
+    top: 105px;
 }
 
 /* Tira Vertical de Miniaturas */
@@ -120,8 +119,8 @@ p {
     height: 98px;
     border-radius: 10px;
     overflow: hidden;
-    background-color: #f5f0eb;
-    border: 2px solid transparent;
+    background-color: #16080c;
+    border: 2px solid rgba(255, 70, 90, 0.18);
     cursor: pointer;
     transition: all 0.25s ease;
     box-sizing: border-box;
@@ -141,23 +140,23 @@ p {
 }
 
 .pdp-thumb-item.active {
-    border-color: #111111;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.12);
+    border-color: #ff3b4e;
+    box-shadow: 0 0 18px rgba(225, 29, 46, 0.45);
 }
 
 /* Box da Imagem Principal */
 .pdp-hero-container {
     flex: 1;
     position: relative;
-    border-radius: 16px;
+    border-radius: 18px;
     overflow: hidden;
-    background-color: #f5f0eb;
-    border: 1.5px solid #ece7df;
+    background-color: #16080c;
+    border: 1.5px solid rgba(255, 70, 90, 0.24);
     height: 590px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 22px 54px rgba(0, 0, 0, 0.68), 0 0 32px rgba(225, 29, 46, 0.12);
 }
 
 .pdp-hero-img {
@@ -177,7 +176,7 @@ p {
     position: absolute;
     top: 18px;
     left: 18px;
-    background-color: #111111;
+    background: linear-gradient(135deg, #e11d2e 0%, #b31224 100%);
     color: #ffffff;
     font-size: 11px;
     font-weight: 800;
@@ -186,7 +185,7 @@ p {
     padding: 6px 14px;
     border-radius: 20px;
     z-index: 2;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 18px rgba(225, 29, 46, 0.45);
 }
 
 /* Botão de Favorito Flutuante */
@@ -197,32 +196,34 @@ p {
     width: 42px;
     height: 42px;
     border-radius: 50%;
-    background-color: #ffffff;
-    border: 1px solid #e7e5e4;
+    background-color: rgba(18, 7, 11, 0.82);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 70, 90, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     z-index: 2;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
     transition: all 0.2s ease;
-    color: #111111;
+    color: #f7f1f3;
 }
 
 .pdp-wishlist-btn:hover {
     transform: scale(1.1);
-    background-color: #fff1f2;
-    color: #e11d48;
+    background-color: rgba(225, 29, 46, 0.25);
+    border-color: #ff3b4e;
+    color: #ff4d5e;
 }
 
 .pdp-wishlist-btn.active {
-    background-color: #fff1f2;
-    color: #e11d48;
-    border-color: #fecdd3;
+    background-color: rgba(225, 29, 46, 0.25);
+    color: #ff3b4e;
+    border-color: #ff3b4e;
 }
 
 .pdp-wishlist-btn.active svg {
-    fill: #e11d48;
+    fill: #ff3b4e;
 }
 
 /* Botão de Zoom na imagem */
@@ -233,20 +234,22 @@ p {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: #ffffff;
-    border: 1px solid #e7e5e4;
+    background-color: rgba(18, 7, 11, 0.82);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 70, 90, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     z-index: 2;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
     transition: all 0.2s ease;
-    color: #111111;
+    color: #f7f1f3;
 }
 
 .pdp-zoom-btn:hover {
-    background-color: #111111;
+    background: linear-gradient(135deg, #e11d2e 0%, #b31224 100%);
+    border-color: #ff3b4e;
     color: #ffffff;
     transform: scale(1.1);
 }
@@ -261,7 +264,7 @@ p {
     font-size: 12px;
     font-weight: 800;
     text-transform: uppercase;
-    color: #8C8170;
+    color: #ff4d5e;
     letter-spacing: 1px;
     margin-bottom: 8px;
 }
@@ -270,7 +273,7 @@ p {
     font-family: 'Impact', 'Arial Black', Arial, sans-serif;
     font-size: 38px;
     letter-spacing: 0.5px;
-    color: #111111;
+    color: #f7f1f3;
     margin: 0 0 10px 0;
     line-height: 1.15;
 }
@@ -286,28 +289,29 @@ p {
 .pdp-stars {
     display: flex;
     gap: 3px;
-    color: #f59e0b;
+    color: #fbbf24;
     font-size: 15px;
 }
 
 .pdp-rating-score {
     font-size: 13.5px;
     font-weight: 800;
-    color: #111111;
+    color: #f7f1f3;
 }
 
 .pdp-rating-count {
     font-size: 13px;
-    color: #78716c;
+    color: #b9a4a9;
 }
 
 /* Preço e Desconto */
 .pdp-price-box {
-    background-color: #ebe3daf8;
-    border: 1px solid #ece7df;
-    border-radius: 12px;
+    background: linear-gradient(145deg, rgba(28, 11, 16, 0.9), rgba(16, 6, 10, 0.95));
+    border: 1px solid rgba(255, 70, 90, 0.25);
+    border-radius: 14px;
     padding: 18px 22px;
     margin-bottom: 22px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
 }
 
 .pdp-price-main-row {
@@ -320,35 +324,35 @@ p {
 .pdp-price-current {
     font-size: 34px;
     font-weight: 900;
-    color: #111111;
+    color: #ff3b4e;
     letter-spacing: -0.5px;
 }
 
 .pdp-price-original {
     font-size: 18px;
     font-weight: 600;
-    color: #a8a29e;
+    color: #8c767b;
     text-decoration: line-through;
 }
 
 .pdp-discount-tag {
-    background-color: #111111;
+    background: linear-gradient(135deg, #e11d2e 0%, #b31224 100%);
     color: #ffffff;
     font-size: 11px;
     font-weight: 800;
     padding: 4px 10px;
-    border-radius: 4px;
+    border-radius: 6px;
     letter-spacing: 0.5px;
 }
 
 .pdp-installment-text {
     font-size: 13px;
-    color: #57534e;
+    color: #cbb8bc;
     margin: 0;
 }
 
 .pdp-pix-discount {
-    color: #16a34a;
+    color: #4ade80;
     font-weight: 700;
 }
 
@@ -356,7 +360,7 @@ p {
 .pdp-description-short {
     font-size: 14.5px;
     line-height: 1.6;
-    color: #44403c;
+    color: #cbb8bc;
     margin: 0 0 24px 0;
 }
 
@@ -372,11 +376,11 @@ p {
     margin-bottom: 10px;
     font-size: 13.5px;
     font-weight: 600;
-    color: #44403c;
+    color: #b9a4a9;
 }
 
 .pdp-option-header strong {
-    color: #111111;
+    color: #f7f1f3;
     font-weight: 800;
 }
 
@@ -389,7 +393,7 @@ p {
     width: 34px;
     height: 34px;
     border-radius: 50%;
-    outline: 2px solid #e7e5e4;
+    outline: 2px solid rgba(255, 70, 90, 0.28);
     cursor: pointer;
     transition: all 0.2s ease;
     position: relative;
@@ -401,7 +405,8 @@ p {
 }
 
 .pdp-color-swatch.active {
-    outline-color: #111111;
+    outline-color: #ff3b4e;
+    box-shadow: 0 0 12px rgba(255, 59, 78, 0.55);
     transform: scale(1.1);
 }
 
@@ -414,14 +419,14 @@ p {
     gap: 5px;
     font-size: 12.5px;
     font-weight: 700;
-    color: #111111;
+    color: #ff4d5e;
     cursor: pointer;
     text-decoration: underline;
     padding: 0;
 }
 
 .pdp-size-guide-btn:hover {
-    color: #e11d48;
+    color: #ffffff;
 }
 
 .pdp-sizes-row {
@@ -433,12 +438,12 @@ p {
 .pdp-size-btn {
     min-width: 52px;
     height: 48px;
-    border: 1.5px solid #d6d3d1;
+    border: 1.5px solid rgba(255, 70, 90, 0.26);
     border-radius: 8px;
-    background-color: #ebe3daf8;
+    background-color: rgba(26, 10, 15, 0.85);
     font-size: 14px;
     font-weight: 700;
-    color: #111111;
+    color: #f3ecee;
     cursor: pointer;
     transition: all 0.2s ease;
     display: flex;
@@ -448,15 +453,16 @@ p {
 }
 
 .pdp-size-btn:hover {
-    border-color: #111111;
+    border-color: #ff3b4e;
+    color: #ffffff;
     transform: translateY(-2px);
 }
 
 .pdp-size-btn.active {
-    background-color: #111111;
+    background: linear-gradient(135deg, #e11d2e 0%, #b31224 100%);
     color: #ffffff;
-    border-color: #111111;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-color: #ff3b4e;
+    box-shadow: 0 6px 18px rgba(225, 29, 46, 0.4);
 }
 
 /* Status do Estoque */
@@ -466,9 +472,9 @@ p {
     gap: 8px;
     font-size: 12.5px;
     font-weight: 700;
-    color: #15803d;
-    background-color: #f0fdf4;
-    border: 1px solid #bbf7d0;
+    color: #4ade80;
+    background-color: rgba(34, 197, 94, 0.12);
+    border: 1px solid rgba(74, 222, 128, 0.3);
     padding: 7px 14px;
     border-radius: 20px;
     margin-bottom: 22px;
@@ -480,7 +486,7 @@ p {
     height: 8px;
     border-radius: 50%;
     background-color: #22c55e;
-    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.2);
+    box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.25);
 }
 
 /* Área de Compra e Quantidade */
@@ -501,9 +507,9 @@ p {
 .pdp-quantity-selector {
     display: inline-flex;
     align-items: center;
-    border: 1.5px solid #111111;
-    border-radius: 6px;
-    background-color: #ebe3daf8;
+    border: 1.5px solid rgba(255, 70, 90, 0.32);
+    border-radius: 8px;
+    background-color: rgba(24, 9, 14, 0.9);
     height: 52px;
 }
 
@@ -514,9 +520,9 @@ p {
     border: none;
     font-size: 18px;
     font-weight: 800;
-    color: #111111;
+    color: #f7f1f3;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -524,7 +530,8 @@ p {
 }
 
 .pdp-qty-btn:hover {
-    background-color: #f5f0eb;
+    background-color: rgba(225, 29, 46, 0.2);
+    color: #ff4d5e;
     border-radius: 6px;
 }
 
@@ -533,7 +540,7 @@ p {
     text-align: center;
     font-size: 16px;
     font-weight: 800;
-    color: #111111;
+    color: #f7f1f3;
 }
 
 /* Botão Adicionar ao Carrinho (Sweep Efeito Esquerda para Direita) */
@@ -541,9 +548,9 @@ p {
     flex: 1;
     position: relative;
     height: 52px;
-    background-color: #111111;
-    border: 2px solid #111111;
-    border-radius: 6px;
+    background: linear-gradient(135deg, #e11d2e 0%, #b31224 100%);
+    border: 1.5px solid #ff3b4e;
+    border-radius: 8px;
     color: #ffffff;
     font-size: 13.5px;
     font-weight: 800;
@@ -555,6 +562,7 @@ p {
     align-items: center;
     justify-content: center;
     gap: 10px;
+    box-shadow: 0 8px 24px rgba(225, 29, 46, 0.38);
     transition: color 0.35s ease, box-shadow 0.25s ease;
 }
 
@@ -587,17 +595,17 @@ p {
 }
 
 .btn-pdp-add-cart:hover {
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 10px 28px rgba(255, 255, 255, 0.25);
 }
 
 /* Botão Comprar Agora */
 .btn-pdp-buy-now {
     width: 100%;
     height: 48px;
-    background-color: #ebe3daf8;
-    border: 1.5px solid #111111;
-    border-radius: 6px;
-    color: #111111;
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1.5px solid rgba(255, 75, 95, 0.35);
+    border-radius: 8px;
+    color: #f7f1f3;
     font-size: 13px;
     font-weight: 800;
     text-transform: uppercase;
@@ -611,14 +619,16 @@ p {
 }
 
 .btn-pdp-buy-now:hover {
-    background-color: #ebe3d8;
+    background-color: #ffffff;
+    border-color: #ffffff;
+    color: #111111;
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 8px 22px rgba(255, 255, 255, 0.2);
 }
 
-/* Benefícios Rápidos (3 Itens da Foto de Inspiração) */
+/* Benefícios Rápidos (3 Itens) */
 .pdp-quick-perks {
-    border-top: 1px solid #e7e5e4;
+    border-top: 1px solid rgba(255, 70, 90, 0.2);
     padding-top: 20px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -635,7 +645,9 @@ p {
     width: 36px;
     height: 36px;
     border-radius: 8px;
-    background-color: #f5f0eb;
+    background-color: rgba(255, 60, 80, 0.12);
+    border: 1px solid rgba(255, 70, 90, 0.25);
+    color: #ff4d5e;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -651,13 +663,13 @@ p {
 .pdp-perk-title {
     font-size: 12px;
     font-weight: 800;
-    color: #111111;
+    color: #f7f1f3;
     margin-bottom: 2px;
 }
 
 .pdp-perk-desc {
     font-size: 11px;
-    color: #78716c;
+    color: #b9a4a9;
 }
 
 /* ==========================================================================
@@ -673,8 +685,9 @@ p {
 .pdp-tabs-nav {
     display: flex;
     gap: 12px;
-    border-bottom: 2px solid #e7e5e4;
+    border-bottom: 2px solid rgba(255, 70, 90, 0.2);
     margin-bottom: 30px;
+    overflow-x: auto;
 }
 
 .pdp-tab-trigger {
@@ -685,7 +698,7 @@ p {
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: #78716c;
+    color: #b9a4a9;
     cursor: pointer;
     position: relative;
     transition: color 0.2s ease;
@@ -693,11 +706,11 @@ p {
 }
 
 .pdp-tab-trigger:hover {
-    color: #111111;
+    color: #ffffff;
 }
 
 .pdp-tab-trigger.active {
-    color: #111111;
+    color: #ff4d5e;
 }
 
 .pdp-tab-trigger.active::after {
@@ -707,7 +720,8 @@ p {
     left: 0;
     width: 100%;
     height: 3px;
-    background-color: #111111;
+    background-color: #ff3b4e;
+    box-shadow: 0 0 12px rgba(255, 59, 78, 0.65);
 }
 
 /* Conteúdo das Abas */
@@ -737,7 +751,7 @@ p {
 .pdp-tab-text-side p {
     font-size: 14.5px;
     line-height: 1.7;
-    color: #44403c;
+    color: #cbb8bc;
     margin: 0;
 }
 
@@ -756,7 +770,7 @@ p {
     align-items: center;
     gap: 12px;
     font-size: 13.5px;
-    color: #111111;
+    color: #f7f1f3;
     font-weight: 600;
 }
 
@@ -764,12 +778,13 @@ p {
     width: 28px;
     height: 28px;
     border-radius: 6px;
-    background-color: #ebe3daf8;
+    background-color: rgba(255, 60, 80, 0.14);
+    border: 1px solid rgba(255, 70, 90, 0.25);
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 14px;
-    color: #111111;
+    color: #ff4d5e;
     flex-shrink: 0;
 }
 
@@ -779,9 +794,9 @@ p {
     height: 320px;
     border-radius: 16px;
     overflow: hidden;
-    background-color: #111111;
-    border: 1.5px solid #ece7df;
-    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.08);
+    background-color: #14070b;
+    border: 1.5px solid rgba(255, 70, 90, 0.24);
+    box-shadow: 0 18px 44px rgba(0, 0, 0, 0.6);
 }
 
 .pdp-detail-visual-card img {
@@ -801,9 +816,9 @@ p {
     position: absolute;
     bottom: 24px;
     right: 24px;
-    background: rgba(17, 17, 17, 0.88);
+    background: rgba(18, 7, 11, 0.88);
     backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 70, 90, 0.32);
     padding: 12px 20px;
     border-radius: 8px;
     color: #ffffff;
@@ -819,7 +834,7 @@ p {
 
 .pdp-detail-badge-sub {
     font-size: 11px;
-    color: #d3c8bd;
+    color: #ff4d5e;
     margin: 0;
     text-transform: uppercase;
 }
@@ -832,7 +847,7 @@ p {
     max-width: 1240px;
     margin: 0 auto;
     padding: 0 24px 90px;
-    border-top: 1px solid #e7e5e4;
+    border-top: 1px solid rgba(255, 70, 90, 0.22);
     padding-top: 50px;
 }
 
@@ -847,30 +862,30 @@ p {
     font-family: 'Impact', 'Arial Black', Arial, sans-serif;
     font-size: 26px;
     letter-spacing: 0.5px;
-    color: #111111;
+    color: #f7f1f3;
     margin: 0 0 4px 0;
 }
 
 .pdp-related-subtitle {
     font-size: 13px;
-    color: #78716c;
+    color: #b9a4a9;
     margin: 0;
 }
 
 .pdp-view-all-link {
     font-size: 13px;
     font-weight: 800;
-    color: #111111;
+    color: #ff4d5e;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease, color 0.2s ease;
 }
 
 .pdp-view-all-link:hover {
     transform: translateX(4px);
-    color: #e11d48;
+    color: #ffffff;
 }
 
 /* Grid de Produtos Relacionados */
@@ -881,9 +896,9 @@ p {
 }
 
 .pdp-related-card {
-    background-color: #ebe3daf8;
-    border: 1.5px solid #ece7df;
-    border-radius: 12px;
+    background: linear-gradient(160deg, #18090e 0%, #100609 100%);
+    border: 1.5px solid rgba(255, 70, 90, 0.2);
+    border-radius: 14px;
     overflow: hidden;
     cursor: pointer;
     transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease, border-color 0.3s ease;
@@ -893,14 +908,14 @@ p {
 
 .pdp-related-card:hover {
     transform: translateY(-6px);
-    border-color: #111111;
-    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.08);
+    border-color: rgba(255, 80, 100, 0.48);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7), 0 0 26px rgba(225, 29, 46, 0.22);
 }
 
 .pdp-related-img-box {
     position: relative;
     height: 250px;
-    background-color: #ebe3daf8;
+    background-color: #13060a;
     overflow: hidden;
 }
 
@@ -925,7 +940,7 @@ p {
 .pdp-related-name {
     font-size: 15px;
     font-weight: 800;
-    color: #111111;
+    color: #f7f1f3;
     margin: 0 0 6px 0;
     white-space: nowrap;
     overflow: hidden;
@@ -935,7 +950,7 @@ p {
 .pdp-related-price {
     font-size: 16px;
     font-weight: 800;
-    color: #111111;
+    color: #ff3b4e;
     margin: 0 0 10px 0;
 }
 
@@ -947,21 +962,21 @@ p {
 
 .btn-related-view {
     flex: 1;
-    padding: 8px 10px;
-    background-color: #111111;
+    padding: 9px 10px;
+    background: linear-gradient(135deg, #e11d2e 0%, #b31224 100%);
     color: #ffffff;
-    border: 1.5px solid #111111;
+    border: 1.5px solid #ff3b4e;
     border-radius: 6px;
     font-size: 11.5px;
     font-weight: 800;
     text-transform: uppercase;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: filter 0.2s ease;
     text-align: center;
 }
 
 .btn-related-view:hover {
-    background-color: #333333;
+    filter: brightness(1.15);
 }
 
 /* ==========================================================================
@@ -975,7 +990,7 @@ p {
 
 .size-guide-desc {
     font-size: 13.5px;
-    color: #555555;
+    color: #b9a4a9;
     margin: 0 0 20px 0;
     line-height: 1.5;
 }
@@ -993,7 +1008,7 @@ p {
 }
 
 .size-guide-table th {
-    background-color: #111111;
+    background: linear-gradient(135deg, #e11d2e 0%, #b31224 100%);
     color: #ffffff;
     padding: 10px 14px;
     font-weight: 800;
@@ -1003,22 +1018,22 @@ p {
 
 .size-guide-table td {
     padding: 10px 14px;
-    border-bottom: 1px solid #e7e5e4;
-    color: #44403c;
+    border-bottom: 1px solid rgba(255, 70, 90, 0.2);
+    color: #f3ecee;
     font-weight: 600;
 }
 
 .size-guide-table tr:nth-child(even) {
-    background-color: #f9f8f6;
+    background-color: rgba(255, 255, 255, 0.03);
 }
 
 .size-guide-tip {
-    background-color: #fff7ed;
-    border-left: 3px solid #f97316;
+    background-color: rgba(225, 29, 46, 0.12);
+    border-left: 3px solid #ff3b4e;
     padding: 12px 16px;
-    border-radius: 4px;
+    border-radius: 6px;
     font-size: 12.5px;
-    color: #9a3412;
+    color: #f7f1f3;
     margin: 0;
 }
 

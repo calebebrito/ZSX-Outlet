@@ -15,6 +15,15 @@
             <img src="\images/zsx.png" alt="ZSX Outlet">
         </div>
 
+        <!-- Navegação central do header flutuante -->
+        <nav class="hero-nav" aria-label="Navegação principal">
+            <a href="#secPolos" class="hero-nav-link">Polos</a>
+            <a href="#secCategorias" class="hero-nav-link">Categorias</a>
+            <a href="#secLancamentos" class="hero-nav-link">Lançamentos</a>
+            <a href="#secCasacos" class="hero-nav-link">Casacos</a>
+            <a href="category.html?cat=all" class="hero-nav-link">Ver Tudo</a>
+        </nav>
+
         <div id="icons">
             <div class="leftIcons">
                 <div class="supportIcon" id="headerSupportBtn" title="Suporte 24h">
@@ -38,6 +47,28 @@
         </div>
     </div>
 
+    <!-- HERO PRINCIPAL: planeta com aro vermelho brilhante + logo ZSX -->
+    <section class="zsx-hero" id="zsxHero" aria-label="ZSX Outlet">
+        <div class="zsx-hero-dust"></div>
+
+        <div class="zsx-hero-planet-wrap" id="zsxHeroPlanet">
+            <div class="zsx-hero-planet">
+                <div class="zsx-hero-flare"></div>
+                <div class="zsx-hero-flare zsx-hero-flare--2"></div>
+            </div>
+        </div>
+
+        <div class="zsx-hero-inner" id="zsxHeroInner">
+            <img src="\images/zsx.png" alt="ZSX Outlet" class="zsx-hero-logo">
+            <h1 class="zsx-hero-tagline sans">O SHOPPING DOS CRIAS</h1>
+            <a href="#secPolos" class="zsx-hero-cta sans">
+                <span>Comprar Agora</span>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+            <p class="zsx-hero-sub sans">Frete grátis acima de R$ 199 • Troca fácil em 30 dias</p>
+        </div>
+    </section>
+
     <!-- Seta animada (3 setas) apontando para baixo -->
     <div class="scroll-arrow" onclick="window.scrollBy({top: window.innerHeight, behavior: 'smooth'})">
         <span></span>
@@ -45,10 +76,10 @@
         <span></span>
     </div>
 
-    <!-- Espaço vazio temporário para você poder rolar a tela e ver o efeito -->
+    <!-- Conteúdo Principal do Catálogo ZSX Outlet -->
     <div class="conteudo-site">
 
-        <div class="classe1container">
+        <div class="classe1container" id="secPolos">
             <h2 class="classe1 sans">Camisas Polo</h2>
             <p class="verTudo1 sans" onclick="window.location.href='category.html?cat=polos'" style="cursor: pointer;" title="Ver todas as Camisas Polo">Ver tudo &gt;</p>
         </div>
@@ -175,7 +206,7 @@
             </div>
         </div>
 
-        <div class="classes">
+        <div class="classes" id="secCategorias">
             <div class="classe2" onclick="window.location.href='category.html?cat=camisas'" style="cursor: pointer;" title="Explorar Camisas">
                 <div class="classe2-img-container">
                     <img class="classe2-bg" src="\images/fundo-classes.png" alt="Camisas">
@@ -217,7 +248,7 @@
             </div>
         </div>
 
-        <div class="newRelease reveal">
+        <div class="newRelease reveal" id="secLancamentos">
             <img src="\images/newRelease.png" alt="Coleção Copa do Mundo">
 
             <div class="newButton sans" onclick="window.location.href='product.html?id=casaco-1'" style="cursor: pointer;" title="Conferir Coleção">
@@ -288,7 +319,7 @@
         </div>
 
         <!-- Seção de Casacos -->
-        <div class="classe1container">
+        <div class="classe1container" id="secCasacos">
             <h2 class="classe1 sans">Casacos</h2>
             <p class="verTudo1 sans" onclick="window.location.href='category.html?cat=casacos'" style="cursor: pointer;" title="Ver todos os Casacos">Ver tudo &gt;</p>
         </div>
@@ -715,7 +746,7 @@
                 </svg>
             </div>
             <h3 class="modal-card-title">Pedido Confirmado!</h3>
-            <p class="order-number-tag">Pedido <span id="successOrderNum">#ZSX-74921</span></p>
+            <p class="order-number-tag">Pedido <span id="successOrderNum">#ZSX-00000</span></p>
             <p class="modal-card-desc">
                 Obrigado por comprar na ZSX Outlet! Seu pedido já está sendo preparado e enviamos todos os detalhes do rastreio para o seu e-mail.
             </p>
@@ -740,20 +771,24 @@
                     Precisa de ajuda com seu pedido, dúvidas sobre produtos ou entregas? Nossa equipe de suporte está disponível 24 horas por dia, 7 dias por semana.
                 </p>
                 <div class="support-contact-options">
-                    <a href="https://wa.me/5511999999999" target="_blank" class="support-contact-card">
-                        <div class="support-contact-icon whatsapp-bg"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></div>
+                    <a href="https://wa.me/5571992890814" target="_blank" rel="external" class="support-contact-card">
+                        <div class="support-contact-icon whatsapp-bg">
+                            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+                        </div>
                         <div class="support-contact-info">
                             <span class="support-contact-name">WhatsApp 24h</span>
-                            <span class="support-contact-val">(11) 99999-9999</span>
+                            <span class="support-contact-val">(71)99289-0814</span>
                             <span class="support-contact-sub">Atendimento imediato</span>
                         </div>
                         <span class="support-card-arrow">&rarr;</span>
                     </a>
-                    <a href="mailto:sac@zsxoutlet.com.br" class="support-contact-card">
-                        <div class="support-contact-icon email-bg"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+                    <a href="https://www.instagram.com/zsx.outlet/" target="_blank" rel="external" class="support-contact-card">
+                        <div class="support-contact-icon insta-bg">
+                            <svg viewBox="0 0 2500 2500" width="20" height="20" xmlns="http://www.w3.org/2000/svg" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><defs><radialGradient id="0" cx="332.14" cy="2511.81" r="3263.54" gradientUnits="userSpaceOnUse"><stop offset=".09" stop-color="#fa8f21"></stop><stop offset=".78" stop-color="#d82d7e"></stop></radialGradient><radialGradient id="1" cx="1516.14" cy="2623.81" r="2572.12" gradientUnits="userSpaceOnUse"><stop offset=".64" stop-color="#8c3aaa" stop-opacity="0"></stop><stop offset="1" stop-color="#8c3aaa"></stop></radialGradient></defs><path d="M833.4,1250c0-230.11,186.49-416.7,416.6-416.7s416.7,186.59,416.7,416.7-186.59,416.7-416.7,416.7S833.4,1480.11,833.4,1250m-225.26,0c0,354.5,287.36,641.86,641.86,641.86S1891.86,1604.5,1891.86,1250,1604.5,608.14,1250,608.14,608.14,895.5,608.14,1250M1767.27,582.69a150,150,0,1,0,150.06-149.94h-0.06a150.07,150.07,0,0,0-150,149.94M745,2267.47c-121.87-5.55-188.11-25.85-232.13-43-58.36-22.72-100-49.78-143.78-93.5s-70.88-85.32-93.5-143.68c-17.16-44-37.46-110.26-43-232.13-6.06-131.76-7.27-171.34-7.27-505.15s1.31-373.28,7.27-505.15c5.55-121.87,26-188,43-232.13,22.72-58.36,49.78-100,93.5-143.78s85.32-70.88,143.78-93.5c44-17.16,110.26-37.46,232.13-43,131.76-6.06,171.34-7.27,505-7.27s373.28,1.31,505.15,7.27c121.87,5.55,188,26,232.13,43,58.36,22.62,100,49.78,143.78,93.5s70.78,85.42,93.5,143.78c17.16,44,37.46,110.26,43,232.13,6.06,131.87,7.27,171.34,7.27,505.15s-1.21,373.28-7.27,505.15c-5.55,121.87-25.95,188.11-43,232.13-22.72,58.36-49.78,100-93.5,143.68s-85.42,70.78-143.78,93.5c-44,17.16-110.26,37.46-232.13,43-131.76,6.06-171.34,7.27-505.15,7.27s-373.28-1.21-505-7.27M734.65,7.57c-133.07,6.06-224,27.16-303.41,58.06C349,97.54,279.38,140.35,209.81,209.81S97.54,349,65.63,431.24c-30.9,79.46-52,170.34-58.06,303.41C1.41,867.93,0,910.54,0,1250s1.41,382.07,7.57,515.35c6.06,133.08,27.16,223.95,58.06,303.41,31.91,82.19,74.62,152,144.18,221.43S349,2402.37,431.24,2434.37c79.56,30.9,170.34,52,303.41,58.06C868,2498.49,910.54,2500,1250,2500s382.07-1.41,515.35-7.57c133.08-6.06,223.95-27.16,303.41-58.06,82.19-32,151.86-74.72,221.43-144.18s112.18-139.24,144.18-221.43c30.9-79.46,52.1-170.34,58.06-303.41,6.06-133.38,7.47-175.89,7.47-515.35s-1.41-382.07-7.47-515.35c-6.06-133.08-27.16-224-58.06-303.41-32-82.19-74.72-151.86-144.18-221.43S2150.95,97.54,2068.86,65.63c-79.56-30.9-170.44-52.1-303.41-58.06C1632.17,1.51,1589.56,0,1250.1,0S868,1.41,734.65,7.57" fill="url(#0)"></path><path d="M833.4,1250c0-230.11,186.49-416.7,416.6-416.7s416.7,186.59,416.7,416.7-186.59,416.7-416.7,416.7S833.4,1480.11,833.4,1250m-225.26,0c0,354.5,287.36,641.86,641.86,641.86S1891.86,1604.5,1891.86,1250,1604.5,608.14,1250,608.14,608.14,895.5,608.14,1250M1767.27,582.69a150,150,0,1,0,150.06-149.94h-0.06a150.07,150.07,0,0,0-150,149.94M745,2267.47c-121.87-5.55-188.11-25.85-232.13-43-58.36-22.72-100-49.78-143.78-93.5s-70.88-85.32-93.5-143.68c-17.16-44-37.46-110.26-43-232.13-6.06-131.76-7.27-171.34-7.27-505.15s1.31-373.28,7.27-505.15c5.55-121.87,26-188,43-232.13,22.72-58.36,49.78-100,93.5-143.78s85.32-70.88,143.78-93.5c44-17.16,110.26-37.46,232.13-43,131.76-6.06,171.34-7.27,505-7.27s373.28,1.31,505.15,7.27c121.87,5.55,188,26,232.13,43,58.36,22.62,100,49.78,143.78,93.5s70.78,85.42,93.5,143.78c17.16,44,37.46,110.26,43,232.13,6.06,131.87,7.27,171.34,7.27,505.15s-1.21,373.28-7.27,505.15c-5.55,121.87-25.95,188.11-43,232.13-22.72,58.36-49.78,100-93.5,143.68s-85.42,70.78-143.78,93.5c-44,17.16-110.26,37.46-232.13,43-131.76,6.06-171.34,7.27-505.15,7.27s-373.28-1.21-505-7.27M734.65,7.57c-133.07,6.06-224,27.16-303.41,58.06C349,97.54,279.38,140.35,209.81,209.81S97.54,349,65.63,431.24c-30.9,79.46-52,170.34-58.06,303.41C1.41,867.93,0,910.54,0,1250s1.41,382.07,7.57,515.35c6.06,133.08,27.16,223.95,58.06,303.41,31.91,82.19,74.62,152,144.18,221.43S349,2402.37,431.24,2434.37c79.56,30.9,170.34,52,303.41,58.06C868,2498.49,910.54,2500,1250,2500s382.07-1.41,515.35-7.57c133.08-6.06,223.95-27.16,303.41-58.06,82.19-32,151.86-74.72,221.43-144.18s112.18-139.24,144.18-221.43c30.9-79.46,52.1-170.34,58.06-303.41,6.06-133.38,7.47-175.89,7.47-515.35s-1.41-382.07-7.47-515.35c-6.06-133.08-27.16-224-58.06-303.41-32-82.19-74.72-151.86-144.18-221.43S2150.95,97.54,2068.86,65.63c-79.56-30.9-170.44-52.1-303.41-58.06C1632.17,1.51,1589.56,0,1250.1,0S868,1.41,734.65,7.57" fill="url(#1)"></path></g></svg>
+                        </div>
                         <div class="support-contact-info">
-                            <span class="support-contact-name">E-mail SAC</span>
-                            <span class="support-contact-val">sac@zsxoutlet.com.br</span>
+                            <span class="support-contact-name">Instagram</span>
+                            <span class="support-contact-val">@zsx.outlet</span>
                             <span class="support-contact-sub">Resposta em até 2 horas</span>
                         </div>
                         <span class="support-card-arrow">&rarr;</span>
@@ -773,8 +808,8 @@
                         <span class="profile-badge-status">VIP</span>
                     </div>
                     <div class="profile-user-meta">
-                        <h3 class="profile-user-name">Cliente ZSX</h3>
-                        <p class="profile-user-email">membro@zsxoutlet.com.br</p>
+                        <h3 class="profile-user-name" id="profileUserName">Minha Conta ZSX</h3>
+                        <p class="profile-user-email" id="profileUserEmail">Identifique-se para salvar seus dados</p>
                     </div>
                 </div>
                 <button type="button" id="closeProfileBtn" class="modal-close-icon" aria-label="Fechar Perfil">&times;</button>
@@ -825,7 +860,31 @@
                     <span class="menu-item-arrow">&rarr;</span>
                 </button>
 
-                <button type="button" class="profile-menu-item" onclick="window.location.href='admin.html'">
+                <button type="button" class="profile-menu-item" id="menuEditAccountBtn">
+                    <div class="menu-item-icon">
+                        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </div>
+                    <div class="menu-item-text">
+                        <span class="menu-item-title">Meus Dados Pessoais</span>
+                        <span class="menu-item-desc" id="menuAccountDesc">Atualizar nome, e-mail e telefone</span>
+                    </div>
+                    <span class="menu-item-arrow">&rarr;</span>
+                </button>
+
+                <!-- Formulário Inline de Identificação do Cliente -->
+                <form id="customerAccountForm" style="display: none; padding: 14px; background: #f8f5f0; border-radius: 12px; margin: 6px 0; border: 1px solid #e5ddd3;">
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <input type="text" id="custNameInput" placeholder="Seu Nome Completo" required style="padding: 10px 12px; border-radius: 8px; border: 1px solid #d5ccc0; font-size: 13.5px;">
+                        <input type="email" id="custEmailInput" placeholder="Seu E-mail" required style="padding: 10px 12px; border-radius: 8px; border: 1px solid #d5ccc0; font-size: 13.5px;">
+                        <input type="tel" id="custPhoneInput" placeholder="WhatsApp / Telefone (00) 00000-0000" style="padding: 10px 12px; border-radius: 8px; border: 1px solid #d5ccc0; font-size: 13.5px;">
+                        <div style="display: flex; gap: 8px; justify-content: flex-end;">
+                            <button type="button" id="cancelAccountEditBtn" style="padding: 8px 14px; border-radius: 8px; border: 1px solid #ccc; background: #2202029d; font-size: 12.5px; font-weight: 700; cursor: pointer;">Cancelar</button>
+                            <button type="submit" style="padding: 8px 16px; border-radius: 8px; border: none; background: #111; color: #fff; font-size: 12.5px; font-weight: 700; cursor: pointer;">Salvar Dados</button>
+                        </div>
+                    </div>
+                </form>
+
+                <button type="button" class="profile-menu-item" id="menuAdminPanelBtn" style="display: none;" onclick="window.location.href='admin.html'">
                     <div class="menu-item-icon">
                         <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                     </div>

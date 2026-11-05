@@ -1,12 +1,12 @@
 /* ==========================================================================
    TELA DEDICADA DE CATEGORIAS (CLASSES) - ZSX OUTLET
-   Mesmo estilo de alto padrão da tela de produtos (PDP) e da loja
+   Tema Dark Obsidian & Crimson Red Streetwear
    ========================================================================== */
 
 .cat-page-container {
     max-width: 1280px;
     margin: 0 auto;
-    padding: 135px 24px 80px;
+    padding: 112px 24px 80px;
 }
 
 /* Breadcrumb */
@@ -15,7 +15,7 @@
     justify-content: space-between;
     align-items: center;
     font-size: 13px;
-    color: #78716c;
+    color: #b9a4a9;
     margin-bottom: 24px;
 }
 
@@ -27,30 +27,32 @@
 }
 
 .cat-breadcrumb a {
-    color: #78716c;
+    color: #b9a4a9;
     text-decoration: none;
     transition: color 0.2s ease;
 }
 
 .cat-breadcrumb a:hover {
-    color: #111111;
+    color: #ff4d5e;
 }
 
 .cat-breadcrumb-sep {
-    color: #a8a29e;
+    color: #7c686d;
     font-size: 11px;
 }
 
 .cat-breadcrumb-current {
-    color: #111111;
+    color: #f7f1f3;
     font-weight: 700;
 }
 
 /* Banner Hero da Categoria */
 .cat-hero-banner {
-    background: linear-gradient(135deg, #f5efe7 0%, #ece2d5 100%);
-    border: 1.5px solid #dfd5c7;
-    border-radius: 18px;
+    background:
+        radial-gradient(circle at 85% 40%, rgba(225, 29, 46, 0.28) 0%, transparent 60%),
+        linear-gradient(135deg, #1d080f 0%, #0e0508 100%);
+    border: 1.5px solid rgba(255, 70, 90, 0.26);
+    border-radius: 20px;
     padding: 40px 48px;
     margin-bottom: 34px;
     display: flex;
@@ -58,7 +60,7 @@
     align-items: center;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 22px 54px rgba(0, 0, 0, 0.65), 0 0 36px rgba(225, 29, 46, 0.14);
 }
 
 .cat-hero-banner::after {
@@ -66,9 +68,9 @@
     position: absolute;
     right: -40px;
     bottom: -40px;
-    width: 220px;
-    height: 220px;
-    background: radial-gradient(circle, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 70%);
+    width: 240px;
+    height: 240px;
+    background: radial-gradient(circle, rgba(255, 50, 70, 0.22) 0%, rgba(255, 50, 70, 0) 70%);
     pointer-events: none;
 }
 
@@ -83,7 +85,7 @@
     font-weight: 800;
     text-transform: uppercase;
     letter-spacing: 1.2px;
-    color: #8C8170;
+    color: #ff4d5e;
     margin-bottom: 8px;
 }
 
@@ -92,7 +94,7 @@
     font-size: 46px;
     letter-spacing: 0.8px;
     text-transform: uppercase;
-    color: #111111;
+    color: #f7f1f3;
     margin: 0 0 10px 0;
     line-height: 1.1;
 }
@@ -100,7 +102,7 @@
 .cat-hero-desc {
     font-size: 14.5px;
     line-height: 1.6;
-    color: #57534e;
+    color: #cbb8bc;
     margin: 0;
 }
 
@@ -113,7 +115,8 @@
 }
 
 .cat-count-badge {
-    background-color: #111111;
+    background: linear-gradient(135deg, #e11d2e 0%, #b31224 100%);
+    border: 1px solid #ff3b4e;
     color: #ffffff;
     font-size: 12.5px;
     font-weight: 800;
@@ -121,7 +124,7 @@
     border-radius: 30px;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 20px rgba(225, 29, 46, 0.4);
 }
 
 /* Barra de Pílulas de Categorias (Switcher) */
@@ -143,29 +146,29 @@
     align-items: center;
     gap: 8px;
     padding: 10px 20px;
-    background-color: #ffffff;
-    border: 1.5px solid #e7e5e4;
+    background-color: rgba(24, 9, 14, 0.85);
+    border: 1.5px solid rgba(255, 70, 90, 0.22);
     border-radius: 30px;
     font-size: 13.5px;
     font-weight: 700;
-    color: #44403c;
+    color: #cbb8bc;
     cursor: pointer;
     transition: all 0.25s ease;
     white-space: nowrap;
 }
 
 .cat-pill-btn:hover {
-    background-color: #f5f0eb;
-    border-color: #111111;
-    color: #111111;
+    background-color: rgba(255, 60, 80, 0.14);
+    border-color: #ff3b4e;
+    color: #ffffff;
     transform: translateY(-2px);
 }
 
 .cat-pill-btn.active {
-    background-color: #111111;
-    border-color: #111111;
+    background: linear-gradient(135deg, #e11d2e 0%, #b31224 100%);
+    border-color: #ff3b4e;
     color: #ffffff;
-    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 6px 20px rgba(225, 29, 46, 0.4);
 }
 
 .cat-pill-icon {
@@ -177,13 +180,14 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #ffffff;
-    border: 1.5px solid #ece7df;
-    border-radius: 12px;
+    background-color: rgba(22, 8, 13, 0.9);
+    border: 1.5px solid rgba(255, 70, 90, 0.22);
+    border-radius: 14px;
     padding: 14px 22px;
     margin-bottom: 34px;
     flex-wrap: wrap;
     gap: 16px;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
 }
 
 .cat-filters-left {
@@ -197,30 +201,30 @@
     font-size: 12px;
     font-weight: 800;
     text-transform: uppercase;
-    color: #78716c;
+    color: #b9a4a9;
     letter-spacing: 0.5px;
 }
 
 .cat-size-pill {
     padding: 6px 14px;
-    border: 1.5px solid #e7e5e4;
+    border: 1.5px solid rgba(255, 70, 90, 0.24);
     border-radius: 20px;
-    background: none;
+    background: rgba(255, 255, 255, 0.04);
     font-size: 12px;
     font-weight: 700;
-    color: #44403c;
+    color: #cbb8bc;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .cat-size-pill:hover {
-    border-color: #111111;
-    color: #111111;
+    border-color: #ff3b4e;
+    color: #ffffff;
 }
 
 .cat-size-pill.active {
-    background-color: #111111;
-    border-color: #111111;
+    background: linear-gradient(135deg, #e11d2e 0%, #b31224 100%);
+    border-color: #ff3b4e;
     color: #ffffff;
 }
 
@@ -232,14 +236,18 @@
 
 .cat-sort-select {
     padding: 8px 14px;
-    border: 1.5px solid #111111;
-    border-radius: 6px;
+    border: 1.5px solid rgba(255, 70, 90, 0.32);
+    border-radius: 8px;
     font-size: 13px;
     font-weight: 700;
-    color: #111111;
-    background-color: #ffffff;
+    color: #f7f1f3;
+    background-color: #0d0507;
     cursor: pointer;
     outline: none;
+}
+
+.cat-sort-select:focus {
+    border-color: #ff3b4e;
 }
 
 /* Grade de Produtos da Categoria */
@@ -252,9 +260,9 @@
 
 /* Card de Produto */
 .cat-prod-card {
-    background-color: #ffffff;
-    border: 1.5px solid #ece7df;
-    border-radius: 14px;
+    background: linear-gradient(160deg, #18090e 0%, #100609 100%);
+    border: 1.5px solid rgba(255, 70, 90, 0.2);
+    border-radius: 16px;
     overflow: hidden;
     cursor: pointer;
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.25s ease;
@@ -265,15 +273,15 @@
 
 .cat-prod-card:hover {
     transform: translateY(-8px);
-    border-color: #111111;
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.1);
+    border-color: rgba(255, 80, 100, 0.5);
+    box-shadow: 0 20px 44px rgba(0, 0, 0, 0.75), 0 0 28px rgba(225, 29, 46, 0.24);
 }
 
 /* Container de Imagem */
 .cat-card-img-box {
     position: relative;
     height: 300px;
-    background-color: #f7f4ef;
+    background-color: #120609;
     overflow: hidden;
     display: flex;
     align-items: center;
@@ -296,7 +304,7 @@
     position: absolute;
     top: 14px;
     left: 14px;
-    background-color: #111111;
+    background: linear-gradient(135deg, #e11d2e 0%, #b31224 100%);
     color: #ffffff;
     font-size: 10.5px;
     font-weight: 800;
@@ -305,7 +313,7 @@
     padding: 5px 11px;
     border-radius: 16px;
     z-index: 2;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 4px 14px rgba(225, 29, 46, 0.45);
 }
 
 /* Botão de Favorito no Card */
@@ -316,32 +324,34 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background-color: #ffffff;
-    border: 1px solid #e7e5e4;
+    background-color: rgba(18, 7, 11, 0.82);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 70, 90, 0.3);
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     z-index: 2;
-    color: #111111;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    color: #f7f1f3;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     transition: all 0.2s ease;
 }
 
 .cat-card-wishlist:hover {
     transform: scale(1.15);
-    background-color: #fff1f2;
-    color: #e11d48;
+    background-color: rgba(225, 29, 46, 0.25);
+    border-color: #ff3b4e;
+    color: #ff4d5e;
 }
 
 .cat-card-wishlist.active {
-    background-color: #fff1f2;
-    color: #e11d48;
-    border-color: #fecdd3;
+    background-color: rgba(225, 29, 46, 0.25);
+    color: #ff3b4e;
+    border-color: #ff3b4e;
 }
 
 .cat-card-wishlist.active svg {
-    fill: #e11d48;
+    fill: #ff3b4e;
 }
 
 /* Informações do Produto */
@@ -356,7 +366,7 @@
     font-size: 11px;
     font-weight: 800;
     text-transform: uppercase;
-    color: #8C8170;
+    color: #ff4d5e;
     letter-spacing: 0.8px;
     margin-bottom: 5px;
 }
@@ -364,7 +374,7 @@
 .cat-card-title {
     font-size: 16px;
     font-weight: 800;
-    color: #111111;
+    color: #f7f1f3;
     margin: 0 0 8px 0;
     line-height: 1.3;
     letter-spacing: -0.2px;
@@ -381,27 +391,27 @@
 .cat-card-price-current {
     font-size: 18px;
     font-weight: 900;
-    color: #111111;
+    color: #ff3b4e;
 }
 
 .cat-card-price-original {
     font-size: 13.5px;
-    color: #a8a29e;
+    color: #8c767b;
     text-decoration: line-through;
 }
 
 .cat-card-discount-tag {
-    background-color: #111111;
+    background: linear-gradient(135deg, #e11d2e 0%, #b31224 100%);
     color: #ffffff;
     font-size: 10px;
     font-weight: 800;
     padding: 2px 6px;
-    border-radius: 3px;
+    border-radius: 4px;
 }
 
 .cat-card-installments {
     font-size: 12px;
-    color: #78716c;
+    color: #b9a4a9;
     margin: 0 0 16px 0;
 }
 
@@ -415,10 +425,10 @@
 .btn-cat-view {
     flex: 1;
     padding: 10px 12px;
-    background-color: #f7f4ef;
-    color: #111111;
-    border: 1.5px solid #111111;
-    border-radius: 6px;
+    background-color: rgba(255, 255, 255, 0.06);
+    color: #f3ecee;
+    border: 1.5px solid rgba(255, 70, 90, 0.32);
+    border-radius: 8px;
     font-size: 12px;
     font-weight: 800;
     text-transform: uppercase;
@@ -428,17 +438,18 @@
 }
 
 .btn-cat-view:hover {
-    background-color: #111111;
-    color: #ffffff;
+    background-color: #ffffff;
+    border-color: #ffffff;
+    color: #111111;
 }
 
 .btn-cat-add-cart {
     position: relative;
     padding: 10px 14px;
-    background-color: #111111;
+    background: linear-gradient(135deg, #e11d2e 0%, #b31224 100%);
     color: #ffffff;
-    border: 1.5px solid #111111;
-    border-radius: 6px;
+    border: 1.5px solid #ff3b4e;
+    border-radius: 8px;
     font-size: 12px;
     font-weight: 800;
     cursor: pointer;
@@ -479,8 +490,8 @@
     grid-column: 1 / -1;
     text-align: center;
     padding: 80px 20px;
-    background-color: #ffffff;
-    border: 1.5px dashed #dfd5c7;
+    background: linear-gradient(160deg, #18090e 0%, #100609 100%);
+    border: 1.5px dashed rgba(255, 70, 90, 0.3);
     border-radius: 16px;
 }
 
@@ -488,18 +499,19 @@
     font-size: 56px;
     margin-bottom: 16px;
     display: block;
+    color: #ff4d5e;
 }
 
 .cat-empty-title {
     font-size: 22px;
     font-weight: 800;
-    color: #111111;
+    color: #f7f1f3;
     margin-bottom: 8px;
 }
 
 .cat-empty-desc {
     font-size: 14px;
-    color: #78716c;
+    color: #b9a4a9;
     margin-bottom: 22px;
 }
 

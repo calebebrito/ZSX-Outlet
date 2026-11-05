@@ -1,6 +1,56 @@
+const zsxHeroEl = document.getElementById('zsxHero');
+let wasScrolledDown = false;
+
+function replayHeroAnimation() {
+    if (!zsxHeroEl) return;
+    zsxHeroEl.classList.remove('is-visible');
+    void zsxHeroEl.offsetWidth;
+    zsxHeroEl.classList.add('is-visible');
+}
+
+if (zsxHeroEl) {
+    requestAnimationFrame(() => {
+        zsxHeroEl.classList.add('is-visible');
+    });
+
+    zsxHeroEl.addEventListener('mousemove', (e) => {
+        const rect = zsxHeroEl.getBoundingClientRect();
+        const mx = ((e.clientX - rect.left) / rect.width - 0.5) * 2;
+        const my = ((e.clientY - rect.top) / rect.height - 0.5) * 2;
+        zsxHeroEl.style.setProperty('--mx', mx.toFixed(3));
+        zsxHeroEl.style.setProperty('--my', my.toFixed(3));
+    });
+
+    zsxHeroEl.addEventListener('mouseleave', () => {
+        zsxHeroEl.style.setProperty('--mx', '0');
+        zsxHeroEl.style.setProperty('--my', '0');
+    });
+
+    const heroObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                replayHeroAnimation();
+            } else {
+                zsxHeroEl.classList.remove('is-visible');
+            }
+        });
+    }, { threshold: 0.2 });
+
+    heroObserver.observe(zsxHeroEl);
+}
+
 window.addEventListener('scroll', () => {
+    const sy = window.scrollY;
+
+    // Progresso suave do hero para conectar com a tela scrolled
+    if (zsxHeroEl) {
+        const heroHeight = zsxHeroEl.offsetHeight || window.innerHeight;
+        const progress = Math.min(1, Math.max(0, sy / (heroHeight * 0.75)));
+        zsxHeroEl.style.setProperty('--hero-p', progress.toFixed(3));
+    }
+
     // Zoom imediato assim que começar a rolar (mais de 5px)
-    if (window.scrollY > 5) {
+    if (sy > 5) {
         document.body.classList.add('zooming');
     } else {
         document.body.classList.remove('zooming');
@@ -9,29 +59,39 @@ window.addEventListener('scroll', () => {
     // Fixar e estilizar cabeçalho (sticky icons com vidro fosco)
     const headEl = document.getElementById('head');
     if (headEl) {
-        if (window.scrollY > 30) {
+        if (sy > 30) {
             headEl.classList.add('header-scrolled');
         } else {
             headEl.classList.remove('header-scrolled');
         }
     }
 
-    // Some a primeira imagem e revela o segundo body apenas depois de 450px
-    if (window.scrollY > 450) {
-        document.body.classList.add('scrolled');
+    // Conecta a transição do hero para o estado scrolled e reativa o efeito ao voltar
+    if (sy > 420) {
+        if (!wasScrolledDown) {
+            wasScrolledDown = true;
+            document.body.classList.add('scrolled');
+            if (zsxHeroEl) zsxHeroEl.classList.remove('is-visible');
+        }
     } else {
-        document.body.classList.remove('scrolled');
+        if (wasScrolledDown) {
+            wasScrolledDown = false;
+            document.body.classList.remove('scrolled');
+            replayHeroAnimation();
+        }
     }
 });
 
-// Efeito de subir e aparecer (slide up) quando o elemento entra na tela
+// Efeito de subir e aparecer (slide up) toda vez que o elemento entra na tela
 const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.classList.add('active');
+        } else {
+            entry.target.classList.remove('active');
         }
     });
-}, { threshold: 0.15 });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
 
 // Pega todos os elementos que tiverem a classe "reveal" e observa eles
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
@@ -48,86 +108,34 @@ let currentPaymentMethod = 'credit';
 let pendingCheckoutAfterAddress = false;
 let currentOrderStatusFilter = 'pending';
 
-// Pedidos Seed Iniciais (se ainda não existirem no localStorage)
-const defaultSeedOrders = [
-    {
-        id: 'ZSX-84920',
-        date: '28/10/2026',
-        status: 'pending',
-        statusLabel: 'Aguardando Pagamento PIX',
-        paymentMethod: 'PIX (5% OFF)',
-        total: 208.90,
-        items: [
-            {
-                name: 'Corta-Vento Nike Preto',
-                price: 219.90,
-                quantity: 1,
-                size: 'G',
-                color: 'Preto',
-                image: '/images/products/corta-vento-nike.jpg'
-            }
-        ]
-    },
-    {
-        id: 'ZSX-74190',
-        date: '27/10/2026',
-        status: 'confirmed',
-        statusLabel: 'Pagamento Aprovado - Em Separação',
-        paymentMethod: 'Cartão de Crédito (3x)',
-        total: 259.80,
-        items: [
-            {
-                name: 'Camisa Polo Branca e Verde',
-                price: 129.90,
-                quantity: 2,
-                size: 'M',
-                color: 'Verde/Branco',
-                image: '/images/products/camisa-polo-branca-e-verde.png'
-            }
-        ]
-    },
-    {
-        id: 'ZSX-69412',
-        date: '25/10/2026',
-        status: 'confirmed',
-        statusLabel: 'A Caminho da Transportadora',
-        paymentMethod: 'Cartão de Débito',
-        total: 249.90,
-        items: [
-            {
-                name: 'Blusão Moletom Adidas',
-                price: 249.90,
-                quantity: 1,
-                size: 'GG',
-                color: 'Mescla',
-                image: '/images/products/blusao-adidas.jpg'
-            }
-        ]
-    },
-    {
-        id: 'ZSX-51028',
-        date: '15/10/2026',
-        status: 'finished',
-        statusLabel: 'Entregue com Sucesso',
-        paymentMethod: 'PIX',
-        total: 389.00,
-        items: [
-            {
-                name: 'Casaco Puffer ZSX Winter',
-                price: 389.00,
-                quantity: 1,
-                size: 'G',
-                color: 'Preto Fosco',
-                image: '/images/products/casaco-puffer.jpg'
-            }
-        ]
-    }
-];
-
-let orders = JSON.parse(localStorage.getItem('zsx_orders'));
-if (!orders || !Array.isArray(orders)) {
-    orders = defaultSeedOrders;
+// Pedidos Reais do Cliente (sem dados simulados)
+const LEGACY_SEED_IDS = ['ZSX-84920', 'ZSX-74190', 'ZSX-69412', 'ZSX-51028'];
+let rawStoredOrders = JSON.parse(localStorage.getItem('zsx_orders')) || [];
+let orders = Array.isArray(rawStoredOrders)
+    ? rawStoredOrders.filter(o => o && !LEGACY_SEED_IDS.includes(o.id))
+    : [];
+if (orders.length !== rawStoredOrders.length) {
     localStorage.setItem('zsx_orders', JSON.stringify(orders));
+}
+
+// Helper para ler configurações oficiais da loja definidas no Painel Admin
+function getLiveStoreSettings() {
+    const defaults = {
+        freeShippingMin: 199.00,
+        defaultShipping: 24.00,
+        pixDiscount: 5,
+        topBarText: 'FRETE GRÁTIS EM COMPRAS ACIMA DE R$ 199',
+        pixKey: '00020126580014br.gov.bcb.pix0136zsxoutlet-oficial5204000053039865802BR5910ZSX OUTLET6009SAO PAULO62070503***6304',
+        whatsapp: '(71) 99289-0814',
+        supportEmail: 'sac@zsxoutlet.com.br'
+    };
+    const saved = JSON.parse(localStorage.getItem('zsx_store_settings')) || {};
+    // Remove o número antigo de exemplo caso tenha ficado salvo no cache do navegador
+    if (saved.whatsapp && saved.whatsapp.includes('99999')) {
+        saved.whatsapp = defaults.whatsapp;
+        localStorage.setItem('zsx_store_settings', JSON.stringify({ ...defaults, ...saved }));
+    }
+    return { ...defaults, ...saved };
 }
 
 // Formatador de Moeda BRL
@@ -275,7 +283,8 @@ function renderCart() {
         `).join('');
     }
 
-    // Cálculos
+    // Cálculos Reais (Subtotal, Desconto de Cupom e Regra Oficial de Frete)
+    const settings = getLiveStoreSettings();
     const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
     let discount = 0;
 
@@ -287,7 +296,23 @@ function renderCart() {
         discountRow.style.display = 'none';
     }
 
-    const total = Math.max(0, subtotal - discount);
+    const afterDiscount = Math.max(0, subtotal - discount);
+    const shippingFee = (cart.length === 0 || afterDiscount >= Number(settings.freeShippingMin))
+        ? 0
+        : Number(settings.defaultShipping);
+
+    const shippingEl = document.getElementById('cartShipping');
+    if (shippingEl) {
+        if (shippingFee === 0) {
+            shippingEl.textContent = 'Grátis';
+            shippingEl.classList.add('text-free');
+        } else {
+            shippingEl.textContent = formatBRL(shippingFee);
+            shippingEl.classList.remove('text-free');
+        }
+    }
+
+    const total = afterDiscount + shippingFee;
 
     if (subtotalEl) subtotalEl.textContent = formatBRL(subtotal);
     if (totalEl) totalEl.textContent = formatBRL(total);
@@ -485,35 +510,51 @@ function handleGoToCheckout() {
     }
 }
 
+// Cálculo Centralizado do Total Final de Checkout
+function calculateCheckoutTotal(paymentMethod = currentPaymentMethod) {
+    const settings = getLiveStoreSettings();
+    const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    const discount = activeCoupon ? subtotal * (activeCoupon.percent / 100) : 0;
+    const afterDiscount = Math.max(0, subtotal - discount);
+    const shippingFee = (cart.length === 0 || afterDiscount >= Number(settings.freeShippingMin))
+        ? 0
+        : Number(settings.defaultShipping);
+
+    let finalTotal = afterDiscount + shippingFee;
+    if (paymentMethod === 'pix') {
+        const pixPct = Number(settings.pixDiscount) || 0;
+        finalTotal = (afterDiscount * (1 - pixPct / 100)) + shippingFee;
+    }
+    return finalTotal;
+}
+
 // Modal de Checkout / Pagamento
 function openCheckoutModal() {
     const modal = document.getElementById('checkoutModal');
     if (!modal) return;
 
-    // Calcular totais
-    const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-    let discount = activeCoupon ? subtotal * (activeCoupon.percent / 100) : 0;
-    
-    // Desconto extra de 5% no PIX se selecionado
-    let finalTotal = Math.max(0, subtotal - discount);
-    if (currentPaymentMethod === 'pix') {
-        finalTotal *= 0.95;
-    }
+    const settings = getLiveStoreSettings();
+    const finalTotal = calculateCheckoutTotal(currentPaymentMethod);
 
     const totalEl = document.getElementById('checkoutFinalTotal');
     const addrEl = document.getElementById('checkoutDeliveryAddress');
+    const pixInput = document.getElementById('pixCodeInput');
 
     if (totalEl) totalEl.textContent = formatBRL(finalTotal);
     if (addrEl && userAddress) {
         addrEl.textContent = `${userAddress.street}, ${userAddress.number} - ${userAddress.city}`;
     }
+    if (pixInput && settings.pixKey) {
+        pixInput.value = settings.pixKey;
+    }
 
-    // Parcelamento Cartão de Crédito
+    // Parcelamento Cartão de Crédito (1x até 6x sem juros)
+    const creditTotal = calculateCheckoutTotal('credit');
     const select = document.getElementById('ccInstallments');
     if (select) {
         select.innerHTML = '';
-        for (let i = 1; i <= 12; i++) {
-            const installmentVal = (finalTotal / i);
+        for (let i = 1; i <= 6; i++) {
+            const installmentVal = (creditTotal / i);
             const opt = document.createElement('option');
             opt.value = i;
             opt.textContent = `${i}x de ${formatBRL(installmentVal)} sem juros`;
@@ -541,13 +582,7 @@ function switchPaymentTab(tabName) {
     if (tabName === 'debit') document.getElementById('tabDebit').classList.add('active');
     if (tabName === 'pix') document.getElementById('tabPix').classList.add('active');
 
-    // Recalcula total com desconto de PIX
-    const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-    let discount = activeCoupon ? subtotal * (activeCoupon.percent / 100) : 0;
-    let finalTotal = Math.max(0, subtotal - discount);
-    if (tabName === 'pix') {
-        finalTotal *= 0.95;
-    }
+    const finalTotal = calculateCheckoutTotal(tabName);
     const totalEl = document.getElementById('checkoutFinalTotal');
     if (totalEl) totalEl.textContent = formatBRL(finalTotal);
 }
@@ -570,8 +605,52 @@ function copyPixCode() {
     });
 }
 
-// Finalizar Pedido
+// Validação Real de Dados do Cartão (Crédito / Débito)
+function validateCardFields(prefix) {
+    const numEl = document.getElementById(`${prefix}Number`);
+    const nameEl = document.getElementById(`${prefix}Name`);
+    const expEl = document.getElementById(`${prefix}Expiry`);
+    const cvvEl = document.getElementById(`${prefix}Cvv`);
+
+    const cleanNum = (numEl?.value || '').replace(/\D/g, '');
+    const cleanName = (nameEl?.value || '').trim();
+    const cleanExp = (expEl?.value || '').trim();
+    const cleanCvv = (cvvEl?.value || '').replace(/\D/g, '');
+
+    if (cleanNum.length < 13 || cleanNum.length > 19) {
+        showToast('Informe um número de cartão válido.', 'error');
+        numEl?.focus();
+        return false;
+    }
+    if (cleanName.length < 3) {
+        showToast('Informe o nome completo impresso no cartão.', 'error');
+        nameEl?.focus();
+        return false;
+    }
+    if (!/^\d{2}\/\d{2}$/.test(cleanExp)) {
+        showToast('Informe a validade do cartão no formato MM/AA.', 'error');
+        expEl?.focus();
+        return false;
+    }
+    const [mm, yy] = cleanExp.split('/').map(Number);
+    if (mm < 1 || mm > 12 || yy < 26) {
+        showToast('A data de validade do cartão é inválida ou expirada.', 'error');
+        expEl?.focus();
+        return false;
+    }
+    if (cleanCvv.length < 3 || cleanCvv.length > 4) {
+        showToast('Informe o código de segurança (CVV) de 3 ou 4 dígitos.', 'error');
+        cvvEl?.focus();
+        return false;
+    }
+    return true;
+}
+
+// Finalizar Pedido com Validação Real e Baixa Automática de Estoque
 function handleFinishOrder() {
+    if (currentPaymentMethod === 'credit' && !validateCardFields('cc')) return;
+    if (currentPaymentMethod === 'debit' && !validateCardFields('deb')) return;
+
     closeCheckoutModal();
     closeCartDrawer();
 
@@ -580,29 +659,46 @@ function handleFinishOrder() {
     const paymentMethodEl = document.getElementById('successPaymentMethod');
     const totalPaidEl = document.getElementById('successTotalPaid');
 
-    const randomOrder = 'ZSX-' + Math.floor(10000 + Math.random() * 90000);
-    if (orderNumEl) orderNumEl.textContent = `#${randomOrder}`;
+    const orderTimestamp = Date.now().toString().slice(-5);
+    const realOrderCode = `ZSX-${orderTimestamp}`;
+    if (orderNumEl) orderNumEl.textContent = `#${realOrderCode}`;
 
-    let methodLabel = 'Cartão de Crédito';
+    const installmentsSel = document.getElementById('ccInstallments');
+    const instCount = installmentsSel ? installmentsSel.value : '1';
+
+    let methodLabel = `Cartão de Crédito (${instCount}x)`;
     if (currentPaymentMethod === 'debit') methodLabel = 'Cartão de Débito';
-    if (currentPaymentMethod === 'pix') methodLabel = 'PIX (Aprovação Imediata)';
+    if (currentPaymentMethod === 'pix') methodLabel = 'PIX';
     if (paymentMethodEl) paymentMethodEl.textContent = methodLabel;
 
-    const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
-    let discount = activeCoupon ? subtotal * (activeCoupon.percent / 100) : 0;
-    let finalTotal = Math.max(0, subtotal - discount);
-    if (currentPaymentMethod === 'pix') finalTotal *= 0.95;
+    const finalTotal = calculateCheckoutTotal(currentPaymentMethod);
     if (totalPaidEl) totalPaidEl.textContent = formatBRL(finalTotal);
 
-    // Salvar nas Compras do Usuário
+    // Baixa Real no Estoque de cada Produto Comprado
+    const catalogOverrides = JSON.parse(localStorage.getItem('zsx_catalog_overrides')) || {};
+    cart.forEach(cartItem => {
+        // O ID no carrinho pode ser 'camisa-1' ou 'camisa-1-M-Preto'
+        const baseIdMatch = String(cartItem.id).match(/^([a-z]+-\d+)/i);
+        const prodId = baseIdMatch ? baseIdMatch[1] : cartItem.id;
+        if (!catalogOverrides[prodId]) catalogOverrides[prodId] = {};
+        const currentStock = catalogOverrides[prodId].stock !== undefined ? Number(catalogOverrides[prodId].stock) : 20;
+        catalogOverrides[prodId].stock = Math.max(0, currentStock - (Number(cartItem.quantity) || 1));
+    });
+    localStorage.setItem('zsx_catalog_overrides', JSON.stringify(catalogOverrides));
+
     const orderStatus = (currentPaymentMethod === 'pix') ? 'pending' : 'confirmed';
-    const orderStatusText = (currentPaymentMethod === 'pix') 
-        ? 'Aguardando Pagamento PIX' 
-        : 'Pagamento Confirmado - Em Preparação';
+    const orderStatusText = (currentPaymentMethod === 'pix')
+        ? 'Aguardando Confirmação PIX'
+        : 'Pagamento Aprovado - Em Separação';
+
+    const customerAccount = JSON.parse(localStorage.getItem('zsx_customer_account')) || null;
 
     const newOrder = {
-        id: randomOrder,
+        id: realOrderCode,
         date: new Date().toLocaleDateString('pt-BR'),
+        customerName: customerAccount?.name || userAddress?.name || 'Cliente',
+        customerEmail: customerAccount?.email || '',
+        address: userAddress ? `${userAddress.street}, ${userAddress.number} - ${userAddress.city} (${userAddress.cep})` : '',
         status: orderStatus,
         statusLabel: orderStatusText,
         paymentMethod: methodLabel,
@@ -891,13 +987,136 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Gestão Real da Conta do Cliente no Modal de Perfil
+    function refreshCustomerProfileUI() {
+        const acc = JSON.parse(localStorage.getItem('zsx_customer_account'));
+        const nameEl = document.getElementById('profileUserName');
+        const emailEl = document.getElementById('profileUserEmail');
+        const badgeEl = document.querySelector('.profile-badge-status');
+        const descEl = document.getElementById('menuAccountDesc');
+        const logoutBtn = document.getElementById('menuLogoutBtn');
+        const adminBtn = document.getElementById('menuAdminPanelBtn');
+
+        // Exibe botão do Painel Admin apenas se houver sessão de administrador ativa
+        const adminSession = JSON.parse(sessionStorage.getItem('zsx_admin_session'));
+        if (adminBtn) {
+            adminBtn.style.display = (adminSession && adminSession.authenticated) ? 'flex' : 'none';
+        }
+
+        if (acc && acc.name) {
+            if (nameEl) nameEl.textContent = acc.name;
+            if (emailEl) emailEl.textContent = acc.email || acc.phone || '';
+            if (badgeEl) badgeEl.textContent = 'ATIVO';
+            if (descEl) descEl.textContent = `${acc.name} • Editar informações`;
+            if (logoutBtn) logoutBtn.style.display = 'flex';
+        } else {
+            if (nameEl) nameEl.textContent = 'Minha Conta ZSX';
+            if (emailEl) emailEl.textContent = 'Cadastre seus dados para agilizar seus pedidos';
+            if (badgeEl) badgeEl.textContent = 'CONTA';
+            if (descEl) descEl.textContent = 'Clique para cadastrar seu nome, e-mail e WhatsApp';
+            if (logoutBtn) logoutBtn.style.display = 'none';
+        }
+    }
+
+    refreshCustomerProfileUI();
+
+    const menuEditAccountBtn = document.getElementById('menuEditAccountBtn');
+    const customerAccountForm = document.getElementById('customerAccountForm');
+    const cancelAccountEditBtn = document.getElementById('cancelAccountEditBtn');
+
+    if (menuEditAccountBtn && customerAccountForm) {
+        menuEditAccountBtn.addEventListener('click', () => {
+            const acc = JSON.parse(localStorage.getItem('zsx_customer_account')) || {};
+            document.getElementById('custNameInput').value = acc.name || '';
+            document.getElementById('custEmailInput').value = acc.email || '';
+            document.getElementById('custPhoneInput').value = acc.phone || '';
+            customerAccountForm.style.display = customerAccountForm.style.display === 'none' ? 'block' : 'none';
+        });
+    }
+
+    if (cancelAccountEditBtn && customerAccountForm) {
+        cancelAccountEditBtn.addEventListener('click', () => {
+            customerAccountForm.style.display = 'none';
+        });
+    }
+
+    if (customerAccountForm) {
+        customerAccountForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const accData = {
+                name: document.getElementById('custNameInput').value.trim(),
+                email: document.getElementById('custEmailInput').value.trim(),
+                phone: document.getElementById('custPhoneInput').value.trim()
+            };
+            localStorage.setItem('zsx_customer_account', JSON.stringify(accData));
+            customerAccountForm.style.display = 'none';
+            refreshCustomerProfileUI();
+            showToast('Dados da sua conta salvos com sucesso!', 'success');
+        });
+    }
+
     const menuLogoutBtn = document.getElementById('menuLogoutBtn');
     if (menuLogoutBtn) {
         menuLogoutBtn.addEventListener('click', () => {
+            localStorage.removeItem('zsx_customer_account');
+            sessionStorage.removeItem('zsx_admin_session');
+            refreshCustomerProfileUI();
             closeProfileModal();
-            showToast('Você saiu da sua conta.', 'info');
+            showToast('Você desconectou da sua conta.', 'info');
         });
     }
+
+    // Máscaras Automáticas para Cartão de Crédito e Débito
+    ['ccNumber', 'debNumber'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', (e) => {
+                let v = e.target.value.replace(/\D/g, '').substring(0, 16);
+                e.target.value = v.replace(/(\d{4})(?=\d)/g, '$1 ');
+            });
+        }
+    });
+
+    ['ccExpiry', 'debExpiry'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', (e) => {
+                let v = e.target.value.replace(/\D/g, '').substring(0, 4);
+                if (v.length >= 3) v = v.substring(0, 2) + '/' + v.substring(2, 4);
+                e.target.value = v;
+            });
+        }
+    });
+
+    ['ccCvv', 'debCvv'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', (e) => {
+                e.target.value = e.target.value.replace(/\D/g, '').substring(0, 4);
+            });
+        }
+    });
+
+    // Sincronizar Contatos de Suporte, WhatsApp e Barra de Topo com as Configurações do Painel Admin
+    (function syncStoreSettingsToUI() {
+        const s = getLiveStoreSettings();
+        if (s.whatsapp) {
+            const cleanDigits = s.whatsapp.replace(/\D/g, '');
+            const waUrl = `https://wa.me/55${cleanDigits}`;
+            document.querySelectorAll('a[href*="wa.me"]').forEach(a => {
+                a.href = waUrl;
+                const valSpan = a.querySelector('.support-contact-val');
+                if (valSpan) valSpan.textContent = s.whatsapp;
+            });
+        }
+        if (s.supportEmail) {
+            document.querySelectorAll('a[href^="mailto:"]').forEach(a => {
+                a.href = `mailto:${s.supportEmail}`;
+                const valSpan = a.querySelector('.support-contact-val');
+                if (valSpan) valSpan.textContent = s.supportEmail;
+            });
+        }
+    })();
 
     // Ícone de Suporte no Header
     const headerSupportBtn = document.getElementById('headerSupportBtn');

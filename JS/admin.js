@@ -473,7 +473,9 @@ const defaultStoreSettings = {
     defaultShipping: 24.00,
     pixDiscount: 5,
     topBarText: 'FRETE GRÁTIS EM COMPRAS ACIMA DE R$ 199',
-    whatsapp: '(11) 99999-9999'
+    pixKey: '00020126580014br.gov.bcb.pix0136zsxoutlet-oficial5204000053039865802BR5910ZSX OUTLET6009SAO PAULO62070503***6304',
+    whatsapp: '(71) 99289-0814',
+    supportEmail: 'sac@zsxoutlet.com.br'
 };
 
 // Estado em Memória
@@ -483,12 +485,21 @@ let customProducts = JSON.parse(localStorage.getItem('zsx_custom_products')) || 
 let deletedProducts = JSON.parse(localStorage.getItem('zsx_deleted_products')) || [];
 let storeCoupons = JSON.parse(localStorage.getItem('zsx_coupons')) || defaultCoupons;
 let storeSettings = JSON.parse(localStorage.getItem('zsx_store_settings')) || defaultStoreSettings;
-let storeOrders = JSON.parse(localStorage.getItem('zsx_orders')) || [];
+const SEED_ORDER_IDS = ['ZSX-84920', 'ZSX-74190', 'ZSX-69412', 'ZSX-51028'];
+let rawOrders = JSON.parse(localStorage.getItem('zsx_orders')) || [];
+let storeOrders = rawOrders.filter(o => !SEED_ORDER_IDS.includes(o.id));
+if (storeOrders.length !== rawOrders.length) {
+    localStorage.setItem('zsx_orders', JSON.stringify(storeOrders));
+}
 let currentOrderFilter = 'all';
 
 // Inicializa Cupons e Settings no localStorage caso ainda não existam
 if (!localStorage.getItem('zsx_coupons')) {
     localStorage.setItem('zsx_coupons', JSON.stringify(storeCoupons));
+}
+if (storeSettings.whatsapp && storeSettings.whatsapp.includes('99999')) {
+    storeSettings.whatsapp = defaultStoreSettings.whatsapp;
+    localStorage.setItem('zsx_store_settings', JSON.stringify(storeSettings));
 }
 if (!localStorage.getItem('zsx_store_settings')) {
     localStorage.setItem('zsx_store_settings', JSON.stringify(storeSettings));
@@ -520,7 +531,7 @@ function getMergedCatalog() {
     baseStoreProducts.forEach((prod, index) => {
         if (deletedProducts.includes(prod.id)) return;
         const ov = catalogOverrides[prod.id] || {};
-        const defaultStock = (index % 7 === 0) ? 4 : (index % 11 === 0 ? 2 : 18);
+        const defaultStock = 20;
         const finalPrice = ov.price !== undefined ? parseFloat(ov.price) : prod.price;
         const finalOrig = ov.originalPrice !== undefined ? parseFloat(ov.originalPrice) : prod.originalPrice;
         const { discountStr, installmentsStr } = computePricingMeta(finalPrice, finalOrig);
@@ -589,25 +600,6 @@ function showAdminToast(message) {
 // ==========================================================================
 // AUTENTICAÇÃO EXCLUSIVA (VOCÊ & DONO DA LOJA)
 // ==========================================================================
-
-window.selectQuickRole = function(role) {
-    const emailInput = document.getElementById('adminLoginEmail');
-    const passInput = document.getElementById('adminLoginPass');
-    const btnDev = document.getElementById('quickRoleDev');
-    const btnOwner = document.getElementById('quickRoleOwner');
-
-    if (role === 'dev') {
-        emailInput.value = adminCredentials.devEmail;
-        passInput.value = adminCredentials.devPass;
-        btnDev.classList.add('active');
-        btnOwner.classList.remove('active');
-    } else {
-        emailInput.value = adminCredentials.ownerEmail;
-        passInput.value = adminCredentials.ownerPass;
-        btnOwner.classList.add('active');
-        btnDev.classList.remove('active');
-    }
-};
 
 function checkAuthSession() {
     const session = JSON.parse(sessionStorage.getItem('zsx_admin_session'));
@@ -1106,15 +1098,18 @@ function handleProductFormSubmit(e) {
 
 function renderOrderRowHTML(order) {
     const itemsSummary = (order.items || []).map(i => `${i.quantity}x ${i.name} (${i.size || 'M'})`).join(' • ');
+    const customerInfo = order.customerName ? ` • Cliente: ${order.customerName}` : '';
+    const addressInfo = order.address ? `<div style="font-size: 12px; color: #b9a4a9; margin-top: 2px;">Entrega: ${order.address}</div>` : '';
     return `
         <div class="order-admin-card">
             <div class="order-admin-left">
                 <div class="order-admin-id-row">
                     <span class="order-admin-id">#${order.id}</span>
                     <span class="order-status-pill ${order.status}">${order.statusLabel}</span>
-                    <span style="font-size: 12px; color: #787064;">Data: ${order.date} • ${order.paymentMethod}</span>
+                    <span style="font-size: 12px; color: #b9a4a9;">Data: ${order.date} • ${order.paymentMethod}${customerInfo}</span>
                 </div>
                 <div class="order-admin-items-text">${itemsSummary || 'Itens do pedido ZSX'}</div>
+                ${addressInfo}
             </div>
 
             <div class="order-admin-right">
@@ -1149,7 +1144,7 @@ function renderOrdersSection() {
     }
 
     if (filtered.length === 0) {
-        container.innerHTML = `<div class="admin-panel-card"><p style="font-size: 14px; color: #6e6659;">Nenhum pedido encontrado neste filtro.</p></div>`;
+        container.innerHTML = `<div class="admin-panel-card"><p style="font-size: 14px; color: #b9a4a9;">Nenhum pedido encontrado neste filtro.</p></div>`;
         return;
     }
 
@@ -1200,8 +1195,8 @@ function renderCouponsSection() {
                     <span class="coupon-code-badge">${c.code}</span>
                     <span class="stock-status-tag ${c.active ? 'in-stock' : 'out-stock'}">${c.active ? 'Ativo' : 'Pausado'}</span>
                 </div>
-                <div style="font-size: 22px; font-weight: 900; color: #111111;">${c.percent}% DE DESCONTO</div>
-                <p style="font-size: 12.5px; color: #6e6659; margin-top: 4px;">${c.desc || 'Válido em todo o carrinho ZSX'}</p>
+                <div style="font-size: 22px; font-weight: 900; color: #f7f1f3;">${c.percent}% DE DESCONTO</div>
+                <p style="font-size: 12.5px; color: #b9a4a9; margin-top: 4px;">${c.desc || 'Válido em todo o carrinho ZSX'}</p>
             </div>
             <div style="display: flex; gap: 8px;">
                 <button type="button" class="btn-secondary-admin" style="flex: 1; justify-content: center;" onclick="toggleCouponStatus('${c.code}')">
@@ -1261,11 +1256,17 @@ window.deleteCoupon = function(code) {
 // ==========================================================================
 
 function loadSettingsIntoInputs() {
-    document.getElementById('settingFreeShippingMin').value = storeSettings.freeShippingMin;
-    document.getElementById('settingDefaultShipping').value = storeSettings.defaultShipping;
-    document.getElementById('settingPixDiscount').value = storeSettings.pixDiscount;
-    document.getElementById('settingTopBarText').value = storeSettings.topBarText;
-    document.getElementById('settingWhatsapp').value = storeSettings.whatsapp;
+    document.getElementById('settingFreeShippingMin').value = storeSettings.freeShippingMin ?? 199;
+    document.getElementById('settingDefaultShipping').value = storeSettings.defaultShipping ?? 24;
+    document.getElementById('settingPixDiscount').value = storeSettings.pixDiscount ?? 5;
+    document.getElementById('settingTopBarText').value = storeSettings.topBarText || '';
+    if (document.getElementById('settingPixKey')) {
+        document.getElementById('settingPixKey').value = storeSettings.pixKey || defaultStoreSettings.pixKey;
+    }
+    document.getElementById('settingWhatsapp').value = storeSettings.whatsapp || '';
+    if (document.getElementById('settingSupportEmail')) {
+        document.getElementById('settingSupportEmail').value = storeSettings.supportEmail || defaultStoreSettings.supportEmail;
+    }
 
     document.getElementById('credDevEmail').value = adminCredentials.devEmail;
     document.getElementById('credDevPass').value = adminCredentials.devPass;
@@ -1280,7 +1281,9 @@ function handleSaveStoreSettings(e) {
         defaultShipping: parseFloat(document.getElementById('settingDefaultShipping').value) || 24,
         pixDiscount: parseInt(document.getElementById('settingPixDiscount').value, 10) || 5,
         topBarText: document.getElementById('settingTopBarText').value.trim(),
-        whatsapp: document.getElementById('settingWhatsapp').value.trim()
+        pixKey: document.getElementById('settingPixKey')?.value.trim() || defaultStoreSettings.pixKey,
+        whatsapp: document.getElementById('settingWhatsapp').value.trim(),
+        supportEmail: document.getElementById('settingSupportEmail')?.value.trim() || defaultStoreSettings.supportEmail
     };
     localStorage.setItem('zsx_store_settings', JSON.stringify(storeSettings));
     showAdminToast('Configurações de frete, PIX e avisos salvas!');
