@@ -375,13 +375,13 @@ body {
     position: absolute;
     bottom: 35px;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(95%) translateY(-400%);
 
     display: flex;
     align-items: center;
     justify-content: center;
 
-    background-color: #111111;
+    background-color: #2d090f;
 
     height: 58px;
     width: 175px;
@@ -403,7 +403,7 @@ body {
     width: 42px;
     height: 42px;
     border-radius: 50%;
-    background-color: #e11d2e;
+    background-color: white;
     color: #111111;
     display: flex;
     align-items: center;
@@ -422,22 +422,22 @@ body {
     font-size: 15px;
     font-weight: 700;
     letter-spacing: 0.5px;
-    color: #e11d2e;
+    color: white;
     margin-left: 28px;
     transition: color 0.45s ease, margin 0.45s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* No hover: botão inteiro se transforma em branco, a seta desliza para a direita */
 .newButton:hover {
-    background-color: #e11d2e;
+    background-color: white;
     box-shadow: 0 14px 35px rgba(0, 0, 0, 0.3);
-    transform: translateX(-50%) translateY(-3px);
+    transform: translateX(95%) translateY(-400%);
 }
 
 .newButton:hover .btn-icon {
     left: calc(100% - 50px);
-    background-color: #111111;
-    color: #e11d2e;
+    background-color: #2d090f;
+    color: white;
 }
 
 .newButton:hover .btn-text {
@@ -646,14 +646,14 @@ body {
     width: 100%;
     max-width: 950px;
     height: 100%;
-    background-color: #D3C8BD;
+    background-color: #13080C;
     box-shadow: -15px 0 50px rgba(0, 0, 0, 0.25);
     display: flex;
     flex-direction: column;
     transform: translateX(100%);
     transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
     overflow: hidden;
-    color: #111111;
+    color: white;
 }
 
 .cart-drawer-overlay.active .cart-drawer {
@@ -667,7 +667,7 @@ body {
     align-items: center;
     padding: 24px 36px;
     border-bottom: 2px solid #111111;
-    background-color: #D3C8BD;
+    background-color: #2A090F;
     position: relative;
 }
 
@@ -689,7 +689,7 @@ body {
     font-size: 32px;
     letter-spacing: 1px;
     text-transform: uppercase;
-    color: #111111;
+    color: white;
     margin: 0;
     line-height: 1;
 }
@@ -699,7 +699,7 @@ body {
     border: none;
     font-size: 32px;
     line-height: 1;
-    color: #111111;
+    color: white;
     cursor: pointer;
     padding: 5px;
     transition: transform 0.2s ease, color 0.2s ease;
@@ -755,7 +755,7 @@ body {
     font-size: 17px;
     font-weight: 800;
     text-transform: uppercase;
-    color: #111111;
+    color: white;
     margin: 0 0 6px 0;
     letter-spacing: -0.3px;
 }
@@ -763,7 +763,7 @@ body {
 .cart-item-price {
     font-size: 16px;
     font-weight: 700;
-    color: #111111;
+    color: white;
     margin: 0 0 8px 0;
 }
 
@@ -771,7 +771,7 @@ body {
     font-size: 12px;
     font-weight: 700;
     text-transform: uppercase;
-    color: #D3C8BD;
+    color: #7e0f23;
     letter-spacing: 0.5px;
     margin-bottom: 14px;
 }
@@ -789,7 +789,7 @@ body {
     border: none;
     font-size: 18px;
     font-weight: 700;
-    color: #111111;
+    color: white;
     cursor: pointer;
     width: 26px;
     height: 26px;
@@ -802,6 +802,7 @@ body {
 
 .qty-btn:hover {
     background-color: #f0f0f0;
+    color: #111111;
     transform: scale(1.15);
 }
 
@@ -852,7 +853,7 @@ body {
 .cart-empty-state {
     text-align: center;
     padding: 60px 20px;
-    color: #666666;
+    color: white;
 }
 
 .cart-empty-icon {
@@ -864,7 +865,7 @@ body {
 .cart-empty-state h3 {
     font-size: 20px;
     font-weight: 800;
-    color: #111111;
+    color: white;
     margin-bottom: 8px;
 }
 
@@ -883,7 +884,7 @@ body {
 .order-summary-box {
     border: 2px solid #111111;
     padding: 24px 28px;
-    background-color: #ebe3daf8;
+    background-color: white;
     box-sizing: border-box;
 }
 
@@ -897,6 +898,7 @@ body {
     margin: 0 0 24px 0;
     padding-bottom: 12px;
     border-bottom: 1.5px solid #111111;
+    color: #111111;
 }
 
 .summary-line {
@@ -1019,7 +1021,7 @@ body {
 
 /* Card de Endereço Ativo */
 .active-address-card {
-    background-color: #fff7ef;
+    background-color: #4b272d;
     border: 1px solid #f8efe6;
     border-radius: 6px;
     padding: 12px 14px;
@@ -1036,7 +1038,7 @@ body {
 .address-badge {
     font-size: 12px;
     font-weight: 700;
-    color: #0f172a;
+    color: white;
 }
 
 .address-edit-link {
@@ -1051,7 +1053,7 @@ body {
 
 .address-card-text {
     font-size: 12.5px;
-    color: #475569;
+    color: white;
     line-height: 1.4;
     margin: 0;
 }
@@ -1080,13 +1082,14 @@ body {
 }
 
 .btn-secondary-address {
-    background-color: #f8efe6;
-    color: #111111;
+    background-color: #2A090F;
+    color: white;
     border: 1.5px solid #111111;
 }
 
 .btn-secondary-address:hover {
     background-color: #f4f4f4;
+    color: #111111;
     transform: translateY(-2px);
 }
 
