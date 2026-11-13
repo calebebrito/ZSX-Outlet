@@ -51,7 +51,6 @@
     background:
         radial-gradient(circle at 85% 40%, rgba(225, 29, 46, 0.28) 0%, transparent 60%),
         linear-gradient(135deg, #1d080f 0%, #0e0508 100%);
-    border: 1.5px solid rgba(255, 70, 90, 0.26);
     border-radius: 20px;
     padding: 40px 48px;
     margin-bottom: 34px;
@@ -124,7 +123,6 @@
     border-radius: 30px;
     letter-spacing: 0.5px;
     white-space: nowrap;
-    box-shadow: 0 6px 20px rgba(225, 29, 46, 0.4);
 }
 
 /* Barra de Pílulas de Categorias (Switcher) */
@@ -137,6 +135,7 @@
     display: flex;
     gap: 10px;
     overflow-x: auto;
+    padding-top: 8px;
     padding-bottom: 8px;
     scrollbar-width: thin;
 }
@@ -168,7 +167,6 @@
     background: linear-gradient(135deg, #e11d2e 0%, #b31224 100%);
     border-color: #ff3b4e;
     color: #ffffff;
-    box-shadow: 0 6px 20px rgba(225, 29, 46, 0.4);
 }
 
 .cat-pill-icon {

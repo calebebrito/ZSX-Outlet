@@ -447,7 +447,7 @@ body {
 }
 
 .newButton:active {
-    transform: translateX(-50%) scale(0.97);
+    transform: translateX(95%) translateY(-400%);
 }
 
 /* Seção de Benefícios (Frete Grátis, Suporte 24h, Entrega Brasil) */
@@ -3042,5 +3042,273 @@ body {
     #indexBody .beneficios {
         margin: 70px 4% 20px;
         padding: 40px 6%;
+    }
+}
+
+/* ==========================================================================
+   RODAPÉ PROFISSIONAL & MODAL INSTITUCIONAL - ZSX OUTLET
+   ========================================================================== */
+
+.zsx-footer {
+    position: relative;
+    margin-top: 72px;
+    background:
+        radial-gradient(ellipse 75% 40% at 50% 0%, rgba(225, 29, 46, 0.14) 0%, transparent 70%),
+        linear-gradient(180deg, #0b0407 0%, #070204 100%);
+    border-top: 1px solid rgba(255, 70, 90, 0.22);
+    color: #f7f1f3;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.zsx-footer-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 56px 28px 28px;
+    box-sizing: border-box;
+}
+
+.zsx-footer-grid {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr 1fr 1.25fr;
+    gap: 40px;
+    padding-bottom: 42px;
+    border-bottom: 1px solid rgba(255, 70, 90, 0.14);
+}
+
+.zsx-footer-logo {
+    width: 112px;
+    height: auto;
+    display: block;
+    margin-bottom: 14px;
+}
+
+.zsx-footer-desc {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #b9a4a9;
+    margin: 0 0 20px;
+    max-width: 290px;
+}
+
+.zsx-footer-socials {
+    display: flex;
+    gap: 10px;
+}
+
+.zsx-social-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 70, 90, 0.22);
+    color: #f7f1f3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: background-color 0.25s ease, border-color 0.25s ease, transform 0.25s ease, color 0.25s ease;
+}
+
+.zsx-social-btn:hover {
+    background: linear-gradient(135deg, #b80d1d 0%, #e11d2e 100%);
+    border-color: #ff4d5e;
+    color: #ffffff;
+    transform: translateY(-2px);
+}
+
+.zsx-footer-heading {
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #ffffff;
+    margin: 0 0 18px;
+}
+
+.zsx-footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+}
+
+.zsx-footer-links a,
+.zsx-footer-link-btn {
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: inherit;
+    font-size: 13.5px;
+    color: #b9a4a9;
+    text-decoration: none;
+    text-align: left;
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.2s ease;
+    display: inline-block;
+}
+
+.zsx-footer-links a:hover,
+.zsx-footer-link-btn:hover {
+    color: #ff4d5e;
+    transform: translateX(3px);
+}
+
+.zsx-footer-contact {
+    display: flex;
+    flex-direction: column;
+    gap: 11px;
+    margin-bottom: 18px;
+}
+
+.zsx-footer-contact-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 13.5px;
+    color: #f7f1f3;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.zsx-footer-contact-item svg {
+    color: #ff4d5e;
+    flex-shrink: 0;
+}
+
+.zsx-footer-contact-item:hover {
+    color: #ff4d5e;
+}
+
+.zsx-footer-hours {
+    font-size: 12.5px;
+    color: #b9a4a9;
+}
+
+.zsx-security-seals {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.zsx-seal-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 7px 11px;
+    border-radius: 8px;
+    background: rgba(24, 9, 14, 0.9);
+    border: 1px solid rgba(255, 70, 90, 0.25);
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #f4eaec;
+}
+
+.zsx-seal-badge svg {
+    color: #ff4d5e;
+}
+
+.zsx-footer-payments-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 20px 0;
+    border-bottom: 1px solid rgba(255, 70, 90, 0.14);
+}
+
+.zsx-payments-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: #b9a4a9;
+}
+
+.zsx-payment-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.zsx-pay-pill {
+    padding: 6px 12px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #f7f1f3;
+    letter-spacing: 0.4px;
+}
+
+.zsx-pay-pill.zsx-pay-pix {
+    background: rgba(225, 29, 46, 0.16);
+    border-color: rgba(255, 70, 90, 0.4);
+    color: #ff6b78;
+}
+
+.zsx-footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-top: 22px;
+    font-size: 12.5px;
+    color: #9e8a90;
+}
+
+.zsx-footer-legal-id {
+    color: #8b777d;
+}
+
+/* Modal Institucional */
+.legal-modal-card {
+    max-width: 580px;
+    width: 92%;
+}
+
+.legal-modal-body {
+    font-size: 14px;
+    line-height: 1.65;
+    color: #d6c5ca;
+    max-height: 62vh;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.legal-modal-body h4 {
+    font-size: 15px;
+    font-weight: 800;
+    margin: 16px 0 6px;
+}
+
+.legal-modal-body h4:first-child {
+    margin-top: 0;
+}
+
+.legal-modal-body p {
+    margin: 0 0 10px;
+}
+
+@media (max-width: 960px) {
+    .zsx-footer-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 32px;
+    }
+}
+
+@media (max-width: 600px) {
+    .zsx-footer-grid {
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+
+    .zsx-footer-bottom {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }

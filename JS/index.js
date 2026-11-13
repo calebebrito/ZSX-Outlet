@@ -1156,6 +1156,124 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    // Renderização Dinâmica das Seções da Home conforme produtos adicionados pelo dono
+    (function renderDynamicHomeCatalog() {
+        const topContainer = document.getElementById('dynamicHomeSectionsTop');
+        const bottomContainer = document.getElementById('dynamicHomeSectionsBottom');
+        if (!topContainer && !bottomContainer) return;
+
+        const customProducts = JSON.parse(localStorage.getItem('zsx_custom_products')) || [];
+        const overrides = JSON.parse(localStorage.getItem('zsx_catalog_overrides')) || {};
+        const deletedIds = JSON.parse(localStorage.getItem('zsx_deleted_products')) || [];
+
+        const CATEGORY_META = {
+            polos: { title: 'Camisas Polo', secId: 'secPolos' },
+            casacos: { title: 'Casacos', secId: 'secCasacos' },
+            camisas: { title: 'Camisas', secId: 'secCamisas' },
+            bermudas: { title: 'Bermudas', secId: 'secBermudas' },
+            bones: { title: 'Bonés', secId: 'secBones' },
+            jerseys: { title: 'Camisas de Time', secId: 'secJerseys' },
+            calcados: { title: 'Calçados', secId: 'secCalcados' }
+        };
+
+        const grouped = {};
+        customProducts.forEach(rawProd => {
+            if (!rawProd || !rawProd.id || deletedIds.includes(rawProd.id)) return;
+            const ov = overrides[rawProd.id] || {};
+            const merged = { ...rawProd, ...ov };
+            if (merged.active === false) return;
+
+            const catKey = merged.categoryKey || 'camisas';
+            if (!grouped[catKey]) grouped[catKey] = [];
+            grouped[catKey].push(merged);
+        });
+
+        const buildSectionNodes = (catKey, products) => {
+            const meta = CATEGORY_META[catKey] || {
+                title: products[0]?.category || catKey,
+                secId: `sec-${catKey}`
+            };
+
+            const headerDiv = document.createElement('div');
+            headerDiv.className = 'classe1container';
+            headerDiv.id = meta.secId;
+            headerDiv.innerHTML = `
+                <h2 class="classe1 sans">${meta.title}</h2>
+                <p class="verTudo1 sans" onclick="window.location.href='category.html?cat=${encodeURIComponent(catKey)}'" style="cursor: pointer;" title="Ver todos de ${meta.title}">Ver tudo &gt;</p>
+            `;
+
+            const gradeDiv = document.createElement('div');
+            gradeDiv.className = 'grade reveal';
+
+            products.slice(0, 5).forEach(prod => {
+                const isOut = prod.stock !== undefined && Number(prod.stock) <= 0;
+                const defaultSize = Array.isArray(prod.sizes) && prod.sizes.length > 0 ? prod.sizes[0] : 'M';
+                const card = document.createElement('div');
+                card.className = 'prods';
+                card.dataset.id = prod.id;
+                card.dataset.name = prod.name;
+                card.dataset.price = String(prod.price);
+                card.dataset.image = prod.image;
+                card.dataset.size = defaultSize;
+                card.dataset.color = prod.color || 'Padrão';
+
+                card.innerHTML = `
+                    <img src="${prod.image}" alt="${prod.name}">
+                    <h3 class="prod-nome sans">${prod.name}</h3>
+                    <p class="prod-preco sans">${isOut ? 'ESGOTADO' : formatBRL(prod.price)}</p>
+                    <div class="prod-actions">
+                        <button type="button" class="btn-action btn-buy" title="Comprar" aria-label="Comprar">
+                            <span class="btn-bg"></span>
+                            <svg class="btn-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                            </svg>
+                        </button>
+                        <button type="button" class="btn-action btn-add-cart" title="Adicionar ao Carrinho" aria-label="Adicionar ao Carrinho">
+                            <span class="btn-bg"></span>
+                            <svg class="btn-icon-svg" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="9" cy="21" r="1"></circle>
+                                <circle cx="20" cy="21" r="1"></circle>
+                                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+                                <line x1="12" y1="9" x2="16" y2="9"></line>
+                                <line x1="14" y1="7" x2="14" y2="11"></line>
+                            </svg>
+                        </button>
+                    </div>
+                `;
+                gradeDiv.appendChild(card);
+            });
+
+            return { headerDiv, gradeDiv };
+        };
+
+        Object.keys(grouped).forEach(catKey => {
+            const items = grouped[catKey];
+            if (!items || items.length === 0) return;
+
+            const targetContainer = (catKey === 'polos' && topContainer) ? topContainer : (bottomContainer || topContainer);
+            if (!targetContainer) return;
+
+            const { headerDiv, gradeDiv } = buildSectionNodes(catKey, items);
+            targetContainer.appendChild(headerDiv);
+            targetContainer.appendChild(gradeDiv);
+            observer.observe(gradeDiv);
+        });
+    })();
+
+    // Fallback inteligente nos links do header caso a seção dinâmica ainda não exista na Home
+    document.querySelectorAll('.hero-nav-link[href^="#"]').forEach(link => {
+        link.addEventListener('click', (e) => {
+            const hash = link.getAttribute('href');
+            if (!hash || hash.length <= 1) return;
+            const targetEl = document.querySelector(hash);
+            if (!targetEl) {
+                e.preventDefault();
+                if (hash === '#secPolos') window.location.href = 'category.html?cat=polos';
+                if (hash === '#secCasacos') window.location.href = 'category.html?cat=casacos';
+            }
+        });
+    });
+
     // Sincronizar Cards da Home com Edições do Painel Administrativo
     const adminOverrides = JSON.parse(localStorage.getItem('zsx_catalog_overrides')) || {};
     const adminDeleted = JSON.parse(localStorage.getItem('zsx_deleted_products')) || [];
@@ -1314,4 +1432,83 @@ document.addEventListener('DOMContentLoaded', () => {
             e.target.value = v;
         });
     }
+
+    // Modal Institucional (Políticas & Termos)
+    const closeLegalModalBtn = document.getElementById('closeLegalModalBtn');
+    if (closeLegalModalBtn) closeLegalModalBtn.addEventListener('click', closeLegalModal);
+
+    const legalInfoModal = document.getElementById('legalInfoModal');
+    if (legalInfoModal) {
+        legalInfoModal.addEventListener('click', (e) => {
+            if (e.target === legalInfoModal) closeLegalModal();
+        });
+    }
 });
+
+// ==========================================================================
+// MODAL INSTITUCIONAL (TROCAS, ENVIO, PRIVACIDADE LGPD & TERMOS)
+// ==========================================================================
+
+const LEGAL_CONTENTS = {
+    trocas: {
+        title: 'Trocas e Devoluções',
+        html: `
+            <h4>Direito de Arrependimento (7 dias)</h4>
+            <p>Conforme o Art. 49 do Código de Defesa do Consumidor, você tem até <strong>7 dias corridos</strong> após o recebimento do pedido para solicitar a devolução por arrependimento, sem custos adicionais.</p>
+            <h4>Troca por Tamanho ou Defeito (até 30 dias)</h4>
+            <p>Caso a peça não sirva ou apresente defeito de fabricação, entre em contato pelo nosso WhatsApp de suporte informando o número do pedido. A peça deve estar sem sinais de uso, lavagem e com a etiqueta original intacta.</p>
+            <h4>Reembolso</h4>
+            <p>O estorno é realizado em até 5 dias úteis após o recebimento e conferência da peça em nosso centro de distribuição (via PIX ou estorno no cartão utilizado).</p>
+        `
+    },
+    envio: {
+        title: 'Política de Envio e Prazos',
+        html: `
+            <h4>Despacho Rápido</h4>
+            <p>Pedidos com pagamento aprovado até as 14h (dias úteis) são preparados e despachados em até <strong>1 a 2 dias úteis</strong>.</p>
+            <h4>Frete Grátis</h4>
+            <p>Compras acima de <strong>R$ 199,00</strong> contam com frete grátis automático para todo o Brasil na modalidade padrão.</p>
+            <h4>Rastreamento</h4>
+            <p>Assim que o pedido for postado, você receberá o código de rastreamento via WhatsApp ou e-mail para acompanhar cada etapa até a entrega.</p>
+        `
+    },
+    privacidade: {
+        title: 'Política de Privacidade (LGPD)',
+        html: `
+            <h4>Coleta e Uso de Dados</h4>
+            <p>Em conformidade com a Lei Geral de Proteção de Dados (Lei nº 13.709/2018), seus dados cadastrais (nome, e-mail, telefone e endereço) são utilizados exclusivamente para processar pedidos, emitir entregas e prestar suporte.</p>
+            <h4>Segurança</h4>
+            <p>Não vendemos, alugamos ou compartilhamos seus dados pessoais com terceiros para fins publicitários. Dados de pagamento são processados em ambiente criptografado.</p>
+            <h4>Seus Direitos</h4>
+            <p>Você pode solicitar a atualização ou exclusão dos seus dados a qualquer momento pelo e-mail de suporte oficial da loja.</p>
+        `
+    },
+    termos: {
+        title: 'Termos de Uso',
+        html: `
+            <h4>Aceitação</h4>
+            <p>Ao navegar e realizar pedidos na <strong>ZSX Outlet</strong>, você concorda com as condições descritas neste site.</p>
+            <h4>Preços, Cupons e Estoque</h4>
+            <p>Os preços, promoções e disponibilidade de estoque podem ser atualizados sem aviso prévio. O desconto de 5% no PIX é aplicado automaticamente na etapa de pagamento.</p>
+            <h4>Atendimento</h4>
+            <p>Qualquer dúvida ou solicitação pode ser tratada diretamente pelos nossos canais oficiais de atendimento listados no rodapé e no ícone de suporte.</p>
+        `
+    }
+};
+
+window.openLegalModal = function(type) {
+    const modal = document.getElementById('legalInfoModal');
+    const titleEl = document.getElementById('legalModalTitle');
+    const bodyEl = document.getElementById('legalModalBody');
+    const data = LEGAL_CONTENTS[type];
+    if (!modal || !data) return;
+
+    if (titleEl) titleEl.textContent = data.title;
+    if (bodyEl) bodyEl.innerHTML = data.html;
+    modal.classList.add('active');
+};
+
+window.closeLegalModal = function() {
+    const modal = document.getElementById('legalInfoModal');
+    if (modal) modal.classList.remove('active');
+};

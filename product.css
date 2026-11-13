@@ -3,7 +3,7 @@
    Tema Dark Obsidian & Crimson Red Streetwear
    ========================================================================== */
 
-p {
+* {
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -977,6 +977,11 @@ p {
 
 .btn-related-view:hover {
     filter: brightness(1.15);
+    transform: scale(1.04);
+}
+
+.btn-related-view:active {
+    transform: scale(0.96);
 }
 
 /* ==========================================================================
