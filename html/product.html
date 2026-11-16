@@ -916,15 +916,20 @@
                     <span class="menu-item-arrow">&rarr;</span>
                 </button>
 
-                <!-- Formulário Inline de Identificação do Cliente -->
-                <form id="customerAccountForm" style="display: none; padding: 14px; background: #f8f5f0; border-radius: 12px; margin: 6px 0; border: 1px solid #e5ddd3;">
-                    <div style="display: flex; flex-direction: column; gap: 10px;">
-                        <input type="text" id="custNameInput" placeholder="Seu Nome Completo" required style="padding: 10px 12px; border-radius: 8px; border: 1px solid #d5ccc0; font-size: 13.5px;">
-                        <input type="email" id="custEmailInput" placeholder="Seu E-mail" required style="padding: 10px 12px; border-radius: 8px; border: 1px solid #d5ccc0; font-size: 13.5px;">
-                        <input type="tel" id="custPhoneInput" placeholder="WhatsApp / Telefone (00) 00000-0000" style="padding: 10px 12px; border-radius: 8px; border: 1px solid #d5ccc0; font-size: 13.5px;">
-                        <div style="display: flex; gap: 8px; justify-content: flex-end;">
-                            <button type="button" id="cancelAccountEditBtn" style="padding: 8px 14px; border-radius: 8px; border: 1px solid #ccc; background: #fff; font-size: 12.5px; font-weight: 700; cursor: pointer;">Cancelar</button>
-                            <button type="submit" style="padding: 8px 16px; border-radius: 8px; border: none; background: #111; color: #fff; font-size: 12.5px; font-weight: 700; cursor: pointer;">Salvar Dados</button>
+                <!-- Formulário de Identificação / Login / Cadastro do Cliente -->
+                <form id="customerAccountForm" class="customer-account-form" style="display: none;">
+                    <div class="cust-form-inner">
+                        <div class="cust-form-header">
+                            <span id="custFormTitle" class="cust-form-title">Acessar ou Criar Conta</span>
+                            <span class="cust-form-subtitle">Sincronizado na nuvem com seus pedidos</span>
+                        </div>
+                        <input type="text" id="custNameInput" class="cust-input" placeholder="Seu Nome Completo" required>
+                        <input type="email" id="custEmailInput" class="cust-input" placeholder="Seu E-mail" required>
+                        <input type="password" id="custPassInput" class="cust-input" placeholder="Sua Senha (opcional)" autocomplete="current-password">
+                        <input type="tel" id="custPhoneInput" class="cust-input" placeholder="WhatsApp / Telefone (00) 00000-0000">
+                        <div class="cust-form-actions">
+                            <button type="button" id="cancelAccountEditBtn" class="btn-cust-cancel">Cancelar</button>
+                            <button type="submit" id="submitAccountBtn" class="btn-cust-submit">Entrar / Salvar</button>
                         </div>
                     </div>
                 </form>
@@ -1001,6 +1006,7 @@
     <div id="toastContainer" class="toast-container"></div>
 
     <!-- Scripts compartilhados e específicos do Produto -->
+    <script src="../JS/db.js"></script>
     <script src="../JS/index.js"></script>
     <script src="../JS/product.js"></script>
 </body>

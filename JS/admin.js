@@ -571,11 +571,21 @@ function getMergedCatalog() {
     return merged;
 }
 
-// Salvar Overrides no LocalStorage
+// Salvar Overrides no LocalStorage e sincronizar com Supabase (se configurado)
 function saveCatalogOverrides() {
     localStorage.setItem('zsx_catalog_overrides', JSON.stringify(catalogOverrides));
     localStorage.setItem('zsx_custom_products', JSON.stringify(customProducts));
     localStorage.setItem('zsx_deleted_products', JSON.stringify(deletedProducts));
+
+    if (window.ZSX_DB && window.ZSX_DB.isConfigured()) {
+        const customIds = new Set(customProducts.map(p => p.id));
+        const catalogNow = getMergedCatalog();
+        window.ZSX_DB.upsertProductsBulk(catalogNow, customIds);
+        deletedProducts.forEach(delId => {
+            window.ZSX_DB.markProductDeleted({ id: delId, name: delId });
+        });
+    }
+
     refreshAllViews();
 }
 
@@ -1169,6 +1179,7 @@ window.updateOrderStatus = function(orderId, newStatus) {
     if (newStatus === 'finished') target.statusLabel = 'Entregue com Sucesso';
 
     localStorage.setItem('zsx_orders', JSON.stringify(storeOrders));
+    if (window.ZSX_DB) window.ZSX_DB.updateOrderStatus(orderId, newStatus, target.statusLabel);
     refreshAllViews();
     showAdminToast(`Status do pedido #${orderId} atualizado para "${target.statusLabel}"!`);
 };
@@ -1176,6 +1187,7 @@ window.updateOrderStatus = function(orderId, newStatus) {
 window.deleteAdminOrder = function(orderId) {
     storeOrders = (JSON.parse(localStorage.getItem('zsx_orders')) || []).filter(o => o.id !== orderId);
     localStorage.setItem('zsx_orders', JSON.stringify(storeOrders));
+    if (window.ZSX_DB) window.ZSX_DB.deleteOrder(orderId);
     refreshAllViews();
     showAdminToast(`Pedido #${orderId} removido.`);
 };
@@ -1230,6 +1242,8 @@ function handleCreateCoupon(e) {
     }
 
     localStorage.setItem('zsx_coupons', JSON.stringify(storeCoupons));
+    const savedCoupon = storeCoupons.find(c => c.code === code);
+    if (window.ZSX_DB && savedCoupon) window.ZSX_DB.saveCoupon(savedCoupon);
     e.target.reset();
     refreshAllViews();
     showAdminToast(`Cupom ${code} (${percent}% OFF) ativo na loja!`);
@@ -1240,6 +1254,7 @@ window.toggleCouponStatus = function(code) {
     if (!target) return;
     target.active = !target.active;
     localStorage.setItem('zsx_coupons', JSON.stringify(storeCoupons));
+    if (window.ZSX_DB) window.ZSX_DB.saveCoupon(target);
     refreshAllViews();
     showAdminToast(`Cupom ${code} ${target.active ? 'ativado' : 'pausado'}.`);
 };
@@ -1247,6 +1262,7 @@ window.toggleCouponStatus = function(code) {
 window.deleteCoupon = function(code) {
     storeCoupons = storeCoupons.filter(c => c.code !== code);
     localStorage.setItem('zsx_coupons', JSON.stringify(storeCoupons));
+    if (window.ZSX_DB) window.ZSX_DB.deleteCoupon(code);
     refreshAllViews();
     showAdminToast(`Cupom ${code} excluído.`);
 };
@@ -1286,6 +1302,7 @@ function handleSaveStoreSettings(e) {
         supportEmail: document.getElementById('settingSupportEmail')?.value.trim() || defaultStoreSettings.supportEmail
     };
     localStorage.setItem('zsx_store_settings', JSON.stringify(storeSettings));
+    if (window.ZSX_DB) window.ZSX_DB.saveSettings(storeSettings);
     showAdminToast('Configurações de frete, PIX e avisos salvas!');
 }
 
@@ -1336,6 +1353,20 @@ document.addEventListener('DOMContentLoaded', () => {
     checkAuthSession();
     loadSettingsIntoInputs();
     refreshAllViews();
+
+    if (window.ZSX_DB && window.ZSX_DB.isConfigured()) {
+        window.ZSX_DB.syncFromCloud().then(synced => {
+            if (!synced) return;
+            catalogOverrides = JSON.parse(localStorage.getItem('zsx_catalog_overrides')) || {};
+            customProducts = JSON.parse(localStorage.getItem('zsx_custom_products')) || [];
+            deletedProducts = JSON.parse(localStorage.getItem('zsx_deleted_products')) || [];
+            storeOrders = JSON.parse(localStorage.getItem('zsx_orders')) || [];
+            storeCoupons = JSON.parse(localStorage.getItem('zsx_coupons')) || storeCoupons;
+            storeSettings = JSON.parse(localStorage.getItem('zsx_store_settings')) || storeSettings;
+            loadSettingsIntoInputs();
+            refreshAllViews();
+        });
+    }
 
     document.getElementById('adminLoginForm')?.addEventListener('submit', handleAdminLogin);
 

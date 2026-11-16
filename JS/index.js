@@ -682,7 +682,9 @@ function handleFinishOrder() {
         const prodId = baseIdMatch ? baseIdMatch[1] : cartItem.id;
         if (!catalogOverrides[prodId]) catalogOverrides[prodId] = {};
         const currentStock = catalogOverrides[prodId].stock !== undefined ? Number(catalogOverrides[prodId].stock) : 20;
-        catalogOverrides[prodId].stock = Math.max(0, currentStock - (Number(cartItem.quantity) || 1));
+        const nextStock = Math.max(0, currentStock - (Number(cartItem.quantity) || 1));
+        catalogOverrides[prodId].stock = nextStock;
+        if (window.ZSX_DB) window.ZSX_DB.updateProductStock(prodId, nextStock);
     });
     localStorage.setItem('zsx_catalog_overrides', JSON.stringify(catalogOverrides));
 
@@ -708,6 +710,7 @@ function handleFinishOrder() {
 
     orders.unshift(newOrder);
     localStorage.setItem('zsx_orders', JSON.stringify(orders));
+    if (window.ZSX_DB) window.ZSX_DB.insertOrder(newOrder);
     updateOrderBadges();
 
     if (successModal) successModal.classList.add('active');
@@ -996,6 +999,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const descEl = document.getElementById('menuAccountDesc');
         const logoutBtn = document.getElementById('menuLogoutBtn');
         const adminBtn = document.getElementById('menuAdminPanelBtn');
+        const titleEl = document.getElementById('custFormTitle');
+        const submitBtn = document.getElementById('submitAccountBtn');
 
         // Exibe botão do Painel Admin apenas se houver sessão de administrador ativa
         const adminSession = JSON.parse(sessionStorage.getItem('zsx_admin_session'));
@@ -1008,17 +1013,52 @@ document.addEventListener('DOMContentLoaded', () => {
             if (emailEl) emailEl.textContent = acc.email || acc.phone || '';
             if (badgeEl) badgeEl.textContent = 'ATIVO';
             if (descEl) descEl.textContent = `${acc.name} • Editar informações`;
+            if (titleEl) titleEl.textContent = 'Editar Dados da Conta';
+            if (submitBtn) submitBtn.textContent = 'Salvar Alterações';
             if (logoutBtn) logoutBtn.style.display = 'flex';
         } else {
             if (nameEl) nameEl.textContent = 'Minha Conta ZSX';
-            if (emailEl) emailEl.textContent = 'Cadastre seus dados para agilizar seus pedidos';
+            if (emailEl) emailEl.textContent = 'Entre ou crie sua conta para salvar seus pedidos';
             if (badgeEl) badgeEl.textContent = 'CONTA';
-            if (descEl) descEl.textContent = 'Clique para cadastrar seu nome, e-mail e WhatsApp';
+            if (descEl) descEl.textContent = 'Entrar ou criar conta com e-mail e WhatsApp';
+            if (titleEl) titleEl.textContent = 'Acessar ou Criar Conta';
+            if (submitBtn) submitBtn.textContent = 'Entrar / Cadastrar';
             if (logoutBtn) logoutBtn.style.display = 'none';
         }
     }
 
     refreshCustomerProfileUI();
+
+    // Sincronizar dados do cliente salvos na nuvem (Supabase) ao carregar
+    (function syncLoggedCustomer() {
+        const acc = JSON.parse(localStorage.getItem('zsx_customer_account'));
+        if (!acc || !acc.email || !window.ZSX_DB) return;
+        window.ZSX_DB.getCustomerByEmail(acc.email).then(remote => {
+            if (remote) {
+                acc.name = remote.name || acc.name;
+                acc.phone = remote.phone || acc.phone;
+                acc.id = remote.id || acc.id;
+                localStorage.setItem('zsx_customer_account', JSON.stringify(acc));
+                if (remote.address && (!userAddress || !userAddress.street)) {
+                    userAddress = remote.address;
+                    localStorage.setItem('zsx_address', JSON.stringify(remote.address));
+                }
+                refreshCustomerProfileUI();
+            }
+        });
+        window.ZSX_DB.fetchCustomerOrders(acc.email).then(cloudOrders => {
+            if (Array.isArray(cloudOrders) && cloudOrders.length > 0) {
+                const localOrders = JSON.parse(localStorage.getItem('zsx_orders')) || [];
+                const merged = [...cloudOrders];
+                localOrders.forEach(lo => {
+                    if (!merged.some(mo => mo.id === lo.id)) merged.push(lo);
+                });
+                orders = merged;
+                localStorage.setItem('zsx_orders', JSON.stringify(orders));
+                updateOrderBadges();
+            }
+        });
+    })();
 
     const menuEditAccountBtn = document.getElementById('menuEditAccountBtn');
     const customerAccountForm = document.getElementById('customerAccountForm');
@@ -1027,9 +1067,16 @@ document.addEventListener('DOMContentLoaded', () => {
     if (menuEditAccountBtn && customerAccountForm) {
         menuEditAccountBtn.addEventListener('click', () => {
             const acc = JSON.parse(localStorage.getItem('zsx_customer_account')) || {};
-            document.getElementById('custNameInput').value = acc.name || '';
-            document.getElementById('custEmailInput').value = acc.email || '';
-            document.getElementById('custPhoneInput').value = acc.phone || '';
+            const nameIn = document.getElementById('custNameInput');
+            const emailIn = document.getElementById('custEmailInput');
+            const phoneIn = document.getElementById('custPhoneInput');
+            const passIn = document.getElementById('custPassInput');
+
+            if (nameIn) nameIn.value = acc.name || '';
+            if (emailIn) emailIn.value = acc.email || '';
+            if (phoneIn) phoneIn.value = acc.phone || '';
+            if (passIn) passIn.value = acc.password || '';
+
             customerAccountForm.style.display = customerAccountForm.style.display === 'none' ? 'block' : 'none';
         });
     }
@@ -1041,17 +1088,58 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (customerAccountForm) {
-        customerAccountForm.addEventListener('submit', (e) => {
+        customerAccountForm.addEventListener('submit', async (e) => {
             e.preventDefault();
-            const accData = {
-                name: document.getElementById('custNameInput').value.trim(),
-                email: document.getElementById('custEmailInput').value.trim(),
-                phone: document.getElementById('custPhoneInput').value.trim()
-            };
+            const submitBtn = document.getElementById('submitAccountBtn');
+            const origText = submitBtn ? submitBtn.textContent : 'Salvar';
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Salvando...';
+            }
+
+            const name = document.getElementById('custNameInput').value.trim();
+            const email = document.getElementById('custEmailInput').value.trim().toLowerCase();
+            const phone = document.getElementById('custPhoneInput')?.value.trim() || '';
+            const password = document.getElementById('custPassInput')?.value.trim() || '';
+
+            let accData = { name, email, phone, password };
+
+            // Se conectado ao Supabase, verifica se usuário já existe ou cria/atualiza
+            if (window.ZSX_DB) {
+                try {
+                    const existing = await window.ZSX_DB.getCustomerByEmail(email);
+                    if (existing) {
+                        accData.id = existing.id;
+                        accData.name = name || existing.name;
+                        accData.phone = phone || existing.phone;
+                        if (existing.address && (!userAddress || !userAddress.street)) {
+                            userAddress = existing.address;
+                            localStorage.setItem('zsx_address', JSON.stringify(existing.address));
+                        }
+                    }
+                    accData.address = userAddress || {};
+                    await window.ZSX_DB.saveCustomer(accData);
+
+                    // Sincroniza pedidos anteriores do cliente a partir da nuvem
+                    const cloudOrders = await window.ZSX_DB.fetchCustomerOrders(email);
+                    if (Array.isArray(cloudOrders) && cloudOrders.length > 0) {
+                        orders = cloudOrders;
+                        localStorage.setItem('zsx_orders', JSON.stringify(orders));
+                        updateOrderBadges();
+                    }
+                } catch (err) {
+                    console.warn('[ZSX] Erro ao sincronizar cliente:', err);
+                }
+            }
+
             localStorage.setItem('zsx_customer_account', JSON.stringify(accData));
             customerAccountForm.style.display = 'none';
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = origText;
+            }
             refreshCustomerProfileUI();
-            showToast('Dados da sua conta salvos com sucesso!', 'success');
+            showToast(`Bem-vindo, ${accData.name}! Conta sincronizada com sucesso.`, 'success');
         });
     }
 
@@ -1098,7 +1186,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Sincronizar Contatos de Suporte, WhatsApp e Barra de Topo com as Configurações do Painel Admin
-    (function syncStoreSettingsToUI() {
+    function syncStoreSettingsToUI() {
         const s = getLiveStoreSettings();
         if (s.whatsapp) {
             const cleanDigits = s.whatsapp.replace(/\D/g, '');
@@ -1116,7 +1204,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (valSpan) valSpan.textContent = s.supportEmail;
             });
         }
-    })();
+    }
+    syncStoreSettingsToUI();
+
+    if (window.ZSX_DB && window.ZSX_DB.isConfigured()) {
+        window.ZSX_DB.syncFromCloud().then(synced => {
+            if (!synced) return;
+            orders = JSON.parse(localStorage.getItem('zsx_orders')) || [];
+            updateOrderBadges();
+            syncStoreSettingsToUI();
+        });
+    }
 
     // Ícone de Suporte no Header
     const headerSupportBtn = document.getElementById('headerSupportBtn');
