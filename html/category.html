@@ -719,6 +719,106 @@
         </div>
     </div>
 
+    <!-- OVERLAY DE LOGIN (VIDRO FOSCO OBSIDIAN & CRIMSON - SEM BORDAS) -->
+    <div id="loginModal" class="custom-modal-overlay">
+        <div class="custom-modal-card auth-modal-card">
+            <div class="auth-modal-header">
+                <div class="auth-header-brand">
+                    <img src="../images/zsx.png" alt="ZSX Outlet" class="auth-logo">
+                    <h2 class="auth-title">ENTRAR NA CONTA</h2>
+                    <p class="auth-subtitle">Acesse para acompanhar seus pedidos e cupons exclusivos</p>
+                </div>
+                <button type="button" id="closeLoginModalBtn" class="modal-close-icon" aria-label="Fechar Login">&times;</button>
+            </div>
+
+            <form id="loginForm" class="auth-form">
+                <div class="auth-field-group">
+                    <label for="loginEmail">E-mail</label>
+                    <div class="auth-input-wrapper">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        <input type="email" id="loginEmail" placeholder="seuemail@exemplo.com" required autocomplete="email">
+                    </div>
+                </div>
+
+                <div class="auth-field-group">
+                    <label for="loginPassword">Senha</label>
+                    <div class="auth-input-wrapper">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        <input type="password" id="loginPassword" placeholder="Sua senha de acesso" required autocomplete="current-password">
+                    </div>
+                </div>
+
+                <button type="submit" id="btnLoginSubmit" class="btn-auth-submit">
+                    <span>Entrar</span>
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+
+                <div class="auth-switch-prompt">
+                    <span>Não tem uma conta?</span>
+                    <button type="button" id="btnGoToRegister" class="auth-switch-link">Cadastre-se</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- OVERLAY DE CADASTRO (VIDRO FOSCO OBSIDIAN & CRIMSON - SEM BORDAS) -->
+    <div id="registerModal" class="custom-modal-overlay">
+        <div class="custom-modal-card auth-modal-card">
+            <div class="auth-modal-header">
+                <div class="auth-header-brand">
+                    <img src="../images/zsx.png" alt="ZSX Outlet" class="auth-logo">
+                    <h2 class="auth-title">CRIAR CONTA</h2>
+                    <p class="auth-subtitle">Cadastre-se para frete grátis, 5% OFF no PIX e rastreio em tempo real</p>
+                </div>
+                <button type="button" id="closeRegisterModalBtn" class="modal-close-icon" aria-label="Fechar Cadastro">&times;</button>
+            </div>
+
+            <form id="registerForm" class="auth-form">
+                <div class="auth-field-group">
+                    <label for="registerName">Nome Completo</label>
+                    <div class="auth-input-wrapper">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <input type="text" id="registerName" placeholder="Como quer ser chamado" required autocomplete="name">
+                    </div>
+                </div>
+
+                <div class="auth-field-group">
+                    <label for="registerEmail">E-mail</label>
+                    <div class="auth-input-wrapper">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        <input type="email" id="registerEmail" placeholder="seuemail@exemplo.com" required autocomplete="email">
+                    </div>
+                </div>
+
+                <div class="auth-field-group">
+                    <label for="registerPhone">WhatsApp / Telefone</label>
+                    <div class="auth-input-wrapper">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        <input type="tel" id="registerPhone" placeholder="(00) 00000-0000" autocomplete="tel">
+                    </div>
+                </div>
+
+                <div class="auth-field-group">
+                    <label for="registerPassword">Senha</label>
+                    <div class="auth-input-wrapper">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        <input type="password" id="registerPassword" placeholder="Crie uma senha (mínimo 6 caracteres)" minlength="6" required autocomplete="new-password">
+                    </div>
+                </div>
+
+                <button type="submit" id="btnRegisterSubmit" class="btn-auth-submit">
+                    <span>Criar Minha Conta</span>
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+                </button>
+
+                <div class="auth-switch-prompt">
+                    <span>Já possui uma conta?</span>
+                    <button type="button" id="btnGoToLogin" class="auth-switch-link">Fazer Login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- MODAL DE MINHAS COMPRAS COM ABAS E BOLINHAS VERMELHAS -->
     <div id="ordersModal" class="custom-modal-overlay">
         <div class="custom-modal-card orders-modal-card">

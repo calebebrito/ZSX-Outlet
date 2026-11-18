@@ -10,17 +10,91 @@ const ZSX_SUPABASE_CONFIG = {
 };
 
 const ZSX_DB = (function() {
+    function sha256Ascii(ascii) {
+        function rightRotate(value, amount) { return (value >>> amount) | (value << (32 - amount)); }
+        const mathPow = Math.pow, maxWord = mathPow(2, 32), lengthProperty = 'length';
+        let i, j, result = '';
+        const words = [], asciiBitLength = ascii[lengthProperty] * 8;
+        let hash = [], k = [];
+        let primeCounter = 0;
+        const isComposite = {};
+        for (let candidate = 2; primeCounter < 64; candidate++) {
+            if (!isComposite[candidate]) {
+                for (i = 0; i < 313; i += candidate) isComposite[i] = candidate;
+                hash[primeCounter] = (mathPow(candidate, 0.5) * maxWord) | 0;
+                k[primeCounter++] = (mathPow(candidate, 1 / 3) * maxWord) | 0;
+            }
+        }
+        ascii += '\x80';
+        while (ascii[lengthProperty] % 64 - 56) ascii += '\x00';
+        for (i = 0; i < ascii[lengthProperty]; i++) {
+            j = ascii.charCodeAt(i);
+            words[i >> 2] |= j << ((3 - i) % 4) * 8;
+        }
+        words[words[lengthProperty]] = ((asciiBitLength / maxWord) | 0);
+        words[words[lengthProperty]] = (asciiBitLength);
+        for (j = 0; j < words[lengthProperty];) {
+            const w = words.slice(j, j += 16), oldHash = hash;
+            hash = hash.slice(0, 8);
+            for (i = 0; i < 64; i++) {
+                const w15 = w[i - 15], w2 = w[i - 2];
+                const a = hash[0], e = hash[4];
+                const temp1 = hash[7] + (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25)) + ((e & hash[5]) ^ ((~e) & hash[6])) + k[i] + (w[i] = (i < 16) ? w[i] : (w[i - 16] + (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15 >>> 3)) + w[i - 7] + (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2 >>> 10))) | 0);
+                const temp2 = (rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22)) + ((a & hash[1]) ^ (a & hash[2]) ^ (hash[1] & hash[2]));
+                hash = [(temp1 + temp2) | 0].concat(hash);
+                hash[4] = (hash[4] + temp1) | 0;
+            }
+            for (i = 0; i < 8; i++) hash[i] = (hash[i] + oldHash[i]) | 0;
+        }
+        for (i = 0; i < 8; i++) {
+            for (j = 3; j + 1; j--) {
+                const b = (hash[i] >> (j * 8)) & 255;
+                result += ((b < 16) ? 0 : '') + b.toString(16);
+            }
+        }
+        return result;
+    }
+
+    function sha256(str) {
+        return sha256Ascii(unescape(encodeURIComponent(String(str || ''))));
+    }
+
+    function hashAdminPassword(rawPass) {
+        return sha256('zsx-admin-v2-salt:' + String(rawPass || '').trim());
+    }
+
+    function hashCustomerPassword(rawPass) {
+        const clean = String(rawPass || '').trim();
+        if (/^[a-f0-9]{64}$/i.test(clean)) return clean.toLowerCase();
+        return sha256('zsx-cust-v1-salt:' + clean);
+    }
+
     function isConfigured() {
         return Boolean(ZSX_SUPABASE_CONFIG.url && ZSX_SUPABASE_CONFIG.anonKey);
     }
 
     function getHeaders(extra = {}) {
-        return {
+        let authBearer = ZSX_SUPABASE_CONFIG.anonKey;
+        let adminHash = '';
+        try {
+            const adminJwt = sessionStorage.getItem('zsx_admin_jwt');
+            if (adminJwt) authBearer = adminJwt;
+            const adminSession = JSON.parse(sessionStorage.getItem('zsx_admin_session') || 'null');
+            if (adminSession && adminSession.tokenHash) {
+                adminHash = adminSession.tokenHash;
+            }
+        } catch (e) {}
+
+        const headers = {
             'apikey': ZSX_SUPABASE_CONFIG.anonKey,
-            'Authorization': `Bearer ${ZSX_SUPABASE_CONFIG.anonKey}`,
+            'Authorization': `Bearer ${authBearer}`,
             'Content-Type': 'application/json',
             ...extra
         };
+        if (adminHash) {
+            headers['x-zsx-admin-hash'] = adminHash;
+        }
+        return headers;
     }
 
     async function request(path, options = {}) {
@@ -217,17 +291,25 @@ const ZSX_DB = (function() {
 
     async function updateProductStock(prodId, newStock) {
         if (!isConfigured() || !prodId) return;
+        const cleanStock = Math.max(0, Number(newStock) || 0);
         try {
-            await request(`zsx_products?id=eq.${encodeURIComponent(prodId)}`, {
-                method: 'PATCH',
-                headers: { 'Prefer': 'return=minimal' },
-                body: JSON.stringify({
-                    stock: Math.max(0, Number(newStock) || 0),
-                    updated_at: new Date().toISOString()
-                })
+            await request('rpc/sync_product_stock', {
+                method: 'POST',
+                body: JSON.stringify({ p_id: prodId, p_stock: cleanStock })
             });
-        } catch (err) {
-            console.warn('[ZSX_DB] Erro ao atualizar estoque:', err.message);
+        } catch (rpcErr) {
+            try {
+                await request(`zsx_products?id=eq.${encodeURIComponent(prodId)}`, {
+                    method: 'PATCH',
+                    headers: { 'Prefer': 'return=minimal' },
+                    body: JSON.stringify({
+                        stock: cleanStock,
+                        updated_at: new Date().toISOString()
+                    })
+                });
+            } catch (err) {
+                console.warn('[ZSX_DB] Erro ao atualizar estoque:', err.message);
+            }
         }
     }
 
@@ -331,6 +413,96 @@ const ZSX_DB = (function() {
     }
 
     // ==========================================================================
+    // AUTENTICAÇÃO ADMINISTRATIVA BLINDADA (SUPABASE AUTH + RPC SHA-256)
+    // ==========================================================================
+
+    async function verifyAdminLogin(identifier, rawPassword) {
+        const cleanId = String(identifier || '').trim().toLowerCase();
+        const passHash = hashAdminPassword(rawPassword);
+
+        if (!isConfigured()) {
+            return { ok: false, passHash, reason: 'offline' };
+        }
+
+        const baseUrl = ZSX_SUPABASE_CONFIG.url.replace(/\/+$/, '');
+
+        // 1. Tenta autenticar via Supabase Auth oficial (caso o admin esteja registrado em Authentication -> Users)
+        if (cleanId.includes('@')) {
+            try {
+                const authRes = await fetch(`${baseUrl}/auth/v1/token?grant_type=password`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': ZSX_SUPABASE_CONFIG.anonKey,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email: cleanId, password: String(rawPassword || '').trim() })
+                });
+                if (authRes.ok) {
+                    const authData = await authRes.json();
+                    if (authData && authData.access_token) {
+                        sessionStorage.setItem('zsx_admin_jwt', authData.access_token);
+                        return {
+                            ok: true,
+                            role: cleanId.startsWith('dono') || cleanId.startsWith('prop') ? 'owner' : 'dev',
+                            email: cleanId,
+                            passHash,
+                            jwt: authData.access_token
+                        };
+                    }
+                }
+            } catch (authErr) {
+                console.warn('[ZSX_DB] Supabase Auth fallback:', authErr.message);
+            }
+        }
+
+        // 2. Valida no cofre criptografado zsx_admin_secrets via RPC no servidor
+        try {
+            const rpcRes = await request('rpc/verify_zsx_admin_login', {
+                method: 'POST',
+                body: JSON.stringify({
+                    p_identifier: cleanId,
+                    p_pass_hash: passHash
+                })
+            });
+            if (rpcRes && rpcRes.authenticated) {
+                return {
+                    ok: true,
+                    role: rpcRes.role || 'dev',
+                    email: rpcRes.email || cleanId,
+                    passHash
+                };
+            }
+            if (rpcRes && rpcRes.authenticated === false) {
+                return { ok: false, passHash, reason: 'invalid_credentials' };
+            }
+        } catch (rpcErr) {
+            console.warn('[ZSX_DB] RPC verify_zsx_admin_login indisponível (usando verificação SHA-256 local):', rpcErr.message);
+        }
+
+        return { ok: false, passHash, reason: 'rpc_unavailable' };
+    }
+
+    async function updateAdminCredentials(callerHash, devEmail, devHash, ownerEmail, ownerHash) {
+        if (!isConfigured()) return false;
+        try {
+            await request('rpc/update_zsx_admin_credentials', {
+                method: 'POST',
+                body: JSON.stringify({
+                    p_caller_hash: callerHash || '',
+                    p_dev_email: devEmail || '',
+                    p_dev_hash: devHash || '',
+                    p_owner_email: ownerEmail || '',
+                    p_owner_hash: ownerHash || ''
+                })
+            });
+            return true;
+        } catch (err) {
+            console.warn('[ZSX_DB] Erro ao atualizar credenciais no cofre Supabase:', err.message);
+            return false;
+        }
+    }
+
+    // ==========================================================================
     // GESTÃO DE CLIENTES / CONTAS DE USUÁRIOS
     // ==========================================================================
 
@@ -338,12 +510,13 @@ const ZSX_DB = (function() {
         if (!isConfigured() || !cust || !cust.email) return cust;
         const cleanEmail = cust.email.trim().toLowerCase();
         const custId = cust.id || `cust-${Date.now()}`;
+        const hashedPass = cust.password ? hashCustomerPassword(cust.password) : '';
         const payload = {
             id: custId,
             name: cust.name || 'Cliente ZSX',
             email: cleanEmail,
             phone: cust.phone || '',
-            password: cust.password || '',
+            password: hashedPass,
             address: cust.address || (JSON.parse(localStorage.getItem('zsx_address')) || {}),
             updated_at: new Date().toISOString()
         };
@@ -404,6 +577,11 @@ const ZSX_DB = (function() {
 
     return {
         isConfigured,
+        sha256,
+        hashAdminPassword,
+        hashCustomerPassword,
+        verifyAdminLogin,
+        updateAdminCredentials,
         syncFromCloud,
         upsertProduct,
         upsertProductsBulk,

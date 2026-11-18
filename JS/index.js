@@ -728,10 +728,12 @@ function closeSuccessModal() {
 }
 
 // ==========================================================================
-// MODAL DE PERFIL (OVERLAY DE OPÇÕES)
+// MODAL DE PERFIL, LOGIN E CADASTRO (OVERLAYS)
 // ==========================================================================
 
 function openProfileModal() {
+    closeLoginModal();
+    closeRegisterModal();
     const modal = document.getElementById('profileModal');
     if (modal) modal.classList.add('active');
     document.body.style.overflow = 'hidden';
@@ -740,8 +742,46 @@ function openProfileModal() {
 function closeProfileModal() {
     const modal = document.getElementById('profileModal');
     if (modal) modal.classList.remove('active');
-    document.body.style.overflow = '';
+    const hasOtherActive = document.querySelector('.custom-modal-overlay.active, .cart-drawer-overlay.active');
+    if (!hasOtherActive) document.body.style.overflow = '';
 }
+
+function openLoginModal() {
+    closeRegisterModal();
+    closeProfileModal();
+    const modal = document.getElementById('loginModal');
+    if (modal) modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeLoginModal() {
+    const modal = document.getElementById('loginModal');
+    if (modal) modal.classList.remove('active');
+    const hasOtherActive = document.querySelector('.custom-modal-overlay.active, .cart-drawer-overlay.active');
+    if (!hasOtherActive) document.body.style.overflow = '';
+}
+
+function openRegisterModal() {
+    closeLoginModal();
+    closeProfileModal();
+    const modal = document.getElementById('registerModal');
+    if (modal) modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeRegisterModal() {
+    const modal = document.getElementById('registerModal');
+    if (modal) modal.classList.remove('active');
+    const hasOtherActive = document.querySelector('.custom-modal-overlay.active, .cart-drawer-overlay.active');
+    if (!hasOtherActive) document.body.style.overflow = '';
+}
+
+window.openProfileModal = openProfileModal;
+window.closeProfileModal = closeProfileModal;
+window.openLoginModal = openLoginModal;
+window.closeLoginModal = closeLoginModal;
+window.openRegisterModal = openRegisterModal;
+window.closeRegisterModal = closeRegisterModal;
 
 // ==========================================================================
 // MODAL DE MINHAS COMPRAS (ABAS & BOLINHAS VERMELHAS)
@@ -935,10 +975,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Ícone de Perfil no Header -> Abrir Overlay de Perfil
+    // Ícone de Perfil no Header -> Abrir Login (se não autenticado) ou Perfil (se autenticado)
     const headerProfileBtn = document.getElementById('headerProfileBtn');
     if (headerProfileBtn) {
-        headerProfileBtn.addEventListener('click', openProfileModal);
+        headerProfileBtn.addEventListener('click', () => {
+            const acc = JSON.parse(localStorage.getItem('zsx_customer_account'));
+            if (!acc || !acc.email) {
+                openLoginModal();
+            } else {
+                openProfileModal();
+            }
+        });
     }
 
     // Fechar Modal de Perfil
@@ -949,6 +996,250 @@ document.addEventListener('DOMContentLoaded', () => {
     if (profileModal) {
         profileModal.addEventListener('click', (e) => {
             if (e.target === profileModal) closeProfileModal();
+        });
+    }
+
+    // ==========================================================================
+    // CONTROLES DOS OVERLAYS DE LOGIN & CADASTRO (FROSTED GLASS)
+    // ==========================================================================
+
+    // Botões de Fechar
+    const closeLoginModalBtn = document.getElementById('closeLoginModalBtn');
+    if (closeLoginModalBtn) closeLoginModalBtn.addEventListener('click', closeLoginModal);
+
+    const closeRegisterModalBtn = document.getElementById('closeRegisterModalBtn');
+    if (closeRegisterModalBtn) closeRegisterModalBtn.addEventListener('click', closeRegisterModal);
+
+    // Fechar ao clicar fora (backdrop)
+    const loginModal = document.getElementById('loginModal');
+    if (loginModal) {
+        loginModal.addEventListener('click', (e) => {
+            if (e.target === loginModal) closeLoginModal();
+        });
+    }
+
+    const registerModal = document.getElementById('registerModal');
+    if (registerModal) {
+        registerModal.addEventListener('click', (e) => {
+            if (e.target === registerModal) closeRegisterModal();
+        });
+    }
+
+    // Alternar entre Login e Cadastro
+    const btnGoToRegister = document.getElementById('btnGoToRegister');
+    if (btnGoToRegister) {
+        btnGoToRegister.addEventListener('click', (e) => {
+            e.preventDefault();
+            openRegisterModal();
+        });
+    }
+
+    const btnGoToLogin = document.getElementById('btnGoToLogin');
+    if (btnGoToLogin) {
+        btnGoToLogin.addEventListener('click', (e) => {
+            e.preventDefault();
+            openLoginModal();
+        });
+    }
+
+    // Submissão do Formulário de Login
+    const loginForm = document.getElementById('loginForm');
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnLoginSubmit');
+            const origContent = btn ? btn.innerHTML : 'Entrar';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<span>Verificando...</span>';
+            }
+
+            const email = (document.getElementById('loginEmail')?.value || '').trim().toLowerCase();
+            const password = (document.getElementById('loginPassword')?.value || '').trim();
+
+            if (!email || !password) {
+                showToast('Informe seu e-mail e senha de acesso.', 'error');
+                if (btn) { btn.disabled = false; btn.innerHTML = origContent; }
+                return;
+            }
+
+            try {
+                let user = null;
+                if (window.ZSX_DB) {
+                    try {
+                        user = await window.ZSX_DB.getCustomerByEmail(email);
+                    } catch (dbErr) {
+                        console.warn('[ZSX Login DB]', dbErr);
+                    }
+                }
+
+                if (!user) {
+                    const localUsers = JSON.parse(localStorage.getItem('zsx_registered_customers')) || [];
+                    user = localUsers.find(u => u.email && u.email.toLowerCase() === email) || null;
+                }
+
+                if (!user) {
+                    showToast('Conta não encontrada. Verifique o e-mail ou cadastre-se.', 'error');
+                    if (btn) { btn.disabled = false; btn.innerHTML = origContent; }
+                    return;
+                }
+
+                const hashedInputPass = window.ZSX_DB?.hashCustomerPassword
+                    ? window.ZSX_DB.hashCustomerPassword(password)
+                    : password;
+
+                if (!user.password || (user.password !== hashedInputPass && user.password !== password)) {
+                    showToast('Senha incorreta para este e-mail.', 'error');
+                    if (btn) { btn.disabled = false; btn.innerHTML = origContent; }
+                    return;
+                }
+
+                const accData = {
+                    id: user.id,
+                    name: user.name || email.split('@')[0],
+                    email: user.email,
+                    phone: user.phone || '',
+                    password: hashedInputPass
+                };
+                localStorage.setItem('zsx_customer_account', JSON.stringify(accData));
+
+                if (user.address && (!userAddress || !userAddress.street)) {
+                    userAddress = user.address;
+                    localStorage.setItem('zsx_address', JSON.stringify(user.address));
+                }
+
+                // Sincronizar pedidos do cliente
+                if (window.ZSX_DB) {
+                    try {
+                        const cloudOrders = await window.ZSX_DB.fetchCustomerOrders(email);
+                        if (Array.isArray(cloudOrders) && cloudOrders.length > 0) {
+                            const localOrders = JSON.parse(localStorage.getItem('zsx_orders')) || [];
+                            const merged = [...cloudOrders];
+                            localOrders.forEach(lo => {
+                                if (!merged.some(mo => mo.id === lo.id)) merged.push(lo);
+                            });
+                            orders = merged;
+                            localStorage.setItem('zsx_orders', JSON.stringify(orders));
+                            updateOrderBadges();
+                        }
+                    } catch (orderErr) {
+                        console.warn('[ZSX Login Orders Sync]', orderErr);
+                    }
+                }
+
+                closeLoginModal();
+                loginForm.reset();
+                refreshCustomerProfileUI();
+                const currentAcc = JSON.parse(localStorage.getItem('zsx_customer_account'));
+                showToast(`Bem-vindo de volta, ${currentAcc?.name || 'Cliente'}!`, 'success');
+            } catch (err) {
+                console.error('[ZSX Login Error]', err);
+                showToast('Falha ao autenticar. Tente novamente.', 'error');
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = origContent;
+                }
+            }
+        });
+    }
+
+    // Submissão do Formulário de Cadastro
+    const registerForm = document.getElementById('registerForm');
+    if (registerForm) {
+        registerForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('btnRegisterSubmit');
+            const origContent = btn ? btn.innerHTML : 'Criar Minha Conta';
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<span>Criando conta...</span>';
+            }
+
+            const name = (document.getElementById('registerName')?.value || '').trim();
+            const email = (document.getElementById('registerEmail')?.value || '').trim().toLowerCase();
+            const phone = (document.getElementById('registerPhone')?.value || '').trim();
+            const password = (document.getElementById('registerPassword')?.value || '').trim();
+
+            if (!name || !email) {
+                showToast('Informe seu nome e e-mail.', 'error');
+                if (btn) { btn.disabled = false; btn.innerHTML = origContent; }
+                return;
+            }
+
+            if (password.length < 6) {
+                showToast('A senha deve ter no mínimo 6 caracteres.', 'error');
+                if (btn) { btn.disabled = false; btn.innerHTML = origContent; }
+                return;
+            }
+
+            try {
+                let existing = null;
+                if (window.ZSX_DB) {
+                    try {
+                        existing = await window.ZSX_DB.getCustomerByEmail(email);
+                    } catch (checkErr) {
+                        console.warn('[ZSX Check Existing]', checkErr);
+                    }
+                }
+                if (!existing) {
+                    const localUsers = JSON.parse(localStorage.getItem('zsx_registered_customers')) || [];
+                    existing = localUsers.find(u => u.email && u.email.toLowerCase() === email) || null;
+                }
+
+                if (existing) {
+                    showToast('Este e-mail já possui cadastro. Faça login!', 'info');
+                    closeRegisterModal();
+                    openLoginModal();
+                    const loginEmailInput = document.getElementById('loginEmail');
+                    if (loginEmailInput) loginEmailInput.value = email;
+                    if (btn) { btn.disabled = false; btn.innerHTML = origContent; }
+                    return;
+                }
+
+                const hashedRegPass = window.ZSX_DB?.hashCustomerPassword
+                    ? window.ZSX_DB.hashCustomerPassword(password)
+                    : password;
+
+                const accData = {
+                    name,
+                    email,
+                    phone,
+                    password: hashedRegPass,
+                    address: userAddress || {}
+                };
+
+                if (window.ZSX_DB) {
+                    try {
+                        const saved = await window.ZSX_DB.saveCustomer(accData);
+                        if (saved && saved.id) accData.id = saved.id;
+                    } catch (saveErr) {
+                        console.warn('[ZSX Save New Customer]', saveErr);
+                    }
+                }
+
+                const localUsers = JSON.parse(localStorage.getItem('zsx_registered_customers')) || [];
+                const idx = localUsers.findIndex(u => u.email && u.email.toLowerCase() === email);
+                if (idx >= 0) {
+                    localUsers[idx] = accData;
+                } else {
+                    localUsers.push(accData);
+                }
+                localStorage.setItem('zsx_registered_customers', JSON.stringify(localUsers));
+                localStorage.setItem('zsx_customer_account', JSON.stringify(accData));
+                closeRegisterModal();
+                registerForm.reset();
+                refreshCustomerProfileUI();
+                showToast(`Conta criada com sucesso! Bem-vindo, ${name}!`, 'success');
+            } catch (err) {
+                console.error('[ZSX Register Error]', err);
+                showToast('Erro ao criar conta. Tente novamente.', 'error');
+            } finally {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.innerHTML = origContent;
+                }
+            }
         });
     }
 
@@ -1067,6 +1358,11 @@ document.addEventListener('DOMContentLoaded', () => {
     if (menuEditAccountBtn && customerAccountForm) {
         menuEditAccountBtn.addEventListener('click', () => {
             const acc = JSON.parse(localStorage.getItem('zsx_customer_account')) || {};
+            if (!acc || !acc.email) {
+                closeProfileModal();
+                openLoginModal();
+                return;
+            }
             const nameIn = document.getElementById('custNameInput');
             const emailIn = document.getElementById('custEmailInput');
             const phoneIn = document.getElementById('custPhoneInput');

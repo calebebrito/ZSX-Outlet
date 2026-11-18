@@ -1128,6 +1128,21 @@
 }
 
 @media (max-width: 680px) {
+    .pdp-page-container {
+        padding-top: 82px;
+    }
+
+    .pdp-breadcrumb-container {
+        padding: 12px 16px 8px;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .pdp-main-section {
+        padding: 10px 16px 40px;
+        gap: 24px;
+    }
+
     .pdp-gallery-column {
         flex-direction: column-reverse;
     }
@@ -1136,21 +1151,28 @@
         flex-direction: row;
         width: 100%;
         overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
     }
 
     .pdp-thumb-item {
-        width: 70px;
-        height: 84px;
+        width: 68px;
+        height: 80px;
         flex-shrink: 0;
     }
 
     .pdp-hero-container {
-        height: 420px;
+        height: 350px;
         width: 100%;
+        border-radius: 18px;
     }
 
     .pdp-product-title {
-        font-size: 28px;
+        font-size: 24px;
+        line-height: 1.2;
+    }
+
+    .pdp-price-current {
+        font-size: 26px;
     }
 
     .pdp-quick-perks {
@@ -1168,6 +1190,46 @@
 
     .btn-pdp-add-cart {
         width: 100%;
+    }
+
+    .pdp-shipping-input-row {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .pdp-shipping-input-row button {
+        width: 100%;
+    }
+
+    .pdp-tabs-section,
+    .pdp-related-section {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .pdp-tabs-nav {
+        overflow-x: auto;
+        white-space: nowrap;
+        gap: 14px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .pdp-related-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+
+    .pdp-modal-card {
+        width: 94%;
+        padding: 20px 16px;
+        max-height: 90dvh;
+        overflow-y: auto;
+    }
+}
+
+@media (max-width: 380px) {
+    .pdp-hero-container {
+        height: 290px;
     }
 
     .pdp-related-grid {

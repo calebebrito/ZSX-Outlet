@@ -1392,9 +1392,98 @@ body.admin-body {
     .admin-layout {
         grid-template-columns: 1fr;
     }
+
     .admin-sidebar {
         height: auto;
         position: relative;
+        padding: 16px;
+        gap: 14px;
+    }
+
+    .sidebar-nav {
+        display: flex;
+        flex-direction: row;
+        overflow-x: auto;
+        gap: 8px;
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .sidebar-nav-btn {
+        white-space: nowrap;
+        flex-shrink: 0;
+        padding: 10px 14px;
+    }
+
+    .admin-main {
+        padding: 18px 14px 40px;
+    }
+
+    .admin-topbar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+    }
+
+    .admin-topbar-actions {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .admin-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .admin-table-wrap {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .order-admin-card {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+    }
+
+    .order-admin-right {
+        width: 100%;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .admin-form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-modal-card {
+        width: 95%;
+        padding: 22px 16px;
+        max-height: 92dvh;
+        overflow-y: auto;
+    }
+
+    .admin-auth-card {
+        width: 92%;
+        padding: 28px 20px;
+    }
+}
+
+@media (max-width: 540px) {
+    .kpi-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .coupons-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-topbar-actions .btn-primary-admin,
+    .admin-topbar-actions .btn-secondary-admin {
+        width: 100%;
+        justify-content: center;
     }
 }
 

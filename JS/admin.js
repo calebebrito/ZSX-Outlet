@@ -450,15 +450,30 @@ const CATEGORY_LABELS = {
     'polos': 'Camisas Polo'
 };
 
-// Credenciais Padrão (Você e o Dono da Loja)
+// Credenciais Padrão Criptografadas (Apenas Hashes SHA-256 com Salt — Zero Senha em Texto Puro)
 const defaultCredentials = {
     devEmail: 'dev@zsxoutlet.com.br',
-    devPass: 'zsx2026',
+    devPassHash: '16e568bbd90d78bee802eccc6e86ef8738c6b9bf83b417bd307faa6d978dd36a',
     devName: 'Você (Desenvolvedor Master)',
     ownerEmail: 'dono@zsxoutlet.com.br',
-    ownerPass: 'owner2026',
+    ownerPassHash: '30a7fa3c2521dea579db7d341621c8de90bb2307fa29a1d24706c01ca71a8be0',
     ownerName: 'Proprietário ZSX Outlet'
 };
+
+function hashAdminSecret(rawPass) {
+    if (window.ZSX_DB && typeof window.ZSX_DB.hashAdminPassword === 'function') {
+        return window.ZSX_DB.hashAdminPassword(rawPass);
+    }
+    return String(rawPass || '').trim();
+}
+
+function computeSessionSignature(role, tokenHash, issuedAt) {
+    const payload = `zsx-session-sig:${role}:${tokenHash}:${issuedAt}`;
+    if (window.ZSX_DB && typeof window.ZSX_DB.sha256 === 'function') {
+        return window.ZSX_DB.sha256(payload);
+    }
+    return payload;
+}
 
 // Cupons Padrão
 const defaultCoupons = [
@@ -478,8 +493,24 @@ const defaultStoreSettings = {
     supportEmail: 'sac@zsxoutlet.com.br'
 };
 
-// Estado em Memória
-let adminCredentials = JSON.parse(localStorage.getItem('zsx_admin_credentials')) || defaultCredentials;
+// Estado em Memória (Migra e remove qualquer senha antiga em texto puro do localStorage)
+let adminCredentials = (function loadSafeAdminCredentials() {
+    const raw = JSON.parse(localStorage.getItem('zsx_admin_credentials') || 'null');
+    if (!raw) return { ...defaultCredentials };
+    const migrated = {
+        devEmail: raw.devEmail || defaultCredentials.devEmail,
+        devPassHash: raw.devPassHash || (raw.devPass ? hashAdminSecret(raw.devPass) : defaultCredentials.devPassHash),
+        devName: raw.devName || defaultCredentials.devName,
+        ownerEmail: raw.ownerEmail || defaultCredentials.ownerEmail,
+        ownerPassHash: raw.ownerPassHash || (raw.ownerPass ? hashAdminSecret(raw.ownerPass) : defaultCredentials.ownerPassHash),
+        ownerName: raw.ownerName || defaultCredentials.ownerName
+    };
+    if (raw.devPass || raw.ownerPass) {
+        localStorage.setItem('zsx_admin_credentials', JSON.stringify(migrated));
+    }
+    return migrated;
+})();
+
 let catalogOverrides = JSON.parse(localStorage.getItem('zsx_catalog_overrides')) || {};
 let customProducts = JSON.parse(localStorage.getItem('zsx_custom_products')) || [];
 let deletedProducts = JSON.parse(localStorage.getItem('zsx_deleted_products')) || [];
@@ -528,7 +559,7 @@ function computePricingMeta(price, originalPrice) {
 function getMergedCatalog() {
     const merged = [];
 
-    baseStoreProducts.forEach((prod, index) => {
+    baseStoreProducts.forEach((prod) => {
         if (deletedProducts.includes(prod.id)) return;
         const ov = catalogOverrides[prod.id] || {};
         const defaultStock = 20;
@@ -573,6 +604,7 @@ function getMergedCatalog() {
 
 // Salvar Overrides no LocalStorage e sincronizar com Supabase (se configurado)
 function saveCatalogOverrides() {
+    if (!assertAdminAuth()) return;
     localStorage.setItem('zsx_catalog_overrides', JSON.stringify(catalogOverrides));
     localStorage.setItem('zsx_custom_products', JSON.stringify(customProducts));
     localStorage.setItem('zsx_deleted_products', JSON.stringify(deletedProducts));
@@ -608,51 +640,157 @@ function showAdminToast(message) {
 }
 
 // ==========================================================================
-// AUTENTICAÇÃO EXCLUSIVA (VOCÊ & DONO DA LOJA)
+// AUTENTICAÇÃO BLINDADA (SHA-256 + SUPABASE AUTH/RPC + ANTI-DEVTOOLS + RATE LIMIT)
 // ==========================================================================
 
-function checkAuthSession() {
-    const session = JSON.parse(sessionStorage.getItem('zsx_admin_session'));
-    const overlay = document.getElementById('adminAuthOverlay');
-    if (session && session.authenticated) {
-        if (overlay) overlay.classList.add('hidden');
-        document.getElementById('activeAdminRole').textContent = session.roleLabel;
-        document.getElementById('activeAdminName').textContent = session.name;
-    } else {
-        if (overlay) overlay.classList.remove('hidden');
+const ADMIN_SESSION_TTL_MS = 2 * 60 * 60 * 1000; // 2 horas
+const MAX_LOGIN_ATTEMPTS = 5;
+const LOCKOUT_DURATION_MS = 60 * 1000; // 60 segundos
+
+function isAdminAuthenticated() {
+    try {
+        const session = JSON.parse(sessionStorage.getItem('zsx_admin_session') || 'null');
+        if (!session || session.authenticated !== true || !session.tokenHash || !session.issuedAt || !session.signature) {
+            return false;
+        }
+        if (Date.now() - Number(session.issuedAt) > ADMIN_SESSION_TTL_MS) {
+            sessionStorage.removeItem('zsx_admin_session');
+            sessionStorage.removeItem('zsx_admin_jwt');
+            return false;
+        }
+        const expectedSig = computeSessionSignature(session.role, session.tokenHash, session.issuedAt);
+        if (session.signature !== expectedSig) {
+            return false;
+        }
+        const validLocalHash = (session.role === 'dev' && session.tokenHash === adminCredentials.devPassHash) ||
+                               (session.role === 'owner' && session.tokenHash === adminCredentials.ownerPassHash);
+        const hasCloudVerifiedFlag = Boolean(session.cloudVerified || sessionStorage.getItem('zsx_admin_jwt'));
+        return validLocalHash || hasCloudVerifiedFlag;
+    } catch (e) {
+        return false;
     }
 }
 
-function handleAdminLogin(e) {
+function lockAdminPanel() {
+    sessionStorage.removeItem('zsx_admin_session');
+    sessionStorage.removeItem('zsx_admin_jwt');
+    const overlay = document.getElementById('adminAuthOverlay');
+    const layout = document.getElementById('adminMainLayout') || document.querySelector('.admin-layout');
+    if (layout) layout.style.display = 'none';
+    if (overlay) {
+        overlay.classList.remove('hidden');
+        overlay.style.display = 'flex';
+    }
+}
+
+function assertAdminAuth() {
+    if (!isAdminAuthenticated()) {
+        lockAdminPanel();
+        return false;
+    }
+    return true;
+}
+
+function checkAuthSession() {
+    const overlay = document.getElementById('adminAuthOverlay');
+    const layout = document.getElementById('adminMainLayout') || document.querySelector('.admin-layout');
+    if (isAdminAuthenticated()) {
+        const session = JSON.parse(sessionStorage.getItem('zsx_admin_session'));
+        if (overlay) {
+            overlay.classList.add('hidden');
+            overlay.style.display = '';
+        }
+        if (layout) layout.style.display = '';
+        document.getElementById('activeAdminRole').textContent = session.roleLabel;
+        document.getElementById('activeAdminName').textContent = session.name;
+        loadSettingsIntoInputs();
+        refreshAllViews();
+    } else {
+        if (layout) layout.style.display = 'none';
+        if (overlay) {
+            overlay.classList.remove('hidden');
+            overlay.style.display = 'flex';
+        }
+    }
+}
+
+async function handleAdminLogin(e) {
     e.preventDefault();
     const email = document.getElementById('adminLoginEmail').value.trim().toLowerCase();
     const pass = document.getElementById('adminLoginPass').value.trim();
     const errorEl = document.getElementById('adminAuthError');
+    const errorSpan = errorEl ? errorEl.querySelector('span') : null;
 
-    if ((email === adminCredentials.devEmail.toLowerCase() || email === 'dev' || email === 'admin') && pass === adminCredentials.devPass) {
+    // 1. Proteção contra força bruta (Rate Limiting)
+    const lockoutData = JSON.parse(localStorage.getItem('zsx_admin_lockout') || '{"attempts":0,"until":0}');
+    if (lockoutData.until && Date.now() < lockoutData.until) {
+        const waitSec = Math.ceil((lockoutData.until - Date.now()) / 1000);
+        if (errorSpan) errorSpan.textContent = `Muitas tentativas incorretas. Aguarde ${waitSec}s para tentar novamente.`;
+        if (errorEl) errorEl.classList.add('visible');
+        return;
+    }
+
+    const inputHash = hashAdminSecret(pass);
+    let authRole = null;
+    let cloudVerified = false;
+
+    // 2. Validação Primária no Servidor (Supabase Auth + Cofre Criptografado RPC)
+    if (window.ZSX_DB && window.ZSX_DB.isConfigured()) {
+        const cloudCheck = await window.ZSX_DB.verifyAdminLogin(email, pass);
+        if (cloudCheck && cloudCheck.ok) {
+            authRole = cloudCheck.role || 'dev';
+            cloudVerified = true;
+        } else if (cloudCheck && cloudCheck.reason === 'invalid_credentials') {
+            authRole = null;
+        }
+    }
+
+    // 3. Validação Criptográfica SHA-256 Local (caso RPC ainda não tenha sido rodado ou modo local)
+    if (!authRole) {
+        const isDevId = (email === adminCredentials.devEmail.toLowerCase() || email === 'dev' || email === 'admin');
+        const isOwnerId = (email === adminCredentials.ownerEmail.toLowerCase() || email === 'dono' || email === 'proprietario');
+
+        if (isDevId && inputHash === adminCredentials.devPassHash) {
+            authRole = 'dev';
+        } else if (isOwnerId && inputHash === adminCredentials.ownerPassHash) {
+            authRole = 'owner';
+        }
+    }
+
+    if (authRole) {
+        localStorage.removeItem('zsx_admin_lockout');
+        const issuedAt = Date.now();
         const sessionData = {
             authenticated: true,
-            role: 'dev',
-            roleLabel: 'Acesso Master • Dev',
-            name: adminCredentials.devName
+            role: authRole,
+            roleLabel: authRole === 'dev' ? 'Acesso Master • Dev' : 'Proprietário da Loja',
+            name: authRole === 'dev' ? adminCredentials.devName : adminCredentials.ownerName,
+            tokenHash: inputHash,
+            issuedAt,
+            cloudVerified,
+            signature: computeSessionSignature(authRole, inputHash, issuedAt)
         };
         sessionStorage.setItem('zsx_admin_session', JSON.stringify(sessionData));
-        errorEl.classList.remove('visible');
+        if (errorEl) errorEl.classList.remove('visible');
+        document.getElementById('adminLoginPass').value = '';
         checkAuthSession();
-        showAdminToast('Bem-vindo ao Painel Master, Desenvolvedor!');
-    } else if ((email === adminCredentials.ownerEmail.toLowerCase() || email === 'dono' || email === 'proprietario') && pass === adminCredentials.ownerPass) {
-        const sessionData = {
-            authenticated: true,
-            role: 'owner',
-            roleLabel: 'Proprietário da Loja',
-            name: adminCredentials.ownerName
-        };
-        sessionStorage.setItem('zsx_admin_session', JSON.stringify(sessionData));
-        errorEl.classList.remove('visible');
-        checkAuthSession();
-        showAdminToast('Bem-vindo ao Painel, Proprietário ZSX!');
+        showAdminToast(authRole === 'dev' ? 'Bem-vindo ao Painel Master, Desenvolvedor!' : 'Bem-vindo ao Painel, Proprietário ZSX!');
     } else {
-        errorEl.classList.add('visible');
+        const nextAttempts = (lockoutData.attempts || 0) + 1;
+        if (nextAttempts >= MAX_LOGIN_ATTEMPTS) {
+            localStorage.setItem('zsx_admin_lockout', JSON.stringify({
+                attempts: 0,
+                until: Date.now() + LOCKOUT_DURATION_MS
+            }));
+            if (errorSpan) errorSpan.textContent = 'Acesso bloqueado temporariamente por 60 segundos devido a múltiplas tentativas.';
+        } else {
+            localStorage.setItem('zsx_admin_lockout', JSON.stringify({
+                attempts: nextAttempts,
+                until: 0
+            }));
+            if (errorSpan) errorSpan.textContent = `Credenciais inválidas (${nextAttempts}/${MAX_LOGIN_ATTEMPTS} tentativas).`;
+        }
+        if (errorEl) errorEl.classList.add('visible');
     }
 }
 
@@ -661,6 +799,7 @@ function handleAdminLogin(e) {
 // ==========================================================================
 
 window.switchAdminSection = function(sectionKey) {
+    if (!assertAdminAuth()) return;
     document.querySelectorAll('.sidebar-nav-btn').forEach(btn => {
         btn.classList.toggle('active', btn.dataset.section === sectionKey);
     });
@@ -688,6 +827,7 @@ window.switchAdminSection = function(sectionKey) {
 // ==========================================================================
 
 function renderDashboard() {
+    if (!isAdminAuthenticated()) return;
     const catalog = getMergedCatalog();
     storeOrders = JSON.parse(localStorage.getItem('zsx_orders')) || [];
 
@@ -762,6 +902,7 @@ function renderDashboard() {
 // ==========================================================================
 
 function renderProductsTable() {
+    if (!isAdminAuthenticated()) return;
     const tbody = document.getElementById('adminProductsTableBody');
     if (!tbody) return;
 
@@ -882,6 +1023,7 @@ function renderProductsTable() {
 }
 
 window.updateProductPrice = function(id, newPriceVal) {
+    if (!assertAdminAuth()) return;
     const val = Math.max(1, parseFloat(newPriceVal) || 0);
     if (!catalogOverrides[id]) catalogOverrides[id] = {};
     catalogOverrides[id].price = Number(val.toFixed(2));
@@ -890,6 +1032,7 @@ window.updateProductPrice = function(id, newPriceVal) {
 };
 
 window.updateProductOriginalPrice = function(id, newOrigVal) {
+    if (!assertAdminAuth()) return;
     const val = Math.max(1, parseFloat(newOrigVal) || 0);
     if (!catalogOverrides[id]) catalogOverrides[id] = {};
     catalogOverrides[id].originalPrice = Number(val.toFixed(2));
@@ -898,6 +1041,7 @@ window.updateProductOriginalPrice = function(id, newOrigVal) {
 };
 
 window.applyQuickDiscount = function(id, discountPercent) {
+    if (!assertAdminAuth()) return;
     const catalog = getMergedCatalog();
     const prod = catalog.find(p => p.id === id);
     if (!prod) return;
@@ -913,6 +1057,7 @@ window.applyQuickDiscount = function(id, discountPercent) {
 };
 
 window.adjustProductStock = function(id, delta) {
+    if (!assertAdminAuth()) return;
     const catalog = getMergedCatalog();
     const prod = catalog.find(p => p.id === id);
     if (!prod) return;
@@ -925,6 +1070,7 @@ window.adjustProductStock = function(id, delta) {
 };
 
 window.setProductStock = function(id, val) {
+    if (!assertAdminAuth()) return;
     const nextStock = Math.max(0, parseInt(val, 10) || 0);
     if (!catalogOverrides[id]) catalogOverrides[id] = {};
     catalogOverrides[id].stock = nextStock;
@@ -933,6 +1079,7 @@ window.setProductStock = function(id, val) {
 };
 
 window.toggleProductActive = function(id) {
+    if (!assertAdminAuth()) return;
     const catalog = getMergedCatalog();
     const prod = catalog.find(p => p.id === id);
     if (!prod) return;
@@ -944,6 +1091,7 @@ window.toggleProductActive = function(id) {
 };
 
 window.deleteProduct = function(id) {
+    if (!assertAdminAuth()) return;
     const catalog = getMergedCatalog();
     const prod = catalog.find(p => p.id === id);
     if (!prod) return;
@@ -956,6 +1104,7 @@ window.deleteProduct = function(id) {
 };
 
 window.applyBulkCategoryDiscount = function() {
+    if (!assertAdminAuth()) return;
     const cat = document.getElementById('bulkCategorySelect').value;
     const pct = Math.min(90, Math.max(0, parseFloat(document.getElementById('bulkDiscountInput').value) || 0));
     const catalog = getMergedCatalog();
@@ -977,6 +1126,7 @@ window.applyBulkCategoryDiscount = function() {
 };
 
 window.applyBulkRestock = function(amount) {
+    if (!assertAdminAuth()) return;
     const cat = document.getElementById('bulkCategorySelect').value;
     const catalog = getMergedCatalog();
 
@@ -998,6 +1148,7 @@ window.applyBulkRestock = function(amount) {
 // ==========================================================================
 
 window.openProductModal = function(prodId = null) {
+    if (!assertAdminAuth()) return;
     const modal = document.getElementById('adminProductModal');
     const titleEl = document.getElementById('productModalTitle');
     const form = document.getElementById('adminProductForm');
@@ -1040,6 +1191,7 @@ window.closeProductModal = function() {
 
 function handleProductFormSubmit(e) {
     e.preventDefault();
+    if (!assertAdminAuth()) return;
     const existingId = document.getElementById('editProdId').value.trim();
     const name = document.getElementById('editProdName').value.trim();
     const categoryKey = document.getElementById('editProdCategoryKey').value;
@@ -1144,6 +1296,7 @@ function renderOrderRowHTML(order) {
 }
 
 function renderOrdersSection() {
+    if (!isAdminAuthenticated()) return;
     const container = document.getElementById('adminOrdersContainer');
     if (!container) return;
 
@@ -1162,6 +1315,7 @@ function renderOrdersSection() {
 }
 
 window.filterAdminOrders = function(status, btnEl) {
+    if (!assertAdminAuth()) return;
     currentOrderFilter = status;
     document.querySelectorAll('.order-filter-pill').forEach(b => b.classList.remove('active'));
     if (btnEl) btnEl.classList.add('active');
@@ -1169,6 +1323,7 @@ window.filterAdminOrders = function(status, btnEl) {
 };
 
 window.updateOrderStatus = function(orderId, newStatus) {
+    if (!assertAdminAuth()) return;
     storeOrders = JSON.parse(localStorage.getItem('zsx_orders')) || [];
     const target = storeOrders.find(o => o.id === orderId);
     if (!target) return;
@@ -1185,6 +1340,7 @@ window.updateOrderStatus = function(orderId, newStatus) {
 };
 
 window.deleteAdminOrder = function(orderId) {
+    if (!assertAdminAuth()) return;
     storeOrders = (JSON.parse(localStorage.getItem('zsx_orders')) || []).filter(o => o.id !== orderId);
     localStorage.setItem('zsx_orders', JSON.stringify(storeOrders));
     if (window.ZSX_DB) window.ZSX_DB.deleteOrder(orderId);
@@ -1197,6 +1353,7 @@ window.deleteAdminOrder = function(orderId) {
 // ==========================================================================
 
 function renderCouponsSection() {
+    if (!isAdminAuthenticated()) return;
     const container = document.getElementById('adminCouponsList');
     if (!container) return;
 
@@ -1227,6 +1384,7 @@ function renderCouponsSection() {
 
 function handleCreateCoupon(e) {
     e.preventDefault();
+    if (!assertAdminAuth()) return;
     const code = document.getElementById('newCouponCode').value.trim().toUpperCase();
     const percent = Math.min(90, Math.max(1, parseInt(document.getElementById('newCouponPercent').value, 10) || 10));
     const desc = document.getElementById('newCouponDesc').value.trim() || `${percent}% OFF em toda a loja`;
@@ -1250,6 +1408,7 @@ function handleCreateCoupon(e) {
 }
 
 window.toggleCouponStatus = function(code) {
+    if (!assertAdminAuth()) return;
     const target = storeCoupons.find(c => c.code === code);
     if (!target) return;
     target.active = !target.active;
@@ -1260,6 +1419,7 @@ window.toggleCouponStatus = function(code) {
 };
 
 window.deleteCoupon = function(code) {
+    if (!assertAdminAuth()) return;
     storeCoupons = storeCoupons.filter(c => c.code !== code);
     localStorage.setItem('zsx_coupons', JSON.stringify(storeCoupons));
     if (window.ZSX_DB) window.ZSX_DB.deleteCoupon(code);
@@ -1272,6 +1432,7 @@ window.deleteCoupon = function(code) {
 // ==========================================================================
 
 function loadSettingsIntoInputs() {
+    if (!isAdminAuthenticated()) return;
     document.getElementById('settingFreeShippingMin').value = storeSettings.freeShippingMin ?? 199;
     document.getElementById('settingDefaultShipping').value = storeSettings.defaultShipping ?? 24;
     document.getElementById('settingPixDiscount').value = storeSettings.pixDiscount ?? 5;
@@ -1285,13 +1446,14 @@ function loadSettingsIntoInputs() {
     }
 
     document.getElementById('credDevEmail').value = adminCredentials.devEmail;
-    document.getElementById('credDevPass').value = adminCredentials.devPass;
+    document.getElementById('credDevPass').value = '';
     document.getElementById('credOwnerEmail').value = adminCredentials.ownerEmail;
-    document.getElementById('credOwnerPass').value = adminCredentials.ownerPass;
+    document.getElementById('credOwnerPass').value = '';
 }
 
 function handleSaveStoreSettings(e) {
     e.preventDefault();
+    if (!assertAdminAuth()) return;
     storeSettings = {
         freeShippingMin: parseFloat(document.getElementById('settingFreeShippingMin').value) || 199,
         defaultShipping: parseFloat(document.getElementById('settingDefaultShipping').value) || 24,
@@ -1306,18 +1468,55 @@ function handleSaveStoreSettings(e) {
     showAdminToast('Configurações de frete, PIX e avisos salvas!');
 }
 
-function handleSaveCredentials(e) {
+async function handleSaveCredentials(e) {
     e.preventDefault();
-    adminCredentials.devEmail = document.getElementById('credDevEmail').value.trim();
-    adminCredentials.devPass = document.getElementById('credDevPass').value.trim();
-    adminCredentials.ownerEmail = document.getElementById('credOwnerEmail').value.trim();
-    adminCredentials.ownerPass = document.getElementById('credOwnerPass').value.trim();
+    if (!assertAdminAuth()) return;
+
+    const currentSession = JSON.parse(sessionStorage.getItem('zsx_admin_session') || 'null');
+    const callerHash = currentSession ? currentSession.tokenHash : '';
+
+    const newDevEmail = document.getElementById('credDevEmail').value.trim() || adminCredentials.devEmail;
+    const newDevPassRaw = document.getElementById('credDevPass').value.trim();
+    const newOwnerEmail = document.getElementById('credOwnerEmail').value.trim() || adminCredentials.ownerEmail;
+    const newOwnerPassRaw = document.getElementById('credOwnerPass').value.trim();
+
+    adminCredentials.devEmail = newDevEmail;
+    if (newDevPassRaw) {
+        adminCredentials.devPassHash = hashAdminSecret(newDevPassRaw);
+    }
+    adminCredentials.ownerEmail = newOwnerEmail;
+    if (newOwnerPassRaw) {
+        adminCredentials.ownerPassHash = hashAdminSecret(newOwnerPassRaw);
+    }
 
     localStorage.setItem('zsx_admin_credentials', JSON.stringify(adminCredentials));
-    showAdminToast('Credenciais de acesso atualizadas com segurança!');
+
+    // Atualiza o cofre criptografado no Supabase se configurado
+    if (window.ZSX_DB && typeof window.ZSX_DB.updateAdminCredentials === 'function') {
+        await window.ZSX_DB.updateAdminCredentials(
+            callerHash,
+            adminCredentials.devEmail,
+            adminCredentials.devPassHash,
+            adminCredentials.ownerEmail,
+            adminCredentials.ownerPassHash
+        );
+    }
+
+    // Atualiza o token da sessão atual se o próprio usuário trocou sua senha
+    if (currentSession) {
+        const updatedHash = currentSession.role === 'dev' ? adminCredentials.devPassHash : adminCredentials.ownerPassHash;
+        currentSession.tokenHash = updatedHash;
+        currentSession.signature = computeSessionSignature(currentSession.role, updatedHash, currentSession.issuedAt);
+        sessionStorage.setItem('zsx_admin_session', JSON.stringify(currentSession));
+    }
+
+    document.getElementById('credDevPass').value = '';
+    document.getElementById('credOwnerPass').value = '';
+    showAdminToast('Credenciais criptografadas (SHA-256) atualizadas com segurança!');
 }
 
 window.resetAllStoreData = function() {
+    if (!assertAdminAuth()) return;
     localStorage.removeItem('zsx_catalog_overrides');
     localStorage.removeItem('zsx_custom_products');
     localStorage.removeItem('zsx_deleted_products');
@@ -1339,6 +1538,7 @@ window.resetAllStoreData = function() {
 };
 
 function refreshAllViews() {
+    if (!isAdminAuthenticated()) return;
     renderDashboard();
     renderProductsTable();
     renderOrdersSection();
@@ -1346,13 +1546,35 @@ function refreshAllViews() {
 }
 
 // ==========================================================================
-// INICIALIZAÇÃO DO PAINEL
+// INICIALIZAÇÃO DO PAINEL & PROTEÇÃO ANTI-DEVTOOLS (MUTATION OBSERVER)
 // ==========================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
     checkAuthSession();
-    loadSettingsIntoInputs();
-    refreshAllViews();
+
+    // Vigia tentativas de remover o overlay ou forçar exibição do painel via Inspecionar Elemento (F12)
+    const tamperObserver = new MutationObserver(() => {
+        if (!isAdminAuthenticated()) {
+            const overlay = document.getElementById('adminAuthOverlay');
+            const layout = document.getElementById('adminMainLayout') || document.querySelector('.admin-layout');
+            if (layout && layout.style.display !== 'none') {
+                layout.style.display = 'none';
+            }
+            if (!overlay) {
+                if (layout) layout.innerHTML = '';
+                window.location.reload();
+            } else if (overlay.classList.contains('hidden') || overlay.style.display === 'none') {
+                overlay.classList.remove('hidden');
+                overlay.style.display = 'flex';
+            }
+        }
+    });
+    tamperObserver.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['class', 'style']
+    });
 
     if (window.ZSX_DB && window.ZSX_DB.isConfigured()) {
         window.ZSX_DB.syncFromCloud().then(synced => {
@@ -1363,16 +1585,17 @@ document.addEventListener('DOMContentLoaded', () => {
             storeOrders = JSON.parse(localStorage.getItem('zsx_orders')) || [];
             storeCoupons = JSON.parse(localStorage.getItem('zsx_coupons')) || storeCoupons;
             storeSettings = JSON.parse(localStorage.getItem('zsx_store_settings')) || storeSettings;
-            loadSettingsIntoInputs();
-            refreshAllViews();
+            if (isAdminAuthenticated()) {
+                loadSettingsIntoInputs();
+                refreshAllViews();
+            }
         });
     }
 
     document.getElementById('adminLoginForm')?.addEventListener('submit', handleAdminLogin);
 
     document.getElementById('btnAdminLogout')?.addEventListener('click', () => {
-        sessionStorage.removeItem('zsx_admin_session');
-        checkAuthSession();
+        lockAdminPanel();
     });
 
     document.querySelectorAll('.sidebar-nav-btn').forEach(btn => {

@@ -78,7 +78,7 @@
     <!-- ======================================================================
          ESTRUTURA PRINCIPAL DO PAINEL ADMINISTRATIVO
          ====================================================================== -->
-    <div class="admin-layout">
+    <div id="adminMainLayout" class="admin-layout" style="display: none;">
 
         <!-- SIDEBAR -->
         <aside class="admin-sidebar">
@@ -545,22 +545,22 @@
                             <form id="credentialsForm" class="admin-auth-form">
                                 <div class="admin-field-group">
                                     <label>Seu E-mail (Desenvolvedor / Admin Master)</label>
-                                    <input type="text" id="credDevEmail" class="admin-input" value="dev@zsxoutlet.com.br">
+                                    <input type="text" id="credDevEmail" class="admin-input" placeholder="dev@zsxoutlet.com.br">
                                 </div>
                                 <div class="admin-field-group">
-                                    <label>Sua Senha</label>
-                                    <input type="text" id="credDevPass" class="admin-input" value="zsx2026">
+                                    <label>Nova Senha Master (Criptografia SHA-256)</label>
+                                    <input type="password" id="credDevPass" class="admin-input" placeholder="Deixe em branco para manter a senha atual" autocomplete="new-password">
                                 </div>
 
                                 <hr style="border: none; border-top: 1px solid rgba(255, 70, 90, 0.2); margin: 8px 0;">
 
                                 <div class="admin-field-group">
                                     <label>E-mail do Dono da Loja (Proprietário)</label>
-                                    <input type="text" id="credOwnerEmail" class="admin-input" value="dono@zsxoutlet.com.br">
+                                    <input type="text" id="credOwnerEmail" class="admin-input" placeholder="dono@zsxoutlet.com.br">
                                 </div>
                                 <div class="admin-field-group">
-                                    <label>Senha do Dono da Loja</label>
-                                    <input type="text" id="credOwnerPass" class="admin-input" value="owner2026">
+                                    <label>Nova Senha do Proprietário (Criptografia SHA-256)</label>
+                                    <input type="password" id="credOwnerPass" class="admin-input" placeholder="Deixe em branco para manter a senha atual" autocomplete="new-password">
                                 </div>
 
                                 <button type="submit" class="btn-primary-admin" style="justify-content: center; margin-top: 8px;">
