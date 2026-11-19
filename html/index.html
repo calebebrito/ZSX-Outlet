@@ -10,19 +10,22 @@
     <meta property="og:site_name" content="ZSX Outlet">
     <meta property="og:title" content="ZSX Outlet | O Shopping dos Crias">
     <meta property="og:description" content="Streetwear de alto nível com envio para todo o Brasil, troca fácil em 30 dias e 5% OFF no PIX.">
-    <meta property="og:image" content="../images/zsx.png">
+    <meta property="og:image" content="../images/ZSX-natal.png">
     <meta name="twitter:card" content="summary_large_image">
-    <link rel="icon" type="image/png" href="../images/zsx.png">
-    <link rel="apple-touch-icon" href="../images/zsx.png">
+    <link rel="icon" type="image/png" href="../images/ZSX-natal.png">
+    <link rel="apple-touch-icon" href="../images/ZSX-natal.png">
     <link rel="stylesheet" href="../style.css">
 
 </head>
 
 <body id="indexBody">
 
+    <!-- Neve Natalina Sutil em Toda a Tela -->
+    <canvas id="zsxSnowCanvas" class="zsx-snow-canvas" aria-hidden="true"></canvas>
+
     <div id="head">
         <div class="zsx1" onclick="window.scrollTo({top: 0, behavior: 'smooth'})" style="cursor: pointer;" title="Voltar ao início">
-            <img src="../images/zsx.png" alt="ZSX Outlet">
+            <img src="../images/ZSX-natal.png" alt="ZSX Outlet">            
         </div>
 
         <!-- Navegação central do header flutuante -->
@@ -61,6 +64,136 @@
     <section class="zsx-hero" id="zsxHero" aria-label="ZSX Outlet">
         <div class="zsx-hero-dust"></div>
 
+        <!-- Decoração Natalina: Galhos de Pinheiro com Bolas Vermelhas nas Quinas Superiores -->
+        <svg class="xmas-svg-defs" width="0" height="0" aria-hidden="true">
+            <defs>
+                <linearGradient id="xmasPineDeep" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#071a10"/>
+                    <stop offset="55%" stop-color="#0e2e1d"/>
+                    <stop offset="100%" stop-color="#17452c"/>
+                </linearGradient>
+                <linearGradient id="xmasPineMid" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#0d2a1b"/>
+                    <stop offset="50%" stop-color="#16462c"/>
+                    <stop offset="100%" stop-color="#22603d"/>
+                </linearGradient>
+                <linearGradient id="xmasPineHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#1d5436"/>
+                    <stop offset="100%" stop-color="#2c754c"/>
+                </linearGradient>
+                <radialGradient id="xmasBallRed" cx="34%" cy="30%" r="68%">
+                    <stop offset="0%" stop-color="#ff8a95"/>
+                    <stop offset="22%" stop-color="#ff2a3d"/>
+                    <stop offset="62%" stop-color="#c80e20"/>
+                    <stop offset="100%" stop-color="#5c040d"/>
+                </radialGradient>
+                <radialGradient id="xmasBallDarkRed" cx="36%" cy="28%" r="68%">
+                    <stop offset="0%" stop-color="#ff6b79"/>
+                    <stop offset="25%" stop-color="#e11d2e"/>
+                    <stop offset="68%" stop-color="#940a18"/>
+                    <stop offset="100%" stop-color="#450208"/>
+                </radialGradient>
+                <linearGradient id="xmasCapGold" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#8c6d36"/>
+                    <stop offset="45%" stop-color="#f2d68d"/>
+                    <stop offset="100%" stop-color="#7a5b28"/>
+                </linearGradient>
+                <filter id="xmasRedGlow" x="-40%" y="-40%" width="180%" height="180%">
+                    <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#e11d2e" flood-opacity="0.45"/>
+                </filter>
+
+                <symbol id="xmasCornerBranch" viewBox="0 0 360 320">
+                    <!-- Camada de fundo: galhos mais escuros -->
+                    <g fill="url(#xmasPineDeep)">
+                        <path d="M-12,-12 L315,-12 C285,18 250,34 210,40 C230,52 246,66 254,82 C210,74 176,62 145,46 C164,74 178,100 184,128 C142,108 112,86 86,62 C102,102 108,142 106,184 C74,152 52,118 38,84 C44,132 36,182 14,235 C-2,190 -8,136 -12,78 Z"/>
+                        <path d="M-8,12 C62,4 128,16 196,42 C154,54 114,56 72,50 C112,86 138,124 150,168 C108,142 74,114 44,82 C58,136 52,192 22,258 C4,210 -6,154 -8,96 Z" opacity="0.9"/>
+                    </g>
+
+                    <!-- Camada intermediária: folhas e pontas de pinheiro -->
+                    <g fill="url(#xmasPineMid)">
+                        <path d="M-10,-8 L272,-8 C242,16 206,26 168,28 C196,46 218,64 230,86 C184,74 146,56 112,34 C138,68 156,102 162,138 C120,114 86,86 58,54 C78,98 84,142 78,190 C46,154 24,114 12,72 C18,124 8,176 -10,222 Z"/>
+                        <path d="M18,-6 C86,-4 152,10 214,34 C172,40 132,38 92,30 C128,62 154,96 164,136 C126,112 92,84 64,52 C74,98 66,144 40,192 C22,150 14,104 18,58 Z" opacity="0.88"/>
+                    </g>
+
+                    <!-- Camada frontal: agulhas iluminadas + leve toque de geada -->
+                    <g stroke="url(#xmasPineHighlight)" stroke-width="2.4" stroke-linecap="round" opacity="0.92">
+                        <line x1="20" y1="8" x2="72" y2="28"/>
+                        <line x1="48" y1="6" x2="108" y2="26"/>
+                        <line x1="88" y1="4" x2="152" y2="24"/>
+                        <line x1="132" y1="2" x2="196" y2="20"/>
+                        <line x1="178" y1="2" x2="238" y2="16"/>
+                        <line x1="22" y1="28" x2="88" y2="62"/>
+                        <line x1="56" y1="36" x2="128" y2="74"/>
+                        <line x1="100" y1="32" x2="168" y2="66"/>
+                        <line x1="14" y1="58" x2="74" y2="104"/>
+                        <line x1="36" y1="78" x2="96" y2="132"/>
+                        <line x1="12" y1="102" x2="54" y2="158"/>
+                        <line x1="8" y1="138" x2="34" y2="198"/>
+                    </g>
+                    <g stroke="rgba(255,255,255,0.16)" stroke-width="1.3" stroke-linecap="round">
+                        <line x1="110" y1="12" x2="156" y2="22"/>
+                        <line x1="168" y1="8" x2="218" y2="16"/>
+                        <line x1="66" y1="54" x2="114" y2="72"/>
+                        <line x1="28" y1="98" x2="64" y2="128"/>
+                        <line x1="14" y1="152" x2="34" y2="188"/>
+                    </g>
+
+                    <!-- Pontos sutis de luz quente entre os galhos -->
+                    <g fill="#ffdca8" opacity="0.72">
+                        <circle cx="96" cy="24" r="2.1"/>
+                        <circle cx="176" cy="26" r="1.8"/>
+                        <circle cx="52" cy="72" r="2"/>
+                        <circle cx="122" cy="64" r="1.7"/>
+                        <circle cx="28" cy="134" r="1.9"/>
+                    </g>
+
+                    <!-- Bola Vermelha 1 (Maior, destaque central do canto) -->
+                    <g filter="url(#xmasRedGlow)">
+                        <line x1="132" y1="44" x2="132" y2="68" stroke="#d8b976" stroke-width="1.4" opacity="0.8"/>
+                        <rect x="125" y="66" width="14" height="8" rx="2.5" fill="url(#xmasCapGold)"/>
+                        <circle cx="132" cy="96" r="24" fill="url(#xmasBallRed)"/>
+                        <ellipse cx="123" cy="86" rx="6.5" ry="4" transform="rotate(-28 123 86)" fill="rgba(255,255,255,0.42)"/>
+                    </g>
+
+                    <!-- Bola Vermelha 2 (Superior direita do galho) -->
+                    <g filter="url(#xmasRedGlow)">
+                        <line x1="220" y1="22" x2="220" y2="42" stroke="#d8b976" stroke-width="1.2" opacity="0.75"/>
+                        <rect x="215" y="40" width="10" height="6.5" rx="2" fill="url(#xmasCapGold)"/>
+                        <circle cx="220" cy="62" r="17" fill="url(#xmasBallDarkRed)"/>
+                        <ellipse cx="214" cy="55" rx="4.6" ry="2.8" transform="rotate(-28 214 55)" fill="rgba(255,255,255,0.38)"/>
+                    </g>
+
+                    <!-- Bola Vermelha 3 (Inferior esquerda do galho) -->
+                    <g filter="url(#xmasRedGlow)">
+                        <line x1="58" y1="108" x2="58" y2="130" stroke="#d8b976" stroke-width="1.3" opacity="0.8"/>
+                        <rect x="52" y="128" width="12" height="7" rx="2" fill="url(#xmasCapGold)"/>
+                        <circle cx="58" cy="153" r="20" fill="url(#xmasBallRed)"/>
+                        <ellipse cx="51" cy="145" rx="5.4" ry="3.2" transform="rotate(-28 51 145)" fill="rgba(255,255,255,0.4)"/>
+                    </g>
+
+                    <!-- Bola Vermelha 4 (Menor, próxima à ponta inferior) -->
+                    <g filter="url(#xmasRedGlow)">
+                        <line x1="26" y1="184" x2="26" y2="200" stroke="#d8b976" stroke-width="1.1" opacity="0.7"/>
+                        <rect x="22" y="198" width="8" height="5.5" rx="1.8" fill="url(#xmasCapGold)"/>
+                        <circle cx="26" cy="216" r="13.5" fill="url(#xmasBallDarkRed)"/>
+                        <ellipse cx="21.5" cy="210.5" rx="3.5" ry="2.2" transform="rotate(-28 21.5 210.5)" fill="rgba(255,255,255,0.36)"/>
+                    </g>
+                </symbol>
+            </defs>
+        </svg>
+
+        <div class="xmas-corner xmas-corner-left" aria-hidden="true">
+            <svg viewBox="0 0 360 320" width="360" height="320" preserveAspectRatio="xMinYMin meet">
+                <use href="#xmasCornerBranch"/>
+            </svg>
+        </div>
+
+        <div class="xmas-corner xmas-corner-right" aria-hidden="true">
+            <svg viewBox="0 0 360 320" width="360" height="320" preserveAspectRatio="xMinYMin meet">
+                <use href="#xmasCornerBranch"/>
+            </svg>
+        </div>
+
         <div class="zsx-hero-planet-wrap" id="zsxHeroPlanet">
             <div class="zsx-hero-planet">
                 <div class="zsx-hero-flare"></div>
@@ -69,7 +202,9 @@
         </div>
 
         <div class="zsx-hero-inner" id="zsxHeroInner">
-            <img src="../images/zsx.png" alt="ZSX Outlet" class="zsx-hero-logo">
+            <div class="zsx-hero-logo-wrap">
+                <img src="../images/ZSX-natal.png" alt="ZSX Outlet" class="zsx-hero-logo">                
+            </div>
             <h1 class="zsx-hero-tagline sans">O SHOPPING DOS CRIAS</h1>
             <a href="#secPolos" class="zsx-hero-cta sans">
                 <span>Comprar Agora</span>
@@ -151,6 +286,13 @@
 
         <!-- Seção de Benefícios (Frete Grátis, Suporte 24h, Entrega Brasil) -->
         <div class="beneficios reveal">
+            <svg class="xmas-subtle-holly" viewBox="0 0 60 44" aria-hidden="true">
+                <path d="M30 22 C20 10, 6 12, 4 22 C12 24, 18 28, 28 24 Z" fill="#175c36"/>
+                <path d="M30 22 C40 8, 54 12, 56 22 C48 24, 42 28, 32 24 Z" fill="#1e7545"/>
+                <circle cx="28" cy="24" r="3.6" fill="#d91829"/>
+                <circle cx="33.5" cy="25.5" r="3.2" fill="#ff2a3d"/>
+                <circle cx="30.5" cy="20.5" r="2.9" fill="#b30d1d"/>
+            </svg>
             <div class="beneficio-item">
                 <div class="beneficio-icon">
                     <svg viewBox="0 0 48 48" width="40" height="40" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
@@ -213,7 +355,7 @@
         <div class="zsx-footer-inner">
             <div class="zsx-footer-grid">
                 <div class="zsx-footer-col zsx-footer-brand">
-                    <img src="../images/zsx.png" alt="ZSX Outlet" class="zsx-footer-logo">
+                    <img src="../images/ZSX-natal.png" alt="ZSX Outlet" class="zsx-footer-logo">
                     <p class="zsx-footer-desc">
                         O Shopping dos Crias. Streetwear autêntico, qualidade heavyweight e entregas rápidas para todo o Brasil.
                     </p>
@@ -298,7 +440,7 @@
             <!-- Header do Carrinho -->
             <div class="cart-header">
                 <div class="cart-header-left">
-                    <img src="../images/zsx.png" alt="ZSX Outlet" class="cart-header-logo">
+                    <img src="../images/ZSX-natal.png" alt="ZSX Outlet" class="cart-header-logo">
                     <h2 class="cart-title">CARRINHO</h2>
                 </div>
                 <button type="button" id="closeCartBtn" class="cart-close-btn" aria-label="Fechar Carrinho">&times;</button>
@@ -647,9 +789,12 @@
         <div class="custom-modal-card profile-modal-card">
             <div class="profile-card-header">
                 <div class="profile-user-info">
-                    <div class="profile-avatar-wrapper">
-                        <img src="../images/profile-icon-removebg-preview.png" alt="Perfil" class="profile-avatar-img">
-                        <span class="profile-badge-status">VIP</span>
+                    <div class="profile-avatar-wrapper profile-avatar-editable" id="profileAvatarTrigger" title="Alterar foto de perfil">
+                        <img src="../images/profile-icon-removebg-preview.png" alt="Perfil" class="profile-avatar-img" id="profileAvatarImg">
+                        <span class="profile-avatar-cam" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                        </span>                        
+                        <input type="file" id="profileAvatarInput" accept="image/*" hidden>
                     </div>
                     <div class="profile-user-meta">
                         <h3 class="profile-user-name" id="profileUserName">Minha Conta ZSX</h3>
@@ -676,7 +821,7 @@
                         <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                     </div>
                     <div class="menu-item-text">
-                        <span class="menu-item-title">Meus Endereços</span>
+                        <span class="menu-item-title">Meu Endereço</span>
                         <span class="menu-item-desc">Gerenciar endereço de entrega</span>
                     </div>
                     <span class="menu-item-arrow">&rarr;</span>
@@ -763,7 +908,7 @@
         <div class="custom-modal-card auth-modal-card">
             <div class="auth-modal-header">
                 <div class="auth-header-brand">
-                    <img src="../images/zsx.png" alt="ZSX Outlet" class="auth-logo">
+                    <img src="../images/ZSX-natal.png" alt="ZSX Outlet" class="auth-logo">
                     <h2 class="auth-title">ENTRAR NA CONTA</h2>
                     <p class="auth-subtitle">Acesse para acompanhar seus pedidos e cupons exclusivos</p>
                 </div>
@@ -772,10 +917,10 @@
 
             <form id="loginForm" class="auth-form">
                 <div class="auth-field-group">
-                    <label for="loginEmail">E-mail</label>
+                    <label for="loginEmail">E-mail ou Telefone</label>
                     <div class="auth-input-wrapper">
-                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                        <input type="email" id="loginEmail" placeholder="seuemail@exemplo.com" required autocomplete="email">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                        <input type="text" id="loginEmail" placeholder="seuemail@exemplo.com ou (00) 00000-0000" required autocomplete="username">
                     </div>
                 </div>
 
@@ -805,7 +950,7 @@
         <div class="custom-modal-card auth-modal-card">
             <div class="auth-modal-header">
                 <div class="auth-header-brand">
-                    <img src="../images/zsx.png" alt="ZSX Outlet" class="auth-logo">
+                    <img src="../images/ZSX-natal.png" alt="ZSX Outlet" class="auth-logo">
                     <h2 class="auth-title">CRIAR CONTA</h2>
                     <p class="auth-subtitle">Cadastre-se para frete grátis, 5% OFF no PIX e rastreio em tempo real</p>
                 </div>
@@ -821,7 +966,12 @@
                     </div>
                 </div>
 
-                <div class="auth-field-group">
+                <div class="auth-method-toggle" role="tablist" aria-label="Escolha como cadastrar">
+                    <button type="button" id="regMethodEmailBtn" class="auth-method-btn active" data-method="email">Usar E-mail</button>
+                    <button type="button" id="regMethodPhoneBtn" class="auth-method-btn" data-method="phone">Usar Telefone</button>
+                </div>
+
+                <div class="auth-field-group" id="regEmailGroup">
                     <label for="registerEmail">E-mail</label>
                     <div class="auth-input-wrapper">
                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
@@ -829,7 +979,7 @@
                     </div>
                 </div>
 
-                <div class="auth-field-group">
+                <div class="auth-field-group" id="regPhoneGroup" style="display: none;">
                     <label for="registerPhone">WhatsApp / Telefone</label>
                     <div class="auth-input-wrapper">
                         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
@@ -855,6 +1005,20 @@
                     <button type="button" id="btnGoToLogin" class="auth-switch-link">Fazer Login</button>
                 </div>
             </form>
+        </div>
+    </div>
+
+    <!-- MODAL DE CUPONS DISPONÍVEIS (VIDRO FOSCO OBSIDIAN & CRIMSON) -->
+    <div id="couponsModal" class="custom-modal-overlay">
+        <div class="custom-modal-card auth-modal-card coupons-modal-card">
+            <div class="auth-modal-header" style="margin-bottom: 18px;">
+                <div class="auth-header-brand">
+                    <h2 class="auth-title">CUPONS DISPONÍVEIS</h2>
+                    <p class="auth-subtitle">Toque para copiar ou aplicar direto no seu carrinho</p>
+                </div>
+                <button type="button" id="closeCouponsModalBtn" class="modal-close-icon" aria-label="Fechar Cupons">&times;</button>
+            </div>
+            <div id="couponsModalList" class="coupons-modal-list"></div>
         </div>
     </div>
 

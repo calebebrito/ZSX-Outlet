@@ -511,13 +511,18 @@ const ZSX_DB = (function() {
         const cleanEmail = cust.email.trim().toLowerCase();
         const custId = cust.id || `cust-${Date.now()}`;
         const hashedPass = cust.password ? hashCustomerPassword(cust.password) : '';
+        const baseAddr = cust.address || (JSON.parse(localStorage.getItem('zsx_address')) || {});
+        const addrPayload = { ...baseAddr };
+        if (cust.avatar !== undefined) {
+            addrPayload._avatar = cust.avatar || '';
+        }
         const payload = {
             id: custId,
             name: cust.name || 'Cliente ZSX',
             email: cleanEmail,
             phone: cust.phone || '',
             password: hashedPass,
-            address: cust.address || (JSON.parse(localStorage.getItem('zsx_address')) || {}),
+            address: addrPayload,
             updated_at: new Date().toISOString()
         };
 
@@ -527,10 +532,10 @@ const ZSX_DB = (function() {
                 headers: { 'Prefer': 'resolution=merge-duplicates,return=minimal' },
                 body: JSON.stringify(payload)
             });
-            return payload;
+            return { ...payload, avatar: addrPayload._avatar || '' };
         } catch (err) {
             console.warn('[ZSX_DB] Erro ao salvar cliente na nuvem:', err.message);
-            return payload;
+            return { ...payload, avatar: addrPayload._avatar || '' };
         }
     }
 
@@ -540,11 +545,38 @@ const ZSX_DB = (function() {
             const clean = email.trim().toLowerCase();
             const rows = await request(`zsx_customers?email=eq.${encodeURIComponent(clean)}&select=*`);
             if (Array.isArray(rows) && rows.length > 0) {
-                return rows[0];
+                const row = rows[0];
+                if (row.address && row.address._avatar) {
+                    row.avatar = row.address._avatar;
+                }
+                return row;
             }
             return null;
         } catch (err) {
             console.warn('[ZSX_DB] Erro ao buscar cliente:', err.message);
+            return null;
+        }
+    }
+
+    async function getCustomerByPhone(phone) {
+        if (!isConfigured() || !phone) return null;
+        const digits = String(phone).replace(/\D/g, '');
+        if (digits.length < 8) return null;
+        try {
+            const phoneEmail = `${digits}@phone.zsx`;
+            const byEmail = await getCustomerByEmail(phoneEmail);
+            if (byEmail) return byEmail;
+            const rows = await request(`zsx_customers?phone=ilike.*${encodeURIComponent(digits.slice(-8))}*&select=*`);
+            if (Array.isArray(rows) && rows.length > 0) {
+                const match = rows.find(r => String(r.phone || '').replace(/\D/g, '').endsWith(digits.slice(-9))) || rows[0];
+                if (match.address && match.address._avatar) {
+                    match.avatar = match.address._avatar;
+                }
+                return match;
+            }
+            return null;
+        } catch (err) {
+            console.warn('[ZSX_DB] Erro ao buscar cliente por telefone:', err.message);
             return null;
         }
     }
@@ -575,6 +607,169 @@ const ZSX_DB = (function() {
         }
     }
 
+    // ==========================================================================
+    // AUTENTICAÇÃO REAL DE CLIENTES VIA SUPABASE AUTH (CONFIRMAÇÃO DE E-MAIL)
+    // ==========================================================================
+
+    async function authSignUp({ email, password, name, phone }) {
+        if (!isConfigured()) {
+            return { ok: false, code: 'not_configured', message: 'Supabase não configurado.' };
+        }
+        const baseUrl = ZSX_SUPABASE_CONFIG.url.replace(/\/+$/, '');
+        const cleanEmail = String(email || '').trim().toLowerCase();
+        const redirectUrl = window.location.href.split('#')[0].split('?')[0];
+
+        try {
+            const res = await fetch(`${baseUrl}/auth/v1/signup`, {
+                method: 'POST',
+                headers: {
+                    'apikey': ZSX_SUPABASE_CONFIG.anonKey,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: cleanEmail,
+                    password: String(password || '').trim(),
+                    data: {
+                        name: String(name || '').trim(),
+                        phone: String(phone || '').trim()
+                    },
+                    gotrue_meta_security: {},
+                    code_challenge: undefined,
+                    redirect_to: redirectUrl.startsWith('http') ? redirectUrl : undefined
+                })
+            });
+
+            const data = await res.json().catch(() => ({}));
+
+            if (!res.ok) {
+                const rawMsg = (data.msg || data.error_description || data.message || '').toLowerCase();
+                if (res.status === 429 || rawMsg.includes('rate limit')) {
+                    return { ok: false, code: 'rate_limit', message: 'Muitas tentativas recentes. Aguarde alguns minutos e tente novamente.' };
+                }
+                if (rawMsg.includes('already registered') || rawMsg.includes('already exists')) {
+                    return { ok: false, code: 'already_registered', message: 'Este e-mail já está cadastrado. Faça login!' };
+                }
+                if (rawMsg.includes('invalid') && rawMsg.includes('email')) {
+                    return { ok: false, code: 'invalid_email', message: 'Informe um endereço de e-mail válido.' };
+                }
+                if (rawMsg.includes('password')) {
+                    return { ok: false, code: 'weak_password', message: 'A senha precisa ter pelo menos 6 caracteres.' };
+                }
+                return { ok: false, code: 'signup_error', message: data.msg || data.message || 'Não foi possível concluir o cadastro.' };
+            }
+
+            // Supabase retorna identities: [] quando o e-mail já existe e está confirmado
+            if (Array.isArray(data.identities) && data.identities.length === 0) {
+                return { ok: false, code: 'already_registered', message: 'Este e-mail já possui cadastro. Faça login!' };
+            }
+
+            const hasSession = Boolean(data.access_token);
+            return {
+                ok: true,
+                needsConfirmation: !hasSession,
+                accessToken: data.access_token || null,
+                user: data.user || data
+            };
+        } catch (err) {
+            return { ok: false, code: 'network_error', message: 'Erro de conexão com o servidor. Tente novamente.' };
+        }
+    }
+
+    async function authSignIn(email, password) {
+        if (!isConfigured()) {
+            return { ok: false, code: 'not_configured', message: 'Supabase não configurado.' };
+        }
+        const baseUrl = ZSX_SUPABASE_CONFIG.url.replace(/\/+$/, '');
+        const cleanEmail = String(email || '').trim().toLowerCase();
+
+        try {
+            const res = await fetch(`${baseUrl}/auth/v1/token?grant_type=password`, {
+                method: 'POST',
+                headers: {
+                    'apikey': ZSX_SUPABASE_CONFIG.anonKey,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: cleanEmail,
+                    password: String(password || '').trim()
+                })
+            });
+
+            const data = await res.json().catch(() => ({}));
+
+            if (!res.ok) {
+                const errCode = (data.error_code || data.error || '').toLowerCase();
+                const rawMsg = (data.msg || data.error_description || data.message || '').toLowerCase();
+                if (errCode === 'email_not_confirmed' || rawMsg.includes('email not confirmed')) {
+                    return {
+                        ok: false,
+                        code: 'email_not_confirmed',
+                        message: 'E-mail ainda não confirmado. Verifique sua caixa de entrada ou spam.'
+                    };
+                }
+                return {
+                    ok: false,
+                    code: 'invalid_credentials',
+                    message: 'E-mail ou senha incorretos.'
+                };
+            }
+
+            return {
+                ok: true,
+                accessToken: data.access_token,
+                user: data.user || null
+            };
+        } catch (err) {
+            return { ok: false, code: 'network_error', message: 'Erro de conexão ao tentar entrar.' };
+        }
+    }
+
+    async function authResendConfirmation(email) {
+        if (!isConfigured() || !email) return { ok: false, message: 'Informe um e-mail válido.' };
+        const baseUrl = ZSX_SUPABASE_CONFIG.url.replace(/\/+$/, '');
+        try {
+            const res = await fetch(`${baseUrl}/auth/v1/resend`, {
+                method: 'POST',
+                headers: {
+                    'apikey': ZSX_SUPABASE_CONFIG.anonKey,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    type: 'signup',
+                    email: String(email).trim().toLowerCase()
+                })
+            });
+            const data = await res.json().catch(() => ({}));
+            if (!res.ok) {
+                if (res.status === 429) {
+                    return { ok: false, message: 'Aguarde 1 minuto antes de solicitar outro reenvio.' };
+                }
+                return { ok: false, message: data.msg || data.message || 'Não foi possível reenviar o e-mail.' };
+            }
+            return { ok: true, message: 'E-mail de confirmação reenviado! Verifique sua caixa de entrada e spam.' };
+        } catch (err) {
+            return { ok: false, message: 'Erro de rede ao reenviar confirmação.' };
+        }
+    }
+
+    async function authGetUserFromToken(accessToken) {
+        if (!isConfigured() || !accessToken) return null;
+        const baseUrl = ZSX_SUPABASE_CONFIG.url.replace(/\/+$/, '');
+        try {
+            const res = await fetch(`${baseUrl}/auth/v1/user`, {
+                method: 'GET',
+                headers: {
+                    'apikey': ZSX_SUPABASE_CONFIG.anonKey,
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            });
+            if (!res.ok) return null;
+            return await res.json();
+        } catch (err) {
+            return null;
+        }
+    }
+
     return {
         isConfigured,
         sha256,
@@ -582,6 +777,10 @@ const ZSX_DB = (function() {
         hashCustomerPassword,
         verifyAdminLogin,
         updateAdminCredentials,
+        authSignUp,
+        authSignIn,
+        authResendConfirmation,
+        authGetUserFromToken,
         syncFromCloud,
         upsertProduct,
         upsertProductsBulk,
@@ -595,6 +794,7 @@ const ZSX_DB = (function() {
         saveSettings,
         saveCustomer,
         getCustomerByEmail,
+        getCustomerByPhone,
         fetchCustomerOrders
     };
 })();

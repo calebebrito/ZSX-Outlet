@@ -1054,62 +1054,140 @@ document.addEventListener('DOMContentLoaded', () => {
                 btn.innerHTML = '<span>Verificando...</span>';
             }
 
-            const email = (document.getElementById('loginEmail')?.value || '').trim().toLowerCase();
+            const rawIdentifier = (document.getElementById('loginEmail')?.value || '').trim();
+            const identifierLower = rawIdentifier.toLowerCase();
+            const isEmailLogin = identifierLower.includes('@');
+            const phoneDigitsLogin = rawIdentifier.replace(/\D/g, '');
+            const email = isEmailLogin ? identifierLower : `${phoneDigitsLogin}@phone.zsx`;
             const password = (document.getElementById('loginPassword')?.value || '').trim();
 
-            if (!email || !password) {
-                showToast('Informe seu e-mail e senha de acesso.', 'error');
+            if (!rawIdentifier || !password) {
+                showToast('Informe seu e-mail ou telefone e a senha de acesso.', 'error');
                 if (btn) { btn.disabled = false; btn.innerHTML = origContent; }
                 return;
             }
 
+            if (!isEmailLogin && phoneDigitsLogin.length < 10) {
+                showToast('Informe um e-mail válido ou telefone completo com DDD.', 'error');
+                if (btn) { btn.disabled = false; btn.innerHTML = origContent; }
+                return;
+            }
+
+            const existingResendBox = document.getElementById('loginResendBox');
+            if (existingResendBox) existingResendBox.remove();
+
             try {
-                let user = null;
-                if (window.ZSX_DB) {
-                    try {
-                        user = await window.ZSX_DB.getCustomerByEmail(email);
-                    } catch (dbErr) {
-                        console.warn('[ZSX Login DB]', dbErr);
+                // 1A. Login por Telefone (valida na nuvem zsx_customers ou local)
+                if (!isEmailLogin) {
+                    let user = null;
+                    if (window.ZSX_DB && window.ZSX_DB.isConfigured()) {
+                        try {
+                            user = typeof window.ZSX_DB.getCustomerByPhone === 'function'
+                                ? await window.ZSX_DB.getCustomerByPhone(phoneDigitsLogin)
+                                : await window.ZSX_DB.getCustomerByEmail(email);
+                        } catch (dbErr) {
+                            console.warn('[ZSX Login Phone DB]', dbErr);
+                        }
                     }
-                }
-
-                if (!user) {
-                    const localUsers = JSON.parse(localStorage.getItem('zsx_registered_customers')) || [];
-                    user = localUsers.find(u => u.email && u.email.toLowerCase() === email) || null;
-                }
-
-                if (!user) {
-                    showToast('Conta não encontrada. Verifique o e-mail ou cadastre-se.', 'error');
-                    if (btn) { btn.disabled = false; btn.innerHTML = origContent; }
+                    if (!user) {
+                        const localUsers = JSON.parse(localStorage.getItem('zsx_registered_customers')) || [];
+                        user = localUsers.find(u =>
+                            (u.phone && String(u.phone).replace(/\D/g, '') === phoneDigitsLogin) ||
+                            (u.email && u.email.toLowerCase() === email)
+                        ) || null;
+                    }
+                    if (!user) {
+                        showToast('Nenhuma conta encontrada com este telefone. Cadastre-se!', 'error');
+                        if (btn) { btn.disabled = false; btn.innerHTML = origContent; }
+                        return;
+                    }
+                    const hashedInputPass = window.ZSX_DB?.hashCustomerPassword
+                        ? window.ZSX_DB.hashCustomerPassword(password)
+                        : password;
+                    if (!user.password || (user.password !== hashedInputPass && user.password !== password)) {
+                        showToast('Senha incorreta para este telefone.', 'error');
+                        if (btn) { btn.disabled = false; btn.innerHTML = origContent; }
+                        return;
+                    }
+                    const accData = {
+                        id: user.id,
+                        name: user.name || 'Cliente ZSX',
+                        email: user.email || email,
+                        phone: user.phone || rawIdentifier,
+                        password: hashedInputPass,
+                        avatar: user.avatar || user.address?._avatar || ''
+                    };
+                    localStorage.setItem('zsx_customer_account', JSON.stringify(accData));
+                    if (user.address && (!userAddress || !userAddress.street)) {
+                        userAddress = user.address;
+                        localStorage.setItem('zsx_address', JSON.stringify(user.address));
+                    }
+                    closeLoginModal();
+                    loginForm.reset();
+                    refreshCustomerProfileUI();
+                    showToast(`Bem-vindo de volta, ${accData.name}!`, 'success');
                     return;
                 }
 
-                const hashedInputPass = window.ZSX_DB?.hashCustomerPassword
-                    ? window.ZSX_DB.hashCustomerPassword(password)
-                    : password;
+                // 1B. Autenticação oficial por E-mail via Supabase Auth (exige e-mail confirmado)
+                if (window.ZSX_DB && window.ZSX_DB.isConfigured() && typeof window.ZSX_DB.authSignIn === 'function') {
+                    const authRes = await window.ZSX_DB.authSignIn(email, password);
 
-                if (!user.password || (user.password !== hashedInputPass && user.password !== password)) {
-                    showToast('Senha incorreta para este e-mail.', 'error');
-                    if (btn) { btn.disabled = false; btn.innerHTML = origContent; }
-                    return;
-                }
+                    if (!authRes.ok) {
+                        if (authRes.code === 'email_not_confirmed') {
+                            showToast(authRes.message, 'error');
+                            const resendBox = document.createElement('div');
+                            resendBox.id = 'loginResendBox';
+                            resendBox.className = 'auth-verify-inline';
+                            resendBox.innerHTML = `
+                                <span>Seu e-mail ainda não foi confirmado.</span>
+                                <button type="button" id="btnInlineResend" class="auth-switch-link">Reenviar link de confirmação</button>
+                            `;
+                            loginForm.insertBefore(resendBox, loginForm.querySelector('.auth-switch-prompt'));
+                            document.getElementById('btnInlineResend')?.addEventListener('click', async () => {
+                                const resendBtn = document.getElementById('btnInlineResend');
+                                if (resendBtn) { resendBtn.disabled = true; resendBtn.textContent = 'Reenviando...'; }
+                                const r = await window.ZSX_DB.authResendConfirmation(email);
+                                showToast(r.message, r.ok ? 'success' : 'error');
+                                if (resendBtn) { resendBtn.disabled = false; resendBtn.textContent = 'Reenviar link de confirmação'; }
+                            });
+                            if (btn) { btn.disabled = false; btn.innerHTML = origContent; }
+                            return;
+                        }
 
-                const accData = {
-                    id: user.id,
-                    name: user.name || email.split('@')[0],
-                    email: user.email,
-                    phone: user.phone || '',
-                    password: hashedInputPass
-                };
-                localStorage.setItem('zsx_customer_account', JSON.stringify(accData));
+                        showToast(authRes.message || 'E-mail ou senha incorretos.', 'error');
+                        if (btn) { btn.disabled = false; btn.innerHTML = origContent; }
+                        return;
+                    }
 
-                if (user.address && (!userAddress || !userAddress.street)) {
-                    userAddress = user.address;
-                    localStorage.setItem('zsx_address', JSON.stringify(user.address));
-                }
+                    // Login aprovado pelo Supabase Auth! Busca ou sincroniza perfil em zsx_customers
+                    const authUser = authRes.user || {};
+                    const meta = authUser.user_metadata || {};
+                    let dbProfile = null;
+                    try {
+                        dbProfile = await window.ZSX_DB.getCustomerByEmail(email);
+                    } catch (e) {}
 
-                // Sincronizar pedidos do cliente
-                if (window.ZSX_DB) {
+                    const hashedInputPass = window.ZSX_DB.hashCustomerPassword(password);
+                    const accData = {
+                        id: dbProfile?.id || authUser.id || `cust-${Date.now()}`,
+                        name: dbProfile?.name || meta.name || email.split('@')[0],
+                        email: email,
+                        phone: dbProfile?.phone || meta.phone || '',
+                        password: hashedInputPass,
+                        avatar: dbProfile?.avatar || dbProfile?.address?._avatar || '',
+                        verified: true
+                    };
+
+                    if (!dbProfile) {
+                        await window.ZSX_DB.saveCustomer({ ...accData, address: userAddress || {} });
+                    } else if (dbProfile.address && (!userAddress || !userAddress.street)) {
+                        userAddress = dbProfile.address;
+                        localStorage.setItem('zsx_address', JSON.stringify(dbProfile.address));
+                    }
+
+                    localStorage.setItem('zsx_customer_account', JSON.stringify(accData));
+
                     try {
                         const cloudOrders = await window.ZSX_DB.fetchCustomerOrders(email);
                         if (Array.isArray(cloudOrders) && cloudOrders.length > 0) {
@@ -1125,13 +1203,35 @@ document.addEventListener('DOMContentLoaded', () => {
                     } catch (orderErr) {
                         console.warn('[ZSX Login Orders Sync]', orderErr);
                     }
+
+                    closeLoginModal();
+                    loginForm.reset();
+                    refreshCustomerProfileUI();
+                    showToast(`Bem-vindo de volta, ${accData.name}!`, 'success');
+                    return;
                 }
 
+                // 2. Fallback caso o Supabase não esteja configurado (modo offline local)
+                const localUsers = JSON.parse(localStorage.getItem('zsx_registered_customers')) || [];
+                const user = localUsers.find(u => u.email && u.email.toLowerCase() === email) || null;
+                if (!user) {
+                    showToast('Conta não encontrada. Verifique o e-mail ou cadastre-se.', 'error');
+                    if (btn) { btn.disabled = false; btn.innerHTML = origContent; }
+                    return;
+                }
+                const hashedInputPass = window.ZSX_DB?.hashCustomerPassword
+                    ? window.ZSX_DB.hashCustomerPassword(password)
+                    : password;
+                if (!user.password || (user.password !== hashedInputPass && user.password !== password)) {
+                    showToast('Senha incorreta para este e-mail.', 'error');
+                    if (btn) { btn.disabled = false; btn.innerHTML = origContent; }
+                    return;
+                }
+                localStorage.setItem('zsx_customer_account', JSON.stringify(user));
                 closeLoginModal();
                 loginForm.reset();
                 refreshCustomerProfileUI();
-                const currentAcc = JSON.parse(localStorage.getItem('zsx_customer_account'));
-                showToast(`Bem-vindo de volta, ${currentAcc?.name || 'Cliente'}!`, 'success');
+                showToast(`Bem-vindo de volta, ${user.name || 'Cliente'}!`, 'success');
             } catch (err) {
                 console.error('[ZSX Login Error]', err);
                 showToast('Falha ao autenticar. Tente novamente.', 'error');
@@ -1144,7 +1244,138 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Submissão do Formulário de Cadastro
+    // Validação de E-mail Real (bloqueia descartáveis e alerta erros de digitação)
+    const DISPOSABLE_EMAIL_DOMAINS = new Set([
+        'tempmail.com', 'temp-mail.org', '10minutemail.com', 'guerrillamail.com',
+        'mailinator.com', 'yopmail.com', 'trashmail.com', 'sharklasers.com',
+        'getnada.com', 'mohmal.com', 'dispostable.com', 'fakeinbox.com',
+        'maildrop.cc', 'throwawaymail.com', 'emailondeck.com', 'mintemail.com'
+    ]);
+    const TYPO_EMAIL_DOMAINS = {
+        'gamil.com': 'gmail.com',
+        'gmial.com': 'gmail.com',
+        'gnail.com': 'gmail.com',
+        'gmal.com': 'gmail.com',
+        'gmail.con': 'gmail.com',
+        'gmail.com.br': 'gmail.com',
+        'hotmal.com': 'hotmail.com',
+        'hotmial.com': 'hotmail.com',
+        'hotmail.con': 'hotmail.com',
+        'outlok.com': 'outlook.com',
+        'outloo.com': 'outlook.com',
+        'yaho.com': 'yahoo.com',
+        'icloud.con': 'icloud.com'
+    };
+
+    function validateRealEmail(email) {
+        const clean = String(email || '').trim().toLowerCase();
+        if (!/^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(clean)) {
+            return { valid: false, message: 'Digite um endereço de e-mail válido.' };
+        }
+        const domain = clean.split('@')[1];
+        if (DISPOSABLE_EMAIL_DOMAINS.has(domain)) {
+            return { valid: false, message: 'E-mails temporários não são permitidos. Use seu e-mail pessoal.' };
+        }
+        if (TYPO_EMAIL_DOMAINS[domain]) {
+            return { valid: false, message: `Verifique o domínio do e-mail: você quis dizer @${TYPO_EMAIL_DOMAINS[domain]}?` };
+        }
+        return { valid: true };
+    }
+
+    function showRegisterConfirmationScreen(email) {
+        const regModalCard = document.querySelector('#registerModal .auth-modal-card');
+        if (!regModalCard || !registerForm) return;
+        let verifyBox = document.getElementById('registerVerifyNotice');
+        if (!verifyBox) {
+            verifyBox = document.createElement('div');
+            verifyBox.id = 'registerVerifyNotice';
+            verifyBox.className = 'auth-verify-panel';
+            regModalCard.appendChild(verifyBox);
+        }
+        registerForm.style.display = 'none';
+        verifyBox.style.display = 'flex';
+        verifyBox.innerHTML = `
+            <div class="auth-verify-icon">
+                <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                </svg>
+            </div>
+            <h3 class="auth-verify-title">VERIFIQUE SEU E-MAIL</h3>
+            <p class="auth-verify-desc">
+                Enviamos um link de confirmação para <strong>${email}</strong>.
+                Abra sua caixa de entrada (ou pasta de spam) e clique no link para ativar sua conta.
+            </p>
+            <button type="button" id="btnVerifyGoLogin" class="btn-auth-submit">
+                <span>Já confirmei, Fazer Login</span>
+            </button>
+            <button type="button" id="btnVerifyResend" class="auth-switch-link">
+                Não recebeu? Reenviar e-mail de confirmação
+            </button>
+        `;
+
+        document.getElementById('btnVerifyGoLogin')?.addEventListener('click', () => {
+            verifyBox.style.display = 'none';
+            registerForm.style.display = '';
+            closeRegisterModal();
+            openLoginModal();
+            const loginEmailInput = document.getElementById('loginEmail');
+            if (loginEmailInput) loginEmailInput.value = email;
+        });
+
+        document.getElementById('btnVerifyResend')?.addEventListener('click', async () => {
+            const resendBtn = document.getElementById('btnVerifyResend');
+            if (resendBtn) { resendBtn.disabled = true; resendBtn.textContent = 'Reenviando...'; }
+            const r = await window.ZSX_DB.authResendConfirmation(email);
+            showToast(r.message, r.ok ? 'success' : 'error');
+            if (resendBtn) { resendBtn.disabled = false; resendBtn.textContent = 'Não recebeu? Reenviar e-mail de confirmação'; }
+        });
+    }
+
+    // Restaura formulário de cadastro se o usuário fechar e abrir novamente
+    document.getElementById('closeRegisterModalBtn')?.addEventListener('click', () => {
+        const verifyBox = document.getElementById('registerVerifyNotice');
+        if (verifyBox) verifyBox.style.display = 'none';
+        if (registerForm) registerForm.style.display = '';
+    });
+
+    // Seletor de método de cadastro (E-mail ou Telefone) + máscara de telefone
+    let currentRegisterMethod = 'email';
+    const regMethodEmailBtn = document.getElementById('regMethodEmailBtn');
+    const regMethodPhoneBtn = document.getElementById('regMethodPhoneBtn');
+    const regEmailGroup = document.getElementById('regEmailGroup');
+    const regPhoneGroup = document.getElementById('regPhoneGroup');
+    const regEmailInput = document.getElementById('registerEmail');
+    const regPhoneInput = document.getElementById('registerPhone');
+
+    function setRegisterMethod(method) {
+        currentRegisterMethod = method === 'phone' ? 'phone' : 'email';
+        if (regMethodEmailBtn) regMethodEmailBtn.classList.toggle('active', currentRegisterMethod === 'email');
+        if (regMethodPhoneBtn) regMethodPhoneBtn.classList.toggle('active', currentRegisterMethod === 'phone');
+        if (regEmailGroup) regEmailGroup.style.display = currentRegisterMethod === 'email' ? '' : 'none';
+        if (regPhoneGroup) regPhoneGroup.style.display = currentRegisterMethod === 'phone' ? '' : 'none';
+        if (regEmailInput) regEmailInput.required = currentRegisterMethod === 'email';
+        if (regPhoneInput) regPhoneInput.required = currentRegisterMethod === 'phone';
+    }
+
+    if (regMethodEmailBtn) regMethodEmailBtn.addEventListener('click', () => setRegisterMethod('email'));
+    if (regMethodPhoneBtn) regMethodPhoneBtn.addEventListener('click', () => setRegisterMethod('phone'));
+
+    if (regPhoneInput) {
+        regPhoneInput.addEventListener('input', (e) => {
+            let v = e.target.value.replace(/\D/g, '').substring(0, 11);
+            if (v.length > 6) {
+                v = `(${v.slice(0, 2)}) ${v.slice(2, 7)}-${v.slice(7)}`;
+            } else if (v.length > 2) {
+                v = `(${v.slice(0, 2)}) ${v.slice(2)}`;
+            } else if (v.length > 0) {
+                v = `(${v}`;
+            }
+            e.target.value = v;
+        });
+    }
+
+    // Submissão do Formulário de Cadastro (E-mail com verificação real OU Telefone)
     const registerForm = document.getElementById('registerForm');
     if (registerForm) {
         registerForm.addEventListener('submit', async (e) => {
@@ -1159,10 +1390,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const name = (document.getElementById('registerName')?.value || '').trim();
             const email = (document.getElementById('registerEmail')?.value || '').trim().toLowerCase();
             const phone = (document.getElementById('registerPhone')?.value || '').trim();
+            const phoneDigits = phone.replace(/\D/g, '');
             const password = (document.getElementById('registerPassword')?.value || '').trim();
 
-            if (!name || !email) {
-                showToast('Informe seu nome e e-mail.', 'error');
+            if (!name) {
+                showToast('Informe seu nome completo.', 'error');
                 if (btn) { btn.disabled = false; btn.innerHTML = origContent; }
                 return;
             }
@@ -1174,57 +1406,140 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                let existing = null;
-                if (window.ZSX_DB) {
-                    try {
-                        existing = await window.ZSX_DB.getCustomerByEmail(email);
-                    } catch (checkErr) {
-                        console.warn('[ZSX Check Existing]', checkErr);
+                // MODO TELEFONE
+                if (currentRegisterMethod === 'phone') {
+                    if (phoneDigits.length < 10 || phoneDigits.length > 11) {
+                        showToast('Digite um número de telefone válido com DDD (10 ou 11 dígitos).', 'error');
+                        if (btn) { btn.disabled = false; btn.innerHTML = origContent; }
+                        return;
                     }
-                }
-                if (!existing) {
+
+                    const phoneEmailKey = `${phoneDigits}@phone.zsx`;
+                    let existingPhoneUser = null;
+                    if (window.ZSX_DB && window.ZSX_DB.isConfigured()) {
+                        existingPhoneUser = typeof window.ZSX_DB.getCustomerByPhone === 'function'
+                            ? await window.ZSX_DB.getCustomerByPhone(phoneDigits)
+                            : await window.ZSX_DB.getCustomerByEmail(phoneEmailKey);
+                    }
+                    if (!existingPhoneUser) {
+                        const localUsers = JSON.parse(localStorage.getItem('zsx_registered_customers')) || [];
+                        existingPhoneUser = localUsers.find(u =>
+                            (u.phone && String(u.phone).replace(/\D/g, '') === phoneDigits) ||
+                            (u.email && u.email.toLowerCase() === phoneEmailKey)
+                        ) || null;
+                    }
+                    if (existingPhoneUser) {
+                        showToast('Este telefone já está cadastrado. Faça login!', 'info');
+                        closeRegisterModal();
+                        openLoginModal();
+                        const loginEmailInput = document.getElementById('loginEmail');
+                        if (loginEmailInput) loginEmailInput.value = phone;
+                        if (btn) { btn.disabled = false; btn.innerHTML = origContent; }
+                        return;
+                    }
+
+                    const hashedRegPass = window.ZSX_DB?.hashCustomerPassword
+                        ? window.ZSX_DB.hashCustomerPassword(password)
+                        : password;
+                    const accData = {
+                        id: `cust-${Date.now()}`,
+                        name,
+                        email: phoneEmailKey,
+                        phone,
+                        password: hashedRegPass,
+                        avatar: '',
+                        address: userAddress || {}
+                    };
+
+                    if (window.ZSX_DB && window.ZSX_DB.isConfigured()) {
+                        const saved = await window.ZSX_DB.saveCustomer(accData);
+                        if (saved && saved.id) accData.id = saved.id;
+                    }
+
                     const localUsers = JSON.parse(localStorage.getItem('zsx_registered_customers')) || [];
-                    existing = localUsers.find(u => u.email && u.email.toLowerCase() === email) || null;
+                    localUsers.push(accData);
+                    localStorage.setItem('zsx_registered_customers', JSON.stringify(localUsers));
+                    localStorage.setItem('zsx_customer_account', JSON.stringify(accData));
+
+                    closeRegisterModal();
+                    registerForm.reset();
+                    setRegisterMethod('email');
+                    refreshCustomerProfileUI();
+                    showToast(`Conta criada com sucesso! Bem-vindo, ${name}!`, 'success');
+                    return;
                 }
 
-                if (existing) {
-                    showToast('Este e-mail já possui cadastro. Faça login!', 'info');
-                    closeRegisterModal();
-                    openLoginModal();
-                    const loginEmailInput = document.getElementById('loginEmail');
-                    if (loginEmailInput) loginEmailInput.value = email;
+                // MODO E-MAIL (com verificação real via Supabase Auth)
+                if (!email) {
+                    showToast('Informe seu e-mail.', 'error');
                     if (btn) { btn.disabled = false; btn.innerHTML = origContent; }
                     return;
                 }
 
+                const emailCheck = validateRealEmail(email);
+                if (!emailCheck.valid) {
+                    showToast(emailCheck.message, 'error');
+                    if (btn) { btn.disabled = false; btn.innerHTML = origContent; }
+                    return;
+                }
+
+                if (window.ZSX_DB && window.ZSX_DB.isConfigured() && typeof window.ZSX_DB.authSignUp === 'function') {
+                    const signUpRes = await window.ZSX_DB.authSignUp({ email, password, name, phone: '' });
+
+                    if (!signUpRes.ok) {
+                        if (signUpRes.code === 'already_registered') {
+                            showToast(signUpRes.message, 'info');
+                            closeRegisterModal();
+                            openLoginModal();
+                            const loginEmailInput = document.getElementById('loginEmail');
+                            if (loginEmailInput) loginEmailInput.value = email;
+                        } else {
+                            showToast(signUpRes.message, 'error');
+                        }
+                        if (btn) { btn.disabled = false; btn.innerHTML = origContent; }
+                        return;
+                    }
+
+                    if (signUpRes.needsConfirmation) {
+                        registerForm.reset();
+                        showRegisterConfirmationScreen(email);
+                        showToast('Link de confirmação enviado! Verifique seu e-mail.', 'success');
+                        if (btn) { btn.disabled = false; btn.innerHTML = origContent; }
+                        return;
+                    }
+
+                    const hashedRegPass = window.ZSX_DB.hashCustomerPassword(password);
+                    const accData = {
+                        id: signUpRes.user?.id || `cust-${Date.now()}`,
+                        name,
+                        email,
+                        phone: '',
+                        password: hashedRegPass,
+                        avatar: '',
+                        address: userAddress || {}
+                    };
+                    await window.ZSX_DB.saveCustomer(accData);
+                    localStorage.setItem('zsx_customer_account', JSON.stringify(accData));
+                    closeRegisterModal();
+                    registerForm.reset();
+                    refreshCustomerProfileUI();
+                    showToast(`Conta criada com sucesso! Bem-vindo, ${name}!`, 'success');
+                    return;
+                }
+
+                // Fallback local (apenas se Supabase não estiver configurado)
+                const localUsers = JSON.parse(localStorage.getItem('zsx_registered_customers')) || [];
+                if (localUsers.some(u => u.email && u.email.toLowerCase() === email)) {
+                    showToast('Este e-mail já possui cadastro. Faça login!', 'info');
+                    closeRegisterModal();
+                    openLoginModal();
+                    return;
+                }
                 const hashedRegPass = window.ZSX_DB?.hashCustomerPassword
                     ? window.ZSX_DB.hashCustomerPassword(password)
                     : password;
-
-                const accData = {
-                    name,
-                    email,
-                    phone,
-                    password: hashedRegPass,
-                    address: userAddress || {}
-                };
-
-                if (window.ZSX_DB) {
-                    try {
-                        const saved = await window.ZSX_DB.saveCustomer(accData);
-                        if (saved && saved.id) accData.id = saved.id;
-                    } catch (saveErr) {
-                        console.warn('[ZSX Save New Customer]', saveErr);
-                    }
-                }
-
-                const localUsers = JSON.parse(localStorage.getItem('zsx_registered_customers')) || [];
-                const idx = localUsers.findIndex(u => u.email && u.email.toLowerCase() === email);
-                if (idx >= 0) {
-                    localUsers[idx] = accData;
-                } else {
-                    localUsers.push(accData);
-                }
+                const accData = { name, email, phone: '', password: hashedRegPass, avatar: '', address: userAddress || {} };
+                localUsers.push(accData);
                 localStorage.setItem('zsx_registered_customers', JSON.stringify(localUsers));
                 localStorage.setItem('zsx_customer_account', JSON.stringify(accData));
                 closeRegisterModal();
@@ -1243,6 +1558,35 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Retorno automático quando o cliente clica no link de confirmação enviado por e-mail
+    (async function handleEmailConfirmationCallback() {
+        const hash = window.location.hash || '';
+        if (!hash.includes('access_token=')) return;
+        const params = new URLSearchParams(hash.replace(/^#/, ''));
+        const accessToken = params.get('access_token');
+        if (!accessToken || !window.ZSX_DB || typeof window.ZSX_DB.authGetUserFromToken !== 'function') return;
+
+        const user = await window.ZSX_DB.authGetUserFromToken(accessToken);
+        if (user && user.email) {
+            const meta = user.user_metadata || {};
+            const accData = {
+                id: user.id,
+                name: meta.name || user.email.split('@')[0],
+                email: user.email.toLowerCase(),
+                phone: meta.phone || '',
+                verified: true
+            };
+            await window.ZSX_DB.saveCustomer({ ...accData, address: userAddress || {} });
+            localStorage.setItem('zsx_customer_account', JSON.stringify(accData));
+            refreshCustomerProfileUI();
+            showToast(`E-mail confirmado com sucesso! Bem-vindo, ${accData.name}!`, 'success');
+        }
+        // Limpa o token da barra de endereço por segurança
+        if (window.history && window.history.replaceState) {
+            window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
+    })();
+
     // Opções do Perfil
     const menuMyOrdersBtn = document.getElementById('menuMyOrdersBtn');
     if (menuMyOrdersBtn) {
@@ -1260,17 +1604,106 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Modal de Cupons Disponíveis (Vidro Fosco Obsidian & Crimson)
+    function renderCouponsModal() {
+        const listEl = document.getElementById('couponsModalList');
+        if (!listEl) return;
+
+        const cList = JSON.parse(localStorage.getItem('zsx_coupons')) || [
+            { code: 'ZSX10', percent: 10, desc: '10% OFF Primeira Compra', active: true },
+            { code: 'OFF20', percent: 20, desc: '20% OFF Campanha Streetwear', active: true },
+            { code: 'VIP30', percent: 30, desc: '30% OFF Clientes VIP ZSX', active: true }
+        ];
+        const activeCoupons = cList.filter(c => c && c.active !== false);
+
+        if (activeCoupons.length === 0) {
+            listEl.innerHTML = `
+                <div class="coupons-empty-state">
+                    <p>Nenhum cupom disponível no momento. Fique de olho nas novidades da ZSX!</p>
+                </div>
+            `;
+            return;
+        }
+
+        listEl.innerHTML = activeCoupons.map(c => {
+            const safeCode = String(c.code || '').toUpperCase();
+            const pct = Number(c.percent) || 10;
+            const desc = c.desc || `${pct}% de desconto em toda a loja`;
+            return `
+                <div class="coupon-modal-item">
+                    <div class="coupon-modal-left">
+                        <div class="coupon-modal-top">
+                            <span class="coupon-modal-code">${safeCode}</span>
+                            <span class="coupon-modal-pct">${pct}% OFF</span>
+                        </div>
+                        <p class="coupon-modal-desc">${desc}</p>
+                    </div>
+                    <div class="coupon-modal-actions">
+                        <button type="button" class="btn-coupon-copy" onclick="copyCouponCode('${safeCode}')">Copiar</button>
+                        <button type="button" class="btn-coupon-apply" onclick="applyCouponFromModal('${safeCode}')">Aplicar</button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function openCouponsModal() {
+        closeProfileModal();
+        renderCouponsModal();
+        const modal = document.getElementById('couponsModal');
+        if (modal) modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeCouponsModal() {
+        const modal = document.getElementById('couponsModal');
+        if (modal) modal.classList.remove('active');
+        const hasOtherActive = document.querySelector('.custom-modal-overlay.active, .cart-drawer-overlay.active');
+        if (!hasOtherActive) document.body.style.overflow = '';
+    }
+
+    window.openCouponsModal = openCouponsModal;
+    window.closeCouponsModal = closeCouponsModal;
+
+    window.copyCouponCode = function(code) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(code).catch(() => {});
+        }
+        showToast(`Cupom ${code} copiado!`, 'success');
+    };
+
+    window.applyCouponFromModal = function(code) {
+        const couponInput = document.getElementById('couponInput');
+        if (couponInput) {
+            couponInput.value = code;
+            handleApplyCoupon();
+        } else {
+            const cList = JSON.parse(localStorage.getItem('zsx_coupons')) || [];
+            const match = cList.find(c => c.active && String(c.code).toUpperCase() === code);
+            if (match) {
+                activeCoupon = { code, percent: Number(match.percent) };
+                showToast(`Cupom ${code} (${match.percent}% OFF) aplicado!`, 'success');
+            }
+        }
+        closeCouponsModal();
+        if (Array.isArray(cart) && cart.length > 0 && typeof openCartDrawer === 'function') {
+            openCartDrawer();
+        }
+    };
+
+    const closeCouponsModalBtn = document.getElementById('closeCouponsModalBtn');
+    if (closeCouponsModalBtn) closeCouponsModalBtn.addEventListener('click', closeCouponsModal);
+
+    const couponsModal = document.getElementById('couponsModal');
+    if (couponsModal) {
+        couponsModal.addEventListener('click', (e) => {
+            if (e.target === couponsModal) closeCouponsModal();
+        });
+    }
+
     const menuMyCouponsBtn = document.getElementById('menuMyCouponsBtn');
     if (menuMyCouponsBtn) {
-        menuMyCouponsBtn.addEventListener('click', () => {
-            const cList = JSON.parse(localStorage.getItem('zsx_coupons')) || [
-                { code: 'ZSX10', percent: 10, active: true },
-                { code: 'OFF20', percent: 20, active: true },
-                { code: 'VIP30', percent: 30, active: true }
-            ];
-            const activeStr = cList.filter(c => c.active).map(c => `${c.code} (${c.percent}%)`).join(', ');
-            showToast(activeStr ? `Cupons ativos: ${activeStr}` : 'Nenhum cupom ativo no momento.', 'success');
-        });
+        menuMyCouponsBtn.addEventListener('click', openCouponsModal);
     }
 
     const menuSupportBtn = document.getElementById('menuSupportBtn');
@@ -1278,6 +1711,92 @@ document.addEventListener('DOMContentLoaded', () => {
         menuSupportBtn.addEventListener('click', () => {
             closeProfileModal();
             openSupportModal();
+        });
+    }
+
+    // Foto de Perfil do Cliente (Upload com recorte quadrado e compressão)
+    const DEFAULT_PROFILE_AVATAR = '../images/profile-icon-removebg-preview.png';
+
+    function applyCustomerAvatarUI(acc) {
+        const avatarSrc = (acc && acc.avatar) ? acc.avatar : '';
+        const profileImg = document.getElementById('profileAvatarImg') || document.querySelector('.profile-avatar-img');
+        const headerImg = document.querySelector('#headerProfileBtn img');
+
+        if (profileImg) {
+            profileImg.src = avatarSrc || DEFAULT_PROFILE_AVATAR;
+            profileImg.classList.toggle('has-custom-avatar', Boolean(avatarSrc));
+        }
+        if (headerImg) {
+            headerImg.src = avatarSrc || DEFAULT_PROFILE_AVATAR;
+            headerImg.classList.toggle('has-custom-avatar', Boolean(avatarSrc));
+        }
+    }
+
+    const profileAvatarTrigger = document.getElementById('profileAvatarTrigger');
+    const profileAvatarInput = document.getElementById('profileAvatarInput');
+
+    if (profileAvatarTrigger && profileAvatarInput) {
+        profileAvatarTrigger.addEventListener('click', () => {
+            const acc = JSON.parse(localStorage.getItem('zsx_customer_account'));
+            if (!acc || !acc.email) {
+                closeProfileModal();
+                openLoginModal();
+                showToast('Entre na sua conta para adicionar uma foto de perfil.', 'info');
+                return;
+            }
+            profileAvatarInput.click();
+        });
+
+        profileAvatarInput.addEventListener('change', (e) => {
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+            if (!file.type.startsWith('image/')) {
+                showToast('Selecione um arquivo de imagem válido (JPG, PNG ou WebP).', 'error');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = () => {
+                const img = new Image();
+                img.onload = async () => {
+                    const size = 220;
+                    const canvas = document.createElement('canvas');
+                    canvas.width = size;
+                    canvas.height = size;
+                    const ctx = canvas.getContext('2d');
+                    const minSide = Math.min(img.width, img.height);
+                    const sx = (img.width - minSide) / 2;
+                    const sy = (img.height - minSide) / 2;
+                    ctx.drawImage(img, sx, sy, minSide, minSide, 0, 0, size, size);
+
+                    const dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+                    const acc = JSON.parse(localStorage.getItem('zsx_customer_account')) || {};
+                    acc.avatar = dataUrl;
+                    localStorage.setItem('zsx_customer_account', JSON.stringify(acc));
+
+                    // Atualiza cache local de usuários cadastrados também
+                    const localUsers = JSON.parse(localStorage.getItem('zsx_registered_customers')) || [];
+                    const idx = localUsers.findIndex(u => u.email && acc.email && u.email.toLowerCase() === acc.email.toLowerCase());
+                    if (idx >= 0) {
+                        localUsers[idx].avatar = dataUrl;
+                        localStorage.setItem('zsx_registered_customers', JSON.stringify(localUsers));
+                    }
+
+                    applyCustomerAvatarUI(acc);
+                    showToast('Foto de perfil atualizada!', 'success');
+
+                    if (window.ZSX_DB && window.ZSX_DB.isConfigured() && acc.email) {
+                        try {
+                            await window.ZSX_DB.saveCustomer({ ...acc, address: userAddress || {} });
+                        } catch (err) {
+                            console.warn('[ZSX Avatar Sync]', err);
+                        }
+                    }
+                };
+                img.src = reader.result;
+            };
+            reader.readAsDataURL(file);
+            profileAvatarInput.value = '';
         });
     }
 
@@ -1299,9 +1818,13 @@ document.addEventListener('DOMContentLoaded', () => {
             adminBtn.style.display = (adminSession && adminSession.authenticated) ? 'flex' : 'none';
         }
 
+        applyCustomerAvatarUI(acc);
+
         if (acc && acc.name) {
+            const isPhonePlaceholder = acc.email && acc.email.endsWith('@phone.zsx');
+            const displayContact = isPhonePlaceholder ? (acc.phone || '') : (acc.email || acc.phone || '');
             if (nameEl) nameEl.textContent = acc.name;
-            if (emailEl) emailEl.textContent = acc.email || acc.phone || '';
+            if (emailEl) emailEl.textContent = displayContact;
             if (badgeEl) badgeEl.textContent = 'ATIVO';
             if (descEl) descEl.textContent = `${acc.name} • Editar informações`;
             if (titleEl) titleEl.textContent = 'Editar Dados da Conta';
@@ -1311,7 +1834,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (nameEl) nameEl.textContent = 'Minha Conta ZSX';
             if (emailEl) emailEl.textContent = 'Entre ou crie sua conta para salvar seus pedidos';
             if (badgeEl) badgeEl.textContent = 'CONTA';
-            if (descEl) descEl.textContent = 'Entrar ou criar conta com e-mail e WhatsApp';
+            if (descEl) descEl.textContent = 'Entrar ou criar conta com e-mail ou telefone';
             if (titleEl) titleEl.textContent = 'Acessar ou Criar Conta';
             if (submitBtn) submitBtn.textContent = 'Entrar / Cadastrar';
             if (logoutBtn) logoutBtn.style.display = 'none';
@@ -1329,6 +1852,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 acc.name = remote.name || acc.name;
                 acc.phone = remote.phone || acc.phone;
                 acc.id = remote.id || acc.id;
+                if ((remote.avatar || remote.address?._avatar) && !acc.avatar) {
+                    acc.avatar = remote.avatar || remote.address._avatar;
+                }
                 localStorage.setItem('zsx_customer_account', JSON.stringify(acc));
                 if (remote.address && (!userAddress || !userAddress.street)) {
                     userAddress = remote.address;
@@ -1906,3 +2432,94 @@ window.closeLegalModal = function() {
     const modal = document.getElementById('legalInfoModal');
     if (modal) modal.classList.remove('active');
 };
+
+// ==========================================================================
+// NEVE NATALINA LENTA E SUTIL EM TODA A TELA (CANVAS LEVE)
+// ==========================================================================
+(function initChristmasSnow() {
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        return;
+    }
+
+    function startSnow() {
+        const canvas = document.getElementById('zsxSnowCanvas');
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+
+        let width = window.innerWidth;
+        let height = window.innerHeight;
+        let dpr = Math.min(window.devicePixelRatio || 1, 2);
+        let flakes = [];
+        let animId = null;
+
+        function createFlake(startRandomY) {
+            const radius = 1.2 + Math.random() * 2.3;
+            return {
+                x: Math.random() * width,
+                y: startRandomY ? Math.random() * height : -10 - Math.random() * 30,
+                r: radius,
+                vy: 0.24 + Math.random() * 0.40, // Queda bem lenta e suave
+                vxBase: (Math.random() - 0.5) * 0.16,
+                phase: Math.random() * Math.PI * 2,
+                driftSpeed: 0.004 + Math.random() * 0.007,
+                driftAmp: 0.18 + Math.random() * 0.28,
+                opacity: 0.24 + Math.random() * 0.40
+            };
+        }
+
+        function resizeCanvas() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            dpr = Math.min(window.devicePixelRatio || 1, 2);
+            canvas.width = Math.floor(width * dpr);
+            canvas.height = Math.floor(height * dpr);
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+            const targetCount = width < 768 ? 34 : 58;
+            if (flakes.length < targetCount) {
+                while (flakes.length < targetCount) {
+                    flakes.push(createFlake(true));
+                }
+            } else if (flakes.length > targetCount) {
+                flakes.length = targetCount;
+            }
+        }
+
+        function renderFrame() {
+            if (!document.hidden) {
+                ctx.clearRect(0, 0, width, height);
+                for (let i = 0; i < flakes.length; i++) {
+                    const f = flakes[i];
+                    f.phase += f.driftSpeed;
+                    f.y += f.vy;
+                    f.x += f.vxBase + Math.sin(f.phase) * f.driftAmp;
+
+                    if (f.y > height + 10) {
+                        flakes[i] = createFlake(false);
+                        continue;
+                    }
+                    if (f.x < -10) f.x = width + 10;
+                    if (f.x > width + 10) f.x = -10;
+
+                    ctx.beginPath();
+                    ctx.arc(f.x, f.y, f.r, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 250, 252, ${f.opacity.toFixed(2)})`;
+                    ctx.fill();
+                }
+            }
+            animId = window.requestAnimationFrame(renderFrame);
+        }
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas, { passive: true });
+        if (animId) window.cancelAnimationFrame(animId);
+        renderFrame();
+    }
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', startSnow);
+    } else {
+        startSnow();
+    }
+})();

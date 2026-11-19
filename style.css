@@ -3629,6 +3629,261 @@ body {
     color: #ffffff;
 }
 
+.auth-verify-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 14px;
+    padding: 10px 4px 4px;
+}
+
+.auth-verify-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    background: rgba(225, 29, 46, 0.16);
+    color: #ff4d5e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 10px 26px rgba(225, 29, 46, 0.22);
+}
+
+.auth-verify-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 900;
+    letter-spacing: 0.6px;
+    color: #ffffff;
+}
+
+.auth-verify-desc {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.55;
+    color: #c8b6bc;
+}
+
+.auth-verify-desc strong {
+    color: #ffffff;
+}
+
+.auth-verify-inline {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(225, 29, 46, 0.14);
+    font-size: 12.5px;
+    color: #f7f1f3;
+    text-align: center;
+}
+
+/* Seletor E-mail / Telefone no Cadastro */
+.auth-method-toggle {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    padding: 4px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.055);
+}
+
+.auth-method-btn {
+    border: none !important;
+    border-radius: 11px;
+    padding: 10px 12px;
+    background: transparent;
+    color: #b9a4a9;
+    font-size: 12.5px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.auth-method-btn.active {
+    background: linear-gradient(135deg, #b80d1d 0%, #e11d2e 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(225, 29, 46, 0.38);
+}
+
+/* Foto de Perfil Editável (Perfil + Header) */
+.profile-avatar-editable {
+    cursor: pointer;
+    position: relative;
+}
+
+.profile-avatar-editable:hover .profile-avatar-cam {
+    transform: scale(1.1);
+    background: #ff2a3d;
+}
+
+.profile-avatar-cam {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #e11d2e;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.55);
+    transition: transform 0.2s ease, background-color 0.2s ease;
+    z-index: 3;
+}
+
+.profile-avatar-img.has-custom-avatar {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    border-radius: 50%;
+    filter: none !important;
+}
+
+.profile > img.has-custom-avatar {
+    width: 34px !important;
+    height: 34px !important;
+    object-fit: cover;
+    border-radius: 50%;
+    filter: none !important;
+    box-shadow: 0 0 0 2px rgba(225, 29, 46, 0.75);
+}
+
+/* Modal de Cupons Disponíveis (Vidro Fosco Sem Bordas) */
+.coupons-modal-card {
+    max-width: 470px;
+}
+
+.coupons-modal-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 58vh;
+    overflow-y: auto;
+    padding-right: 2px;
+}
+
+.coupon-modal-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 15px 16px;
+    border-radius: 16px;
+    border: none !important;
+    background: rgba(255, 255, 255, 0.055);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.coupon-modal-item:hover {
+    background: rgba(255, 255, 255, 0.085);
+    transform: translateY(-1px);
+}
+
+.coupon-modal-left {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 0;
+}
+
+.coupon-modal-top {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.coupon-modal-code {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 8px;
+    background: rgba(225, 29, 46, 0.22);
+    color: #ff6b79;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.8px;
+}
+
+.coupon-modal-pct {
+    font-size: 12.5px;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.coupon-modal-desc {
+    margin: 0;
+    font-size: 12px;
+    color: #b9a4a9;
+    line-height: 1.4;
+}
+
+.coupon-modal-actions {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    flex-shrink: 0;
+}
+
+.btn-coupon-copy,
+.btn-coupon-apply {
+    border: none !important;
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    transition: filter 0.2s ease, transform 0.2s ease;
+}
+
+.btn-coupon-copy {
+    background: rgba(255, 255, 255, 0.1);
+    color: #f7f1f3;
+}
+
+.btn-coupon-apply {
+    background: linear-gradient(135deg, #b80d1d 0%, #e11d2e 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 14px rgba(225, 29, 46, 0.35);
+}
+
+.btn-coupon-copy:hover,
+.btn-coupon-apply:hover {
+    filter: brightness(1.12);
+    transform: translateY(-1px);
+}
+
+.coupons-empty-state {
+    padding: 28px 14px;
+    text-align: center;
+    font-size: 13.5px;
+    color: #b9a4a9;
+}
+
+@media (max-width: 480px) {
+    .coupon-modal-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    .coupon-modal-actions {
+        width: 100%;
+    }
+    .btn-coupon-copy,
+    .btn-coupon-apply {
+        flex: 1;
+        text-align: center;
+    }
+}
+
 @keyframes zsxModalFadeIn {
     from {
         opacity: 0;
@@ -4019,5 +4274,196 @@ html, body {
 
     .zsx-hero-tagline {
         letter-spacing: 2px;
+    }
+}
+
+/* ==========================================================================
+   DECORAÇÃO NATALINA SUTIL (GALHOS NAS QUINAS SUPERIORES + NEVE LENTA)
+   ========================================================================== */
+
+.zsx-snow-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    z-index: 950;
+}
+
+.xmas-svg-defs {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+.xmas-corner {
+    position: absolute;
+    top: -12px;
+    width: clamp(215px, 25vw, 360px);
+    height: auto;
+    pointer-events: none;
+    z-index: 6;
+    opacity: 0.96;
+    filter: drop-shadow(0 14px 30px rgba(0, 0, 0, 0.65));
+    will-change: transform;
+}
+
+.xmas-corner svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.xmas-corner-left {
+    left: -12px;
+    transform-origin: 0% 0%;
+    animation: xmasCornerSway 11s ease-in-out infinite;
+}
+
+.xmas-corner-right {
+    right: -12px;
+    transform-origin: 100% 0%;
+    animation: xmasCornerSwayReverse 12.6s ease-in-out infinite;
+}
+
+.xmas-corner-right svg {
+    transform: scaleX(-1);
+}
+
+@keyframes xmasCornerSway {
+    0%, 100% {
+        transform: rotate(-1.2deg) translate(0px, 0px);
+    }
+    30% {
+        transform: rotate(3.2deg) translate(3px, 4px);
+    }
+    62% {
+        transform: rotate(0.6deg) translate(1px, 2px);
+    }
+    82% {
+        transform: rotate(2.4deg) translate(2px, 3px);
+    }
+}
+
+@keyframes xmasCornerSwayReverse {
+    0%, 100% {
+        transform: rotate(1.2deg) translate(0px, 0px);
+    }
+    34% {
+        transform: rotate(-3.2deg) translate(-3px, 4px);
+    }
+    66% {
+        transform: rotate(-0.6deg) translate(-1px, 2px);
+    }
+    85% {
+        transform: rotate(-2.3deg) translate(-2px, 3px);
+    }
+}
+
+/* Laço de Presente Verde Enlaçando a Logo ZSX (Hero Principal) */
+.zsx-hero-logo-wrap {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.xmas-hero-gift-wrap {
+    position: absolute;
+    top: -34%;
+    left: -4%;
+    width: 108%;
+    height: 138%;
+    pointer-events: none;
+    z-index: 4;
+    filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.55));
+    animation: zsxLogoIn 1.05s cubic-bezier(0.22, 1, 0.36, 1) 0.45s both;
+}
+
+/* Mini Laço de Presente Verde Enlaçando a Logo do Header (Todas as Páginas) */
+.zsx1 {
+    position: relative !important;
+}
+
+.xmas-header-bow {
+    position: absolute;
+    top: -28%;
+    left: -3%;
+    width: 106%;
+    height: 132%;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.65));
+    pointer-events: none;
+    z-index: 1002;
+}
+
+/* Pequenos Detalhes Natalinos Sutis no Resto do Site */
+.beneficios {
+    position: relative;
+}
+
+.xmas-subtle-holly {
+    position: absolute;
+    top: 12px;
+    right: 16px;
+    width: 38px;
+    height: auto;
+    opacity: 0.72;
+    pointer-events: none;
+    filter: drop-shadow(0 3px 8px rgba(0, 0, 0, 0.5));
+}
+
+.zsx-footer::before {
+    content: "";
+    position: absolute;
+    top: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(
+        90deg,
+        transparent 0%,
+        rgba(28, 122, 71, 0.45) 22%,
+        rgba(225, 29, 46, 0.55) 50%,
+        rgba(28, 122, 71, 0.45) 78%,
+        transparent 100%
+    );
+    pointer-events: none;
+}
+
+.zsx-footer-heading::before {
+    content: "\2744";
+    display: inline-block;
+    margin-right: 6px;
+    font-size: 10px;
+    color: rgba(46, 168, 101, 0.72);
+    vertical-align: middle;
+}
+
+@media (max-width: 768px) {
+    .xmas-corner {
+        width: clamp(135px, 38vw, 200px);
+        opacity: 0.92;
+    }
+
+    .xmas-subtle-holly {
+        width: 30px;
+        top: 10px;
+        right: 12px;
+    }
+}
+
+@media (max-width: 420px) {
+    .xmas-corner {
+        width: 126px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .xmas-corner-left,
+    .xmas-corner-right,
+    .xmas-hero-gift-wrap {
+        animation: none !important;
     }
 }
